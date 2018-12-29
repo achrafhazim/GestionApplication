@@ -1,0 +1,112 @@
+<?php
+
+use Kernel\Conevert\HTML_Phinx;
+use Phinx\Migration\AbstractMigration;
+
+class Achats extends AbstractMigration
+{
+
+    /**
+     * Change Method.
+     *
+     * Write your reversible migrations using this method.
+     *
+     * More information on writing migrations is available here:
+     * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
+     *
+     * The following commands can be used in this method and Phinx will
+     * automatically reverse them when rolling back:
+     *
+     *    createTable
+     *    renameTable
+     *    addColumn
+     *    addCustomColumn
+     *    renameColumn
+     *    addIndex
+     *    addForeignKey
+     *
+     * Any other destructive changes will result in an error when trying to
+     * rollback the migration.
+     *
+     * Remember to call "create()" or "update()" and NOT "save()" when working
+     * with the Table class.
+     */
+    public function change()
+    {
+
+        /*
+          --
+          -- Structure de la table `achats`
+          --
+
+          CREATE TABLE `achats` (
+          `id` int(10) NOT NULL,
+          `raison$sociale` int(11) NOT NULL,
+          `date_negociation` date NOT NULL,
+          `montant_factures_TTC` double NOT NULL,
+          `montant_avoirs_TTC` double NOT NULL DEFAULT 0,
+          `Reglement_TTC` double NOT NULL DEFAULT 0,
+          `remarque` text DEFAULT NULL,
+          `date_ajoute` datetime NOT NULL,
+          `date_modifier` datetime NOT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         */
+        $this->table('achats', HTML_Phinx::id_default())
+                ->addColumn(HTML_Phinx::id())
+                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::date('date_negociation'))
+                
+                ->addColumn(HTML_Phinx::number('montant_factures_TTC'))
+                ->addColumn(HTML_Phinx::number('montant_avoirs_TTC'))
+                ->addColumn(HTML_Phinx::number('Reglement_TTC'))
+                ->addColumn(HTML_Phinx::textarea('remarque'))
+                ->addColumn(HTML_Phinx::datetime('date_ajoute'))
+                ->addColumn(HTML_Phinx::datetime('date_modifier'))
+                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->create();
+
+        /*
+          --
+          -- Structure de la table `r_achats_achat`
+          --
+
+          CREATE TABLE `r_achats_achat` (
+          `id_achats` int(11) NOT NULL,
+          `id_achat` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+         */
+
+        HTML_Phinx::relation('achats', 'achat', $this->getAdapter());
+
+
+        /*
+          --
+          -- Structure de la table `r_achats_avoirs$achats`
+          --
+
+          CREATE TABLE `r_achats_avoirs$achats` (
+          `id_achats` int(11) NOT NULL,
+          `id_avoirs$achats` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         */
+        HTML_Phinx::relation('achats', 'avoirs$achats', $this->getAdapter());
+
+
+
+        /*
+          --
+          -- Structure de la table `r_achats_factures$achats`
+          --
+
+          CREATE TABLE `r_achats_factures$achats` (
+          `id_achats` int(11) NOT NULL,
+          `id_factures$achats` int(11) NOT NULL,
+          `remarque` text DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         */
+        HTML_Phinx::relation('achats', 'factures$achats', $this->getAdapter());
+    }
+}

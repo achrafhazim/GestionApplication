@@ -1,0 +1,174 @@
+{% extends "themes.twig" %}
+{% use "@AbstractModules/plugins/progress.twig" %}
+{% use "@AbstractModules/plugins/graph.twig" %}
+
+{% block headcss %}
+    <!-- multi-select Custom CSS -->
+    <link href="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
+    <link href="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
+
+
+{% block container %}
+    <div id="status" style="   
+         margin-left: 5px;
+         margin-right: 5px;">
+        <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
+
+            <div class="row" >
+                <div class="col-lg-6" >
+
+                    <div id="formphp">
+                        <div class="panel panel-default box shadow-4dp" style="    padding: 0px ">
+                            <div class="panel-heading">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Notifications Panel
+
+                            </div>
+                            <!-- /.panel-heading -->
+                            {% block formMain %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6" id="panelperentstatistiqe">
+                    <!-- plugins/graph -->
+                    {{ block('graph') }} 
+                </div>
+            </div> 
+            <div class="row">
+                <div class="bloch_child"> 
+                    <div class="col-lg-12"  >
+                        <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
+                            <div class="panel-heading">
+                                <i class=" glyphicon glyphicon-usd"></i>Les  Details - Les  Échéances 
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default  " id="btnpanelperentstatistiqe">
+                                            <span class="glyphicon glyphicon-floppy-saved" style="    color: #337ab7;"></span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="row clearfix" style="margin:5px">
+                                <div class="col-md-12 table-responsive"  style="font-size: 11px;     overflow-x: visible;">
+                                    {% block formMainRelation %}
+
+                                    {% endblock %}
+
+
+
+
+                                </div>
+                            </div>
+                            <a id="add_row" class="btn btn-default pull-right">Add Row</a>
+
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+
+                    </div>
+                    <!-- /.col-lg-8 -->
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12"> 
+                    <!-- par methode ajax 
+                    <label for="ajoutdata"> AJOUTER </label> 
+                    <input type="button" value="ajouter"  class="btn btn-primary btn-lg" id="setdataparAjax">
+                    -->
+                    <label for="reset"> VIDE </label>    
+                    <input type="reset" name="reset"  class="btn btn-success btn-lg">
+                    <!-- si methode simple form submit -->
+                    <input type="submit"  value="Majouter"  class="btn btn-success btn-lg"> 
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block footer %}   
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" ></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" ></script>
+    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+    <script src="/{{_ROOTWEB}}Framework/Moment/moment.js" ></script>
+    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+    <script src="/{{_ROOTWEB}}Framework/ChartGraphique/Chart.min.js" ></script>
+
+    <script src="/AWA/stylefile.js" ></script>
+    <!-- Custom multi select -->
+    <script> $("#id_html_date_negociation").val(moment().format('YYYY-MM-DD'));</script>
+
+
+    <script src="/{{_ROOTWEB}}AWA/AWA_Chart.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/AWA_FormChild.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
+    <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectGraph.js" type="text/javascript"></script>
+
+
+    <script>
+        var awa_Chart_mini = new AWA_Chart({
+            ElementById: 'graph_mini_info',
+            type: 'pie',
+            title: 'Reglement TTC',
+        });
+        var awa_Chart_detail = new AWA_Chart({
+            ElementById: 'graph_detail_info',
+            type: 'bar',
+            options: {
+                scales: {
+                    xAxes: [{
+                            stacked: true
+                        }],
+                    yAxes: [{
+                            stacked: true
+                        }]
+                },
+                responsive: true,
+                title: {
+                    display: true,
+                    text: "Reglement TTC"
+                }
+            }
+
+        });
+        new AWA_CalculeAutoInput({
+            preffix: "id_html",
+            graph: [awa_Chart_mini, awa_Chart_detail]
+        });
+        new AWA_FormChild({
+            select_id: "content-child",
+            graph: [awa_Chart_mini, awa_Chart_detail]
+        });
+        var configMultiSelect = new AWA_ConfigMultiSelect({
+            Calcule: new pluginsMultiSelectCalcule({
+                preffixDOM: "id_html",
+                preffixDATA: "content_",
+            }),
+            Graph: new pluginsMultiSelectGraph(
+                    {
+                        preffixDATA: "content_",
+                        graph: [awa_Chart_mini, awa_Chart_detail],
+                        label: "date_paiement",
+                        dataset: "net_a_payer",
+                    })
+
+        });
+        /// set config multi select
+        $.each($('select[multiple]'), function() {
+            $(this).multiSelect(configMultiSelect);
+        });
+    </script>
+
+
+    <script src="/{{_ROOTWEB}}AWA/set_data_par_ajax.js" ></script>
+
+{% endblock %}

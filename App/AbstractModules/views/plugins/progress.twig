@@ -1,0 +1,27 @@
+{% block progress %}
+<i id="refresh" class="fa fa-refresh fa-spin center hidden" style="font-size:100px"></i>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ModalProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-refresh fa-spin center" style="font-size:24px"></i></h4>
+                </div>
+                <div class="modal-body">
+                    <div  id="progresshidden" >
+                        <spam id="messageprogressBar"></spam>
+                        <spam id="etat"></spam>
+                        <div class="progress " >
+                            <div class="progress-bar" id="progressBar"role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}

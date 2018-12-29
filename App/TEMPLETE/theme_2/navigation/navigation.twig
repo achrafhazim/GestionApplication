@@ -1,0 +1,121 @@
+
+{% use "theme_2/navigation/static/NAVBAR.twig" %}
+
+{% block Navigation %}
+
+              <!-- begin .app-side -->
+              <aside class="app-side">
+
+                <!-- begin .side-heading -->
+                <header class="side-heading">
+                  <div class="clearfix visible-xs b-b b-wet-asphalt m-b-10">
+                    <a class="b-a b-wet-asphalt visible-xs p-a-10 m-a-10 pull-right text-clouds" href="#" data-side="collapse">
+                      <i class="fa fa-fw fa-bars"></i>
+                    </a>
+                  </div>
+                  <!--begin logo-->
+                  <a class="logo" href="/public/templete/index.html">
+                    <span class="logo-xs">
+                      <img src="/{{_ROOTWEB}}AWA/assets/img/logo_xs.svg" alt="logo-xs">
+                    </span>
+                    <span class="logo-lg">
+                      <img src="/{{_ROOTWEB}}AWA/assets/img/logo_lg.svg" alt="logo-lg">
+                    </span>
+                  </a>
+                  <!--end logo-->
+                </header>
+                <!-- END: .side-heading -->
+
+                <!-- begin .side-content -->
+                <div class="side-content">
+                  <!-- begin user-panel -->
+                  <div class="user-panel">
+                    <div class="user-image">
+                      <a href="#">
+                        <img class="img-circle" src="/{{_ROOTWEB}}AWA/assets/img/m1.svg" alt="John Doe">
+                      </a>
+                    </div>
+                    <div class="user-info">
+                      <h5>John Doe</h5>
+                      <ul class="nav">
+                        <li class="dropdown">
+                          <a href="#" class="text-turquoise small dropdown-toggle bg-transparent" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-circle">
+                            </i> Online
+                          </a>
+                          <ul class="dropdown-menu animated flipInY pull-right">
+                            <li>
+                              <a href="#">Profile</a>
+                            </li>
+                            <li>
+                              <a href="#">Contacts</a>
+                            </li>
+                            <li>
+                              <a href="#">Mail Box</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                              <a href="#">
+                                <i class="fa fa-fw fa-sign-out"></i> Logout
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- END: user-panel -->
+                  <!-- begin .side-nav -->
+                  <nav class="side-nav">
+                    <!-- BEGIN: nav-content -->
+                    <ul class="metismenu nav nav-inverse nav-bordered nav-stacked" data-plugin="metismenu">
+
+                      <li class="nav-header">MAIN</li>
+
+                      <li>
+                        <a class="active" href="index.html">
+                          <span class="nav-icon">
+                            <i class="fa fa-fw fa-cogs"></i>
+                          </span>
+                          <span class="nav-title">Dashboard</span>
+                        </a>
+                      </li>
+
+                      <li class="nav-divider"></li>
+                      <li class="nav-header">Components</li>
+                      
+                       {{ block('static') }}
+
+                    </ul>
+                    <!-- END: nav-content -->
+                  </nav>
+                  <!-- END: .side-nav -->
+                </div>
+                <!-- END: .side-content -->
+                <!-- begin .side-footer -->
+                <footer class="side-footer p-h-15 p-t-15 p-b-10">
+                  <div class="progress is-xs">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                      <span class="sr-only">60% Complete</span>
+                    </div>
+                  </div>
+                  <div class="progress is-xs">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                      <span class="sr-only">40% Complete</span>
+                    </div>
+                  </div>
+                </footer>
+                <!-- END: .side-footer -->
+              </aside>
+              <!-- END: .app-side -->
+
+             
+    
+
+    
+    
+{% endblock %}
+
+
+
+

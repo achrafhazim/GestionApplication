@@ -1,0 +1,24 @@
+runtime: php72
+api_version: 2
+
+
+
+
+runtime_config :
+    document_root : public
+handlers:
+- url: /
+  script: index.php
+
+- url: /index\.html
+  script: index.php
+
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /(.*\.(gif|png|jpg))$
+  static_files: public/\1
+  upload: public/.*\.(gif|png|jpg)$
+
+
+

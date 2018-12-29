@@ -1,0 +1,41 @@
+{% extends "themes.twig" %}
+
+{% block headcss %}
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block container %}
+    <div class="row" style="margin: 5px ">
+        <h1>select option</h1>
+        <br>
+        <div class="col-md-8 cadre " >
+
+            <form  action=""  method='GET'  enctype="multipart/form-data" class="form-horizontal">
+                <div class="row"> 
+                    {{form(intent)}}  
+                </div>
+                <div class="row"> 
+                    <input type="submit" name="ajouter" class="btn btn-primary center-block" value="Valider">
+                </div>
+            </form>
+        </div> 
+
+        <div class="col-md-4 " >
+
+            <div id="affiche" class=" alert alert-info">
+            </div>
+        </div>     
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+    <!-- bootstrap-select Core JavaScript -->
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/show_label_info_select.js" type="text/javascript"></script>
+{% endblock %}

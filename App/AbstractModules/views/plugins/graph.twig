@@ -1,0 +1,42 @@
+{% block graph %}
+    <div class="panel panel-default box shadow-4dp" >
+        <div class="panel-heading">
+            <i class="fa fa-bar-chart-o fa-fw"></i> Notifications Panel
+
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body" >
+            
+            <canvas id="graph_mini_info" ></canvas>
+        </div>
+        <!-- /.list-group -->
+
+
+        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">
+            View All Alerts
+        </button>
+
+    </div>
+    <!-- /.panel-body -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">pluse info</h4>
+                </div>
+                <div class="modal-body">
+                    <canvas id="graph_detail_info"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

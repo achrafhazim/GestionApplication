@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="projet graficart" namespace="Framework">
+     <description>test code cs </description>
+     <autoload>./vendor/autoload.php</autoload>
+     
+      <file>./App</file>
+      <file>./Kernel</file>
+    
+        
+      
+     <arg name="colors"/>
+     <arg value="sp"/>
+    
+     <rule ref="PSR2"></rule>
+</ruleset>

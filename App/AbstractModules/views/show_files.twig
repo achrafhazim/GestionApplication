@@ -1,0 +1,45 @@
+{% extends "themes.twig" %}
+
+
+
+{% block container %}
+    <H1>abstractmode</H1>
+    <div class ="cadre">
+        <div class="row">
+
+            {% for file in files %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail" >
+
+                        <a href="/{{file.path}} " >
+
+                            {% if file.type=="image" %}
+                                <img src="/{{file.path}}" alt="/{{file.name}} "                       data-toggle="tooltip" data-placement="bottom" title="{{file.name}}"  class="img-thumbnail" style="width:242px; height: 200px" />
+
+                            {% elseif file.type=="pdf"  %}
+                                <img src="/{{_ROOTWEB}}filesUpload/icon/pdf.png" alt="/{{file.name}}"       data-toggle="tooltip" data-placement="bottom" title="{{file.name}}" class="img-thumbnail" style="width:242px; height: 200px" />
+                            {% else %}
+
+                                <img src="/{{_ROOTWEB}}filesUpload/icon/file.jpeg" alt="/{{file.name}}"     data-toggle="tooltip" data-placement="bottom" title="{{file.name}}" class="img-thumbnail" style="width:242px; height: 200px" />
+
+                            {% endif %}
+
+
+
+                        </a>
+                        <div class="caption">
+                            <h3>la taille</h3>
+                            <p>{{file.size}}</p>
+                           
+                       </div>
+
+                    </div>
+                </div>
+
+
+            {% endfor %} 
+
+
+        </div>
+    </div>   
+{% endblock %} 

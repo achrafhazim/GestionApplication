@@ -1,0 +1,52 @@
+{% extends "themes.twig" %}
+{% use "@Rapportsclients/plugins/formqueryDataAjax.twig" %}
+{% use "@Rapportsclients/plugins/message_global.twig" %}
+{% use "@Rapportsclients/plugins/graph.twig" %}
+
+{% block headcss %}
+    <link href="/{{_ROOTWEB}}Framework/DateRangePicker/daterangepicker.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+
+
+{% endblock %}
+
+
+
+{% block container %}
+
+
+
+
+
+    {{ block('formqueryDataAjax') }}
+    {{ block('message_global') }}
+    {{ block('graph') }}
+{% endblock %}
+
+{% block footer %}
+
+    <script src="/{{_ROOTWEB}}Framework/Moment/moment.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/DateRangePicker/jquery.daterangepicker.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/InputSelectDate.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/queryDataAjax.js" type="text/javascript"></script>
+    <script>
+        $("#queryDataAjax").click(function() {
+            /// method post
+            queryDataAjax('/ajax/Rapports');
+
+        });
+    </script>
+
+    <script src="/{{_ROOTWEB}}Framework/ChartGraphique/Chart.min.js" type="text/javascript"></script>
+
+    <script src="/{{_ROOTWEB}}AWA/graphAjax.js" type="text/javascript"></script>
+    <script>
+        /// method get
+        graphAjax("/ajax/st");
+    </script>
+{% endblock %}
+
+

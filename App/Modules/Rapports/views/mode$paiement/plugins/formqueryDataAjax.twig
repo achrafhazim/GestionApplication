@@ -1,0 +1,89 @@
+
+
+{% block formqueryDataAjax %}
+    <div class="box shadow-24dp">
+      <header>
+        <h4>Shadow</h4>
+        <div class="box-tools">
+          <span class="badge">badge</span>
+        </div>
+      </header>
+      <div class="box-body">
+        <h4>Available Shadow Class</h4>
+        <div class="flex flex-row flex-wrap">
+
+
+
+
+          <form class="form-inline" method="POST">
+
+            <div class="row ">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="InputSelectDate"> Selection d'intervalle <span class="glyphicon glyphicon-calendar" aria-hidden="true" ></span></label>
+                  <select class="selectpicker form-control" id="InputSelectDate" size="12" >
+                    <option value="0" id="InputOptionDate_show_per" data-dateselectstart=""  data-dateselectfin=""  >Personnalisé</option>
+                    <option value="1" id="InputOptionDate_Ce_mois_ci" data-dateselectstart=""  data-dateselectfin=""   >Ce mois ci</option>
+                    <option value="2" id="InputOptionDate_mois_dernier" data-dateselectstart=""  data-dateselectfin=""  >Depuis le mois dernier</option>
+                    <option value="3" id="InputOptionDate_3_derniers_mois" data-dateselectstart=""  data-dateselectfin="" >Les 3 derniers mois</option>
+                    <option value="4" id="InputOptionDate_6_derniers_mois" data-dateselectstart=""  data-dateselectfin="" >Les 6 derniers mois</option>
+                    <option value="5" id="InputOptionDate_cette_annee" data-dateselectstart=""  data-dateselectfin="" >Cette année</option>
+                    <option value="6" id="InputOptionDate_l_annee_derniere" data-dateselectstart=""  data-dateselectfin="" >L'année dernière</option>
+
+                  </select>
+                  <p class="help-block">Example block-level help text here.</p>
+                </div>
+              </div>
+              <div class="col-md-9">
+
+                <div class="form-group">
+
+                  <label for="groupInputDateStartFin"> L'intervalle de date  <span class="glyphicon glyphicon-calendar" aria-hidden="true" ></span></label><br>
+                  <span  id="groupInputDateStartFin">
+
+                    <input  class="form-control form-string" id="startinputDate" size="20" value="" name="startinputDate" placeholder="date debit">
+                    <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
+                    <input class="form-control form-string" id="fininputDate" size="20" value="" name="fininputDate" placeholder="date fin">
+                  </span>
+
+                </div>
+
+
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-md-12">
+
+                <div class="form-group">
+                  <label for="Rapports">Selection Rapports</label>
+                  <select class="selectpicker form-control form-childs" multiple data-selected-text-format="count > 7" id="Rapports" name="Rapports[]">
+
+                    {% for op in charge %}
+                        <option value="{{ op }}" >{{ op|replace({'$': " ", '%$%': " "}) }}</option>
+                    {% endfor %}
+
+
+                  </select>
+                  <p class="help-block">Example block-level help text here.</p>
+
+
+
+                </div>
+              </div>
+            </div> 
+
+            <input id="queryDataAjax" type="button" value="recherche" name="query" class="btn btn-primary btn-lg" >
+
+          </form> 
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+{% endblock %}

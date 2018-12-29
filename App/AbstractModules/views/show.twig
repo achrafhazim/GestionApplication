@@ -1,0 +1,105 @@
+{% extends "themes.twig" %}
+
+{% use "@AbstractModules/plugins/showmode.twig" %}
+
+{% block headcss %}
+
+    <link rel="stylesheet" type="text/css" href="/{{_ROOTWEB}}Framework/DataTables/css/dataTables.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/{{_ROOTWEB}}Framework/Buttons/css/buttons.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/{{_ROOTWEB}}Framework/Responsive/css/responsive.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/{{_ROOTWEB}}Framework/Select/css/select.bootstrap.min.css"/>
+
+    <link href="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .DataTableJs {
+            width:95% ; 
+            margin: auto ;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block controle %}
+    {{ block('showmode') }} 
+{% endblock %}
+
+{% block container %}
+
+
+
+    <div class ="">
+
+        <div class="row" style="width:90% ; margin: auto ;    margin-top: 10px;">
+            <table id="DataTableJs"  class="DataTableJs table table-striped table-bordered dt-responsive nowrap ">
+
+
+
+
+                {% block table %}
+                    {% if Html_or_Json=='json' %}
+
+                    {% elseif Html_or_Json=='HTML' %}
+                        {{ table_intent(intent,input_tableHtml())}}
+                    {% endif %}  
+                {% endblock %}
+
+
+
+            </table>
+        </div>
+
+    </div>   
+{% endblock %}
+
+{% block footer %}
+    <!-- Custom datatables -->
+
+
+    <script  src="/{{_ROOTWEB}}Framework/DataTables/js/jquery.dataTables.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/DataTables/js/dataTables.bootstrap.min.js"></script>
+
+
+
+    {% if jsCharges.excel == true %}
+        <script  src="/{{_ROOTWEB}}Framework/JSZip-2.5.0/jszip.min.js"></script>
+    {% endif %}
+    {% if jsCharges.pdf == true %}
+        <script  src="/{{_ROOTWEB}}Framework/pdfmake-0.1.32/pdfmake.min.js"></script>
+        <script  src="/{{_ROOTWEB}}Framework/pdfmake-0.1.32/vfs_fonts.js"></script>
+    {% endif %}
+    <script  src="/{{_ROOTWEB}}Framework/Buttons/js/dataTables.buttons.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.bootstrap.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.colVis.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.html5.min.js"></script>
+    {% if jsCharges.print == true %}
+        <script  src="/Framework/Buttons/js/buttons.print.min.js"></script>
+    {% endif %}
+    <script  src="/{{_ROOTWEB}}Framework/Responsive/js/dataTables.responsive.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/Responsive/js/responsive.bootstrap.min.js"></script>
+    <script  src="/{{_ROOTWEB}}Framework/Select/js/dataTables.select.min.js"></script>
+
+
+    <script src="/{{_ROOTWEB}}AWA/DataTable.js" ></script>
+
+    {% if Html_or_Json=='json' %}
+
+        <script>DataTable_awa('#DataTableJs',
+                    "{{btnDataTable}}",
+                    '{{input_tableJson()}}',
+                    "{{ajax}}");</script>
+        {% elseif Html_or_Json=='HTML' %}
+        <script>DataTable_awa('#DataTableJs',
+                    "{{btnDataTable}}",
+                    '{{input_tableJson()}}'
+                    );</script>
+        {% endif %} 
+    <!-- end dataTables -->  
+
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" ></script>
+    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+    <script src="/{{_ROOTWEB}}AWA/modeAffichageTable.js" ></script>
+
+{% endblock %}

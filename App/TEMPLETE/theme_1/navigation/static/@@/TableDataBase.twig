@@ -1,0 +1,55 @@
+{# empty Twig template #}
+
+
+
+
+{% block TableDataBase %}
+    {% import "macro/item.twig" as item %}
+
+
+
+
+    {% for titre,tableDataBas in _menu   %}
+
+
+        <li>
+
+          <a href="javascript:;">
+            <span class="nav-icon">
+              <i class="fa fa-fw fa-map"></i>
+            </span>
+
+            <span class="nav-title">{{ titre }}</span>
+            <span class="nav-tools">
+              <i class="fa fa-fw arrow"></i>
+            </span>
+          </a>
+
+
+
+          <ul class="nav nav-second-level">
+            {% for group in tableDataBas%}
+
+                {% for label, url in group %}
+
+                    {{ item.li_a(url,label) }}
+
+                {% endfor %}
+
+
+            {% endfor %}
+          </ul>
+        </li> 
+
+
+
+
+
+    {% endfor %}
+
+
+ 
+
+
+
+{% endblock %}
