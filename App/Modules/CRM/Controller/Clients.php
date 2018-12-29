@@ -24,15 +24,10 @@ use function substr;
  */
 class Clients extends AbstractController {
 
-    function __construct($Options) {
-        parent::__construct($Options);
-        $this->setNameController("clients");
-    }
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
         parent::process($request, $handler);
-
+        $this->setNameController("clients");
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
