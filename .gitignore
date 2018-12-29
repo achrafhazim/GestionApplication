@@ -10,8 +10,6 @@ vendor/*
 metadata/
 public/filesUpload/*
 ./public/filesUpload/*
-public/AWA/assets/*
-./public/AWA/assets/*
 .idea
 .metadata
 .vscode
