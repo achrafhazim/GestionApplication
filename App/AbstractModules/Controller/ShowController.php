@@ -30,11 +30,12 @@ use function substr;
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
+        
         $this->setNameController($this->getRoute()->getParam("controle"));
 
         
 
-        $this->chargeModel($this->getNameController());
+       
 
 
         if ($this->is_Erreur()) {

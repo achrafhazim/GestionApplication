@@ -26,7 +26,7 @@ use function ucfirst;
 
 abstract class Controller implements MiddlewareInterface {
 
-    private $erreur = [];
+    protected $erreur = [];
     private $action = [];
     private $container;
     private $model;
@@ -146,9 +146,9 @@ abstract class Controller implements MiddlewareInterface {
 
     function is_Erreur(string $MC = ""): bool {
         if ($MC == "") {
-            return !$this->erreur["Controller"] || !$this->erreur["Model"];
+            return $this->erreur["Controller"] || $this->erreur["Model"];
         } else {
-            return !$this->erreur[$MC];
+            return $this->erreur[$MC];
         }
     }
 
@@ -165,7 +165,7 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     /// model
-    private function getClassModel(): string {
+    private function getClassModel(string $nameclassModel=""): string {
         $type = "Model";
 
         $modul = $this->getNameModule();
@@ -190,7 +190,8 @@ abstract class Controller implements MiddlewareInterface {
 
             return $classDAbstractModules;
         }
-
+        var_dump($controller);
+die("error get class name model");
         // error
     }
 
@@ -198,22 +199,21 @@ abstract class Controller implements MiddlewareInterface {
         $this->model = $model;
     }
 
+    public function getNewModel(string $nameclassModel = ""): ModelInterface {
+    
+            $classModel = $this->getClassModel($nameclassModel);
+      
+      
+        $model = new $classModel($this->getContainer()->get("pathModel"),
+                $this->getContainer()->get("tmp"),
+                strtolower($this->getNameController()));
+        return $model;
+    }
+
     public function getModel(string $nameTable = ""): ModelInterface {
-        $this->chargeModel($nameTable);
 
-
-        return $this->model;
-    }
-
-    public function hasModel(): bool {
-        return is_a($this->model, ModelInterface::class);
-    }
-
-    public function chargeModel(string $nameTable): bool {
-        $flag = $this->hasModel();
-        if (!$flag) {
-            $classModel = $this->getClassModel();
-            $model = new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp"));
+        if (!$this->hasModel()) {
+            $model = $this->getNewModel();
             $this->setModel($model);
         }
         if ($nameTable !== "") {
@@ -222,6 +222,15 @@ abstract class Controller implements MiddlewareInterface {
                 $this->erreur["Model"] = $flag_charge;
             }
         }
+        return $this->model;
+    }
+
+    public function hasModel(): bool {
+        return is_a($this->model, ModelInterface::class);
+    }
+
+    public function chargeModel(string $nameTable): bool {
+
 
 
 
@@ -296,7 +305,7 @@ abstract class Controller implements MiddlewareInterface {
             }
         }
         //etat du erreur
-        $this->erreur["Controller"] = $flag;
+        $this->erreur["Controller"] = !$flag;
         return $flag;
     }
 

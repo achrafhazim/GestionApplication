@@ -91,8 +91,10 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
      * @param string $table
      * @return bool
      */
-    public function setTable(string $table): bool
+    public function setTable(string $Table): bool
+    
     {
+        $table= strtolower($Table);
         if ($this->is_Table($table)) {
             $this->is_null = false;
             $this->table = $table;
