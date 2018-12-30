@@ -19,9 +19,10 @@ use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Kernel\Tools\Tools;
 use function substr;
 
- class ShowController extends AbstractController {
+class ShowController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
@@ -30,12 +31,12 @@ use function substr;
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
-        
+
         $this->setNameController($this->getRoute()->getParam("controle"));
 
-        
 
-       
+
+
 
 
         if ($this->is_Erreur()) {
@@ -52,6 +53,8 @@ use function substr;
 
     public function run($id): ResponseInterface {
         switch (true) {
+            case $this->Actions()->is_ajax():
+                return $this->ajax_js();
             case $this->Actions()->is_index():
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
@@ -88,6 +91,23 @@ use function substr;
             default:
                 return $this->getResponse()->withStatus(404);
         }
+    }
+
+    public function ajax_js(): ResponseInterface {
+        if ($this->is_Erreur()) {
+            return $this->getResponse()
+                            ->withStatus(404)
+                            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+        }
+        $query = $this->getRequest()->getQueryParams();
+
+        $modeshow = $this->getModeShow($query);
+        $modeSelect = $modeshow["modeSelect"];
+
+        $data = $this->getModel()->showAjax($modeSelect, true);
+        $json = Tools::json_js($data);
+        $this->getResponse()->getBody()->write($json);
+        return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
     protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {

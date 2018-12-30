@@ -29,30 +29,13 @@ class AjaxController extends AbstractController {
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
 
-        
+
 
 
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
         return $this->ajax_js();
-    }
-
-    public function ajax_js(): ResponseInterface {
-        if ($this->is_Erreur()) {
-            return $this->getResponse()
-                            ->withStatus(404)
-                            ->withHeader('Content-Type', 'application/json; charset=utf-8');
-        }
-        $query = $this->getRequest()->getQueryParams();
-
-        $modeshow = $this->getModeShow($query);
-        $modeSelect = $modeshow["modeSelect"];
-
-        $data = $this->getModel()->showAjax($modeSelect, true);
-        $json = Tools::json_js($data);
-        $this->getResponse()->getBody()->write($json);
-        return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
 }

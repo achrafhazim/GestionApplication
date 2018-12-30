@@ -17,7 +17,7 @@ use Kernel\AWA_Interface\ActionInterface;
  */
 class Action implements ActionInterface
 {
-
+     private $ajax;
     private $add;
     private $update;
     private $delete;
@@ -27,6 +27,7 @@ class Action implements ActionInterface
 
     /**
      *
+     * @param string $ajax
      * @param string $add
      * @param string $update
      * @param string $delete
@@ -34,12 +35,14 @@ class Action implements ActionInterface
      * @param string $message
      */
     function __construct(
+       string $ajax = "ajax",
         string $add = "add",
         string $update = "update",
         string $delete = "delete",
         string $show = "show",
         string $message = "message"
     ) {
+        $this->ajax = $ajax;
         $this->add = $add;
         $this->update = $update;
         $this->delete = $delete;
@@ -154,4 +157,14 @@ class Action implements ActionInterface
     {
         return "index" === strtolower($this->action) || "" === $this->action || null == $this->action;
     }
+
+    public function is_ajax(): bool {
+        return $this->ajax === $this->action;
+        
+    }
+
+    public function name_ajax(): string {
+        return $this->ajax;
+    }
+
 }

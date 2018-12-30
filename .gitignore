@@ -13,4 +13,5 @@ public/filesUpload/*
 .idea
 .metadata
 .vscode
+composer.lock 
 
