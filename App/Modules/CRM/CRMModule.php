@@ -33,30 +33,40 @@ class CRMModule extends AbstractModule {
 
 
         $router->addRoute_get(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options),
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{params:[a-z0-9\,\/]*}]", 
+                new \App\AbstractModules\Controller\GET($Options),
                 /// name route
-                $nameRoute->show() . "ee", self::NameModule
+                $nameRoute->show() . "ee", 
+                self::NameModule
         );
-        $router->addRoute_get(
-                "/_clients[/{action:[a-z]+}-{id:[0-9\,]+}]", new Controller\Clients($Options), $nameRoute->show(), self::NameModule
+         $router->addRoute_post(
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{params:[a-z0-9\,\/]*}]",
+                 new \App\AbstractModules\Controller\POST($Options), 
+                 $nameRoute->send(), 
+                 self::NameModule
         );
-
-        $router->addRoute_post(
-                "/{controle:[a-z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($Options), $nameRoute->send(), self::NameModule
-        );
-
-
-        $router->addRoute_get(
-                "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
-        );
-
-
-        $router->addRoute_get(
-                "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
-        );
+         
+//        $router->addRoute_get(
+//                "/_clients[/{action:[a-z]+}-{id:[0-9\,]+}]", new Controller\Clients($Options), $nameRoute->show(), self::NameModule
+//        );
+//
+//       
+//
+//
+//        $router->addRoute_get(
+//                "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
+//        );
+//
+//
+//        $router->addRoute_get(
+//                "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($Options), $nameRoute->files(), self::NameModule
+//        );
     }
 
     protected function generateUriMenu(string $name_route, array $Controllers): array {
+        return [];
+        
+        
         $generateUriMenu = [];
         foreach ($Controllers as $controle) {
             if (is_array($controle)) {

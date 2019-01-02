@@ -18,7 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class AjaxController extends AbstractController {
+class RestfulController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
