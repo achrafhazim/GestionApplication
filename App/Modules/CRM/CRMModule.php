@@ -46,7 +46,7 @@ class CRMModule extends AbstractModule {
         );
 
         
-         $router->addRoute_delete(
+         $router->addRoute_any(
                 "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
         );
 
