@@ -1,5 +1,18 @@
-
 2 controler post + get
+restfall controler
+https://stackoverflow.com/questions/36975619/how-to-call-a-rest-web-service-api-from-javascript/51854096
+
+const test = async () => {
+  const response = await fetch('http://localhost/CRM/ajax/clients', {
+    method: 'DELETE',
+    body: "", // string or object
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  });
+  const myJson = await response.json(); //extract JSON from the http response
+  console.log(myJson)
+}
 
 model select tabel
 jont pluse query

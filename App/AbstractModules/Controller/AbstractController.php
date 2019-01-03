@@ -13,52 +13,52 @@
  */
 
 namespace App\AbstractModules\Controller;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
-
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Controller\Controller;
 
 abstract class AbstractController extends Controller {
-    //actionnnnnnnnnnnnn
-     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        parent::process($request, $handler);
 
-        // si is error 
-        if ($this->getResponse()->getStatusCode() != 200) {
-            return $this->getResponse();
-        }
+    protected function getModeShow(array $modeHTTP): array {
         
-        // set route 
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $parent = MODE_SELECT_Interface::_DEFAULT;
+        $child = MODE_SELECT_Interface::_NULL;
 
-        // set controller 
-        $this->setNameController($this->getRoute()->getParam("controle"));
-
-        // si is error 
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
+        $type = "json";
+        if (isset($modeHTTP["pere"])) {
+            $parent = $this->parseMode($modeHTTP["pere"], $parent);
         }
-     
-        ///////////////////////////////////
-        // is ok etap 1
-        // get action
-        $action = $this->getRoute()->getParam("action");
-        // get params
-        $params = $this->getRoute()->getParam("params");
-        // set actont
-        $this->Actions()->setAction($action);
-        //http://localhost/CRM/contacts/mm-00
-        var_dump($action,$params);        die();
-        
-       
+        if (isset($modeHTTP["fils"])) {
+            $child = $this->parseMode($modeHTTP["fils"], $child);
+            if ($child != MODE_SELECT_Interface::_NULL) {
+                $type = "HTML";
+            }
+        }
 
 
-
-        return $this->run($id);
+        return ["type" => $type, "modeSelect" => [$parent, $child]];
     }
 
-    
+    private function parseMode(string $modefr, $default): string {
+        switch ($modefr) {
+            case "rien":
+                $mode = MODE_SELECT_Interface::_NULL;
+                break;
+            case "resume":
+                $mode = MODE_SELECT_Interface::_MASTER;
+                break;
+            case "defaut":
+                $mode = MODE_SELECT_Interface::_DEFAULT;
+                break;
+            case "tous":
+                $mode = MODE_SELECT_Interface::_ALL;
+                break;
+
+            default:
+                $mode = $default;
+                break;
+        }
+        return $mode;
+    }
 
 }

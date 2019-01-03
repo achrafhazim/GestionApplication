@@ -38,7 +38,10 @@ use function var_dump;
         $this->setRoute($this->getRouter()->match($this->getRequest()));
       $this->setNameController($this->getRoute()->getParam("controle"));
 
-       
+        $classModel = $this->getClassModel();
+
+        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
+        $this->chargeModel($this->getNameController());
 
 
         if ($this->is_Erreur()) {

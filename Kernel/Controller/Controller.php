@@ -10,24 +10,23 @@ use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
-use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
-
+use const ROOT_WEB;
+use function array_merge;
 use function in_array;
 use function is_a;
 use function preg_match;
-
+use function str_replace;
 use function ucfirst;
 
 abstract class Controller implements MiddlewareInterface {
 
-    protected $erreur = [];
+    private $erreur = [];
     private $action = [];
     private $container;
     private $model;
@@ -65,8 +64,8 @@ abstract class Controller implements MiddlewareInterface {
         $this->erreur["Model"] = false;
 
         $this->setRouter($this->getContainer()->get(RouterInterface::class));
-//        $this->setRenderer($this->getContainer()->get(RendererInterface::class));
-//       $this->setFile_Upload($this->getContainer()->get(File_UploadInterface::class));
+        $this->setRenderer($this->getContainer()->get(RendererInterface::class));
+        $this->setFile_Upload($this->getContainer()->get(File_UploadInterface::class));
     }
 
     function getContainer(): ContainerInterface {
@@ -74,6 +73,35 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     //
+    public function getClassModel(): string {
+        $type = "Model";
+
+        $modul = $this->getNameModule();
+        $controller = ucfirst($this->getNameController());
+
+        $class = "\App\Modules\\$modul\\$type\\$controller";
+
+        if (class_exists($class)) {
+
+            return $class;
+        }
+
+        $classDefault = "\App\Modules\\$modul\\$type\\$type";
+
+        if (class_exists($classDefault)) {
+
+            return $classDefault;
+        }
+        $classDAbstractModules = "\App\AbstractModules\\$type\\$type";
+
+        if (class_exists($classDAbstractModules)) {
+
+            return $classDAbstractModules;
+        }
+
+        // error
+    }
+
 // psr 7
 
     function setRequest(ServerRequestInterface $request) {
@@ -147,9 +175,9 @@ abstract class Controller implements MiddlewareInterface {
 
     function is_Erreur(string $MC = ""): bool {
         if ($MC == "") {
-            return $this->erreur["Controller"] || $this->erreur["Model"];
+            return !$this->erreur["Controller"] || !$this->erreur["Model"];
         } else {
-            return $this->erreur[$MC];
+            return !$this->erreur[$MC];
         }
     }
 
@@ -166,119 +194,28 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     /// model
-    // get info url mode select
-    protected function getModeShow(array $modeHTTP): array {
-        
-        $parent = MODE_SELECT_Interface::_DEFAULT;
-        $child = MODE_SELECT_Interface::_NULL;
-
-        $type = "json";
-        if (isset($modeHTTP["pere"])) {
-            $parent = $this->parseMode($modeHTTP["pere"], $parent);
-        }
-        if (isset($modeHTTP["fils"])) {
-            $child = $this->parseMode($modeHTTP["fils"], $child);
-            if ($child != MODE_SELECT_Interface::_NULL) {
-                $type = "HTML";
-            }
-        }
-
-
-        return ["type" => $type, "modeSelect" => [$parent, $child]];
-    }
-
-    private function parseMode(string $modefr, $default): string {
-        switch ($modefr) {
-            case "rien":
-                $mode = MODE_SELECT_Interface::_NULL;
-                break;
-            case "resume":
-                $mode = MODE_SELECT_Interface::_MASTER;
-                break;
-            case "defaut":
-                $mode = MODE_SELECT_Interface::_DEFAULT;
-                break;
-            case "tous":
-                $mode = MODE_SELECT_Interface::_ALL;
-                break;
-
-            default:
-                $mode = $default;
-                break;
-        }
-        return $mode;
-    }
-    private function getClassModel(string $nameclassModel=""): string {
-        $type = "Model";
-
-        $modul = $this->getNameModule();
-        $controller = ucfirst($this->getNameController());
-
-        $class = "\App\Modules\\$modul\\$type\\$controller";
-
-        if (class_exists($class)) {
-
-            return $class;
-        }
-
-        $classDefault = "\App\Modules\\$modul\\$type\\$type";
-
-        if (class_exists($classDefault)) {
-
-            return $classDefault;
-        }
-        $classDAbstractModules = "\App\AbstractModules\\$type\\$type";
-
-        if (class_exists($classDAbstractModules)) {
-
-            return $classDAbstractModules;
-        }
-        var_dump($controller);
-die("error get class name model");
-        // error
-    }
-
-    public function setModel(ModelInterface $model) {
+    function setModel(ModelInterface $model) {
         $this->model = $model;
     }
 
-    public function getNewModel(string $nameclassModel = ""): ModelInterface {
-    
-            $classModel = $this->getClassModel($nameclassModel);
-      
-      
-        $model = new $classModel($this->getContainer()->get("pathModel"),
-                $this->getContainer()->get("tmp"),
-                strtolower($this->getNameController()));
-        return $model;
-    }
-
-    public function getModel(string $nameTable = ""): ModelInterface {
-
-        if (!$this->hasModel()) {
-            $model = $this->getNewModel();
-            $this->setModel($model);
-        }
+    protected function getModel(string $nameTable = ""): ModelInterface {
         if ($nameTable !== "") {
-            $flag_charge = $this->model->setTable($nameTable);
-            if ($flag_charge) {
-                $this->erreur["Model"] = $flag_charge;
-            }
+            $this->chargeModel($nameTable);
         }
         return $this->model;
     }
 
-    public function hasModel(): bool {
+    protected function hasModel(): bool {
         return is_a($this->model, ModelInterface::class);
     }
 
-    public function chargeModel(string $nameTable): bool {
-
-
-
-
-
-        return true;
+    protected function chargeModel($table): bool {
+        $flag = $this->hasModel();
+        if ($flag) {
+            $flag = $this->getModel()->setTable($table);
+            $this->erreur["Model"] = $flag;
+        }
+        return $flag;
     }
 
     /// controller
@@ -348,10 +285,61 @@ die("error get class name model");
             }
         }
         //etat du erreur
-        $this->erreur["Controller"] = !$flag;
+        $this->erreur["Controller"] = $flag;
         return $flag;
     }
 
+    /// view
+    function add_data_views(array $data_views): array {
 
+        $this->data_views = array_merge($this->data_views, $data_views);
+        return $this->data_views;
+    }
+
+    function getFile_Upload(): File_UploadInterface {
+        return $this->File_Upload;
+    }
+
+    function getRenderer(): RendererInterface {
+        return $this->renderer;
+    }
+
+    function setFile_Upload(File_UploadInterface $File_Upload) {
+        $this->File_Upload = $File_Upload;
+    }
+
+    function setRenderer(RendererInterface $renderer) {
+        $this->renderer = $renderer;
+    }
+
+    public function render($name_view, array $data = []): ResponseInterface {
+        $renderer = $this->getRenderer();
+
+        $renderer->addGlobal("_page", ucfirst(str_replace("$", "  ", $this->getNameController())));
+        $renderer->addGlobal("_Controller", $this->getNameController());
+        $renderer->addGlobal("_Action", $this->Actions());
+        $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
+
+        $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
+        $data_view = $this->add_data_views($data);
+
+
+        $pathview = $this->getContainer()->get("Modules") .
+                $this->getNameModule() . D_S .
+                "views" . D_S .
+                $this->getNameController() . D_S;
+
+        if (is_dir($pathview)) {
+            $render = $renderer->render("@{$this->getNameModule()}{$this->getNameController()}/" . $name_view, $data_view);
+        } else {
+            $render = $renderer->render("@default_view/" . $name_view, $data_view);
+        }
+
+
+
+        $response = $this->getResponse();
+        $response->getBody()->write($render);
+        return $response;
+    }
 
 }

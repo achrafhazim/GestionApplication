@@ -19,10 +19,9 @@ use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Kernel\Tools\Tools;
 use function substr;
 
-class ShowController extends AbstractController {
+ class ShowController extends AbstractController {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
@@ -31,12 +30,12 @@ class ShowController extends AbstractController {
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
-
         $this->setNameController($this->getRoute()->getParam("controle"));
 
+      $classModel = $this->getClassModel();
 
-
-
+        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
+        $this->chargeModel($this->getNameController());
 
 
         if ($this->is_Erreur()) {
@@ -53,8 +52,6 @@ class ShowController extends AbstractController {
 
     public function run($id): ResponseInterface {
         switch (true) {
-            case $this->Actions()->is_ajax():
-                return $this->ajax_js();
             case $this->Actions()->is_index():
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
 
@@ -92,8 +89,6 @@ class ShowController extends AbstractController {
                 return $this->getResponse()->withStatus(404);
         }
     }
-
-  
 
     protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
 
@@ -154,6 +149,204 @@ class ShowController extends AbstractController {
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    protected function supprimer($id, string $view): ResponseInterface {
 
+        $conditon = ['id' => $id];
+
+        $url_id_file = $this->getModel()->get_idfile($id);
+
+        $etat = $this->getModel()->delete($conditon);
+
+        if ($etat == -1) {
+            $r = $this->getResponse()->withStatus(406);
+            $r->getBody()->write("accès refusé  de supprimer ID  $id");
+            return $r;
+        } else {
+            $this->getResponse()->getBody()->write("$view  $id");
+
+            $eventManager = $this->getContainer()->get(EventManagerInterface::class);
+            $event = new Event();
+            $event->setName("delete_files");
+            $event->setParams(["url_id_file" => $url_id_file]);
+            $eventManager->trigger($event);
+        }
+
+        return $this->getResponse();
+    }
+
+    protected function modifier($id_save, string $view): ResponseInterface {
+
+
+        $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
+        $model = $this->getModel();
+
+        $schema = $model->getschema();
+
+        $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
+
+        if ($Entitys->is_Null()) {
+            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+        }
+
+        $intent_Form = new Intent_Form();
+        $intent_Form->setDefault_Data($Entitys);
+        $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
+
+
+        $intent_Form->setCharge_data_select($model->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
+        $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
+        $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
+
+
+
+
+
+
+
+        return $this->render($view, ["intent" => $intent_Form]);
+    }
+
+    protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
+        $model = $this->getModel();
+        $schema = $model->getschema();
+
+        $data_get = $this->getRequest()->getQueryParams();
+        $NotSelect = $this->getnotSelect();
+
+
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
+
+
+        if (empty($data_get) && !empty($META_data)) {
+            $select = $model->get_Data_FOREIGN_KEY();
+
+
+
+            $intent_formselect = new Intent_Form();
+            $intent_formselect->setCOLUMNS_META($META_data);
+            $intent_formselect->setCharge_data_select($select);
+            return $this->render($viewSelect, ["intent" => $intent_formselect]);
+        } else {
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
+
+            $intent_form = new Intent_Form();
+            $intent_form->setCOLUMNS_META($META_data);
+            $intent_form->setCharge_data_select($select);
+            $intent_form->setCharge_data_multiSelect($multiSelect);
+
+
+            return $this->render($viewAjoutes, ["intent" => $intent_form]);
+        }
+    }
+
+    protected function show($id, string $view): ResponseInterface {
+        $intent = $this->getModel()->show_styleForm($id);
+        return $this->render($view, ["intent" => $intent]);
+    }
+
+    protected function message($rangeID, string $view): ResponseInterface {
+
+        $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
+
+        $intentshow = $this->getModel()->show_in($mode, $rangeID);
+
+        return $this->render($view, ["intent" => $intentshow]);
+    }
+
+    /*     * ***
+     * child
+     */
+
+    protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface {
+        $model = $this->getModel();
+        $schema = $model->getschema();
+
+        $data_get = $this->getRequest()->getQueryParams();
+        $NotSelect = $this->getnotSelect();
+
+        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
+
+
+        if (empty($data_get) && !empty($META_data)) {
+            $select = $model->get_Data_FOREIGN_KEY();
+            $intent_formselect = new Intent_Form();
+            $intent_formselect->setCOLUMNS_META($META_data);
+            $intent_formselect->setCharge_data_select($select);
+            return $this->render($viewSelect, ["intent" => $intent_formselect]);
+        } else {
+            $model = $this->getModel();
+            $schema = $model->getschema();
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
+
+            $intent_form = new Intent_Form();
+            $intent_form->setCOLUMNS_META($META_data);
+            $intent_form->setCharge_data_select($select);
+            $intent_form->setCharge_data_multiSelect($multiSelect);
+
+
+
+
+            $NameControllerchild = $this->getChild();
+            $this->getModel()->setTable($NameControllerchild);
+
+            $model = $this->getModel();
+            $schema = $model->getschema();
+            $META_data = $schema->getCOLUMNS_META();
+            $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
+
+            $intentformchile = new Intent_Form();
+            $intentformchile->setCOLUMNS_META($META_data);
+            $intentformchile->setCharge_data_select($select);
+            $intentformchile->setCharge_data_multiSelect($multiSelect);
+
+            return $this->render($viewAjoutes, ["intent" => $intent_form, "intentchild" => $intentformchile]);
+        }
+    }
+
+    protected function modifier_child($id_save, string $view): ResponseInterface {
+
+
+        $model = $this->getModel();
+        $modeselect = $model::MODE_SELECT_ALL_MASTER;
+
+        $schema = $model->getschema();
+
+        $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
+
+        if ($Entitys->is_Null()) {
+            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+        }
+
+        $intent_Form = new Intent_Form();
+        $intent_Form->setDefault_Data($Entitys);
+        $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
+
+
+        $intent_Form->setCharge_data_select($model->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
+        $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
+        $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
+
+
+
+        //****************************************//
+
+        $Controllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
+        $this->chargeModel($Controllerchild);
+        $model_Child = $this->getModel();
+        $schema_Child = $model_Child->getschema();
+
+        $intent_formChile = new Intent_Form();
+        $intent_formChile->setCharge_data_select($model_Child->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
+        $intent_formChile->setCharge_data_multiSelect($model_Child->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
+        $intent_formChile->setCOLUMNS_META($schema_Child->getCOLUMNS_META());
+
+
+        return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
+    }
 
 }

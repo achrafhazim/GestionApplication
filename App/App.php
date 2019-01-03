@@ -37,8 +37,7 @@ class App extends Kernel {
 
         $this->default_Views();
        
-        //$this->gestion_compte();
-        
+        $this->gestion_compte();
         $modules = $this->getModules();
         $pathModules= $this->getContainer()->get("Modules") ;
 

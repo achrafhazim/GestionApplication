@@ -36,7 +36,7 @@ class ProduitModule extends AbstractModule
 
 
         $router->addRoute_get(
-            "/{controle:[a-z\$]+}[/{action:[a-z]+}{id:[\-0-9\,]*}]",
+            "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
             new ShowController($Options),
             $nameRoute->show(),
             self::NameModule
@@ -51,12 +51,12 @@ class ProduitModule extends AbstractModule
         );
 
 
-//        $router->addRoute_get(
-//            "/ajax/{controle:[a-z\$]+}",
-//            new AjaxController($Options),
-//            $nameRoute->ajax(),
-//            self::NameModule
-//        );
+        $router->addRoute_get(
+            "/ajax/{controle:[a-z\$]+}",
+            new AjaxController($Options),
+            $nameRoute->ajax(),
+            self::NameModule
+        );
 
 
         $router->addRoute_get(

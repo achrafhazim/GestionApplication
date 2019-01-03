@@ -22,27 +22,44 @@ use function substr;
  *
  * @author wassim
  */
-class Clients extends AbstractController {
+class Clients extends AbstractController{
+  
+    function __construct($Options) {
+        $this->setNameController("clients");
+      parent::__construct($Options)  ;
+      
+    }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-
+        
         parent::process($request, $handler);
-        $this->setNameController("clients");
+
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController("clients");
+
+      $classModel = $this->getClassModel();
+
+        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
+        $this->chargeModel($this->getNameController());
+
+
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
         $action = $this->getRoute()->getParam("action");
         $this->Actions()->setAction($action);
         $id = $this->getRoute()->getParam("id");
+
+
+
         return $this->run($id);
     }
 
     public function run($id): ResponseInterface {
-
+        
         switch (true) {
             case $this->Actions()->is_index():
                 return $this->showDataTable("show", $this->getNamesRoute()->ajax());
@@ -340,5 +357,5 @@ class Clients extends AbstractController {
 
         return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
     }
-
+ 
 }
