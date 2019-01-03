@@ -18,6 +18,7 @@ class CRMModule extends AbstractModule {
     ];
 
     const NameModule = "CRM";
+    const RESTful = true;
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
     public function addRoute(RouterInterface $router) {
@@ -33,14 +34,14 @@ class CRMModule extends AbstractModule {
 
 
         $router->addRoute_get(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{params:[a-z0-9\,\/]*}]", 
+                "/{controle:[a-z\$]+}/{action:[a-z]+}[/{params:[a-z0-9\,\/]*}]", 
                 new \App\AbstractModules\Controller\GET($Options),
                 /// name route
                 $nameRoute->show() . "ee", 
                 self::NameModule
         );
          $router->addRoute_post(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{params:[a-z0-9\,\/]*}]",
+                "/{controle:[a-z\$]+}/{action:[a-z]+}[/{params:[a-z0-9\,\/]*}]",
                  new \App\AbstractModules\Controller\POST($Options), 
                  $nameRoute->send(), 
                  self::NameModule

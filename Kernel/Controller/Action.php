@@ -15,9 +15,9 @@ use Kernel\AWA_Interface\ActionInterface;
  *
  * @author wassime
  */
-class Action implements ActionInterface
-{
-     private $ajax;
+class Action implements ActionInterface {
+
+    private $ajax;
     private $add;
     private $update;
     private $delete;
@@ -35,12 +35,7 @@ class Action implements ActionInterface
      * @param string $message
      */
     function __construct(
-       string $ajax = "ajax",
-        string $add = "add",
-        string $update = "update",
-        string $delete = "delete",
-        string $show = "show",
-        string $message = "message"
+    string $ajax = "ajax", string $add = "add", string $update = "update", string $delete = "delete", string $show = "show", string $message = "message"
     ) {
         $this->ajax = $ajax;
         $this->add = $add;
@@ -54,8 +49,7 @@ class Action implements ActionInterface
      *
      * @return string
      */
-    public function name_add(): string
-    {
+    public function name_add(): string {
         return $this->add;
     }
 
@@ -63,8 +57,7 @@ class Action implements ActionInterface
      *
      * @return string
      */
-    public function name_update(): string
-    {
+    public function name_update(): string {
         return $this->update;
     }
 
@@ -72,8 +65,7 @@ class Action implements ActionInterface
      *
      * @return string
      */
-    public function name_delete(): string
-    {
+    public function name_delete(): string {
         return $this->delete;
     }
 
@@ -81,8 +73,7 @@ class Action implements ActionInterface
      *
      * @return string
      */
-    public function name_show(): string
-    {
+    public function name_show(): string {
         return $this->show;
     }
 
@@ -90,8 +81,7 @@ class Action implements ActionInterface
      *
      * @return string
      */
-    public function name_message(): string
-    {
+    public function name_message(): string {
         return $this->message;
     }
 
@@ -99,8 +89,7 @@ class Action implements ActionInterface
      *
      * @param type $action
      */
-    function setAction($action)
-    {
+    function setAction($action) {
         $this->action = $action;
     }
 
@@ -108,8 +97,7 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_add(): bool
-    {
+    public function is_add(): bool {
         return $this->add === $this->action;
     }
 
@@ -117,8 +105,7 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_update(): bool
-    {
+    public function is_update(): bool {
         return $this->update === $this->action;
     }
 
@@ -126,8 +113,7 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_delete(): bool
-    {
+    public function is_delete(): bool {
         return $this->delete === $this->action;
     }
 
@@ -135,8 +121,7 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_show(): bool
-    {
+    public function is_show(): bool {
         return $this->show === $this->action;
     }
 
@@ -144,8 +129,7 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_message(): bool
-    {
+    public function is_message(): bool {
         return $this->message === $this->action;
     }
 
@@ -153,14 +137,12 @@ class Action implements ActionInterface
      *
      * @return bool
      */
-    public function is_index(): bool
-    {
+    public function is_index(): bool {
         return "index" === strtolower($this->action) || "" === $this->action || null == $this->action;
     }
 
     public function is_ajax(): bool {
         return $this->ajax === $this->action;
-        
     }
 
     public function name_ajax(): string {
