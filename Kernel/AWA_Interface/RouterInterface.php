@@ -24,7 +24,10 @@ interface RouterInterface extends MiddlewareInterface
 
     public function addRoute(string $url, MiddlewareInterface $middleware, $methods = null, string $name, string $nameModule = "");
 
-    public function addRoute_get(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") ;
+    public function addRoute_get(string $url, 
+            MiddlewareInterface $middleware, 
+            string $name,
+            string $nameModule = "") ;
 
     public function addRoute_post(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") ;
 

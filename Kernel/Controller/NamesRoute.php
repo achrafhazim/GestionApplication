@@ -15,52 +15,57 @@ use Kernel\AWA_Interface\NamesRouteInterface;
  *
  * @author wassime
  */
-class NamesRoute implements NamesRouteInterface
-{
+class NamesRoute implements NamesRouteInterface {
 
-    private $ajax;
-    private $files;
-    private $send;
-    private $show;
-    private $nameModule="";
-    private $nameRoute="'";
+    private $ajax = "_Ajax";
+    private $files = "_Files";
+    private $send = "_Send";
+    private $show = "_Show";
+    private $get = "_get";
+    private $post = "_post";
+    private $put = "_put";
+    private $delete = "_delete";
+    private $nameModule = "";
+    private $nameRoute = "'";
 
-    function __construct($ajax = "_Ajax", $files = "_Files", $send = "_Send", $show = "_Show")
-    {
-        $this->ajax = $ajax;
-        $this->files = $files;
-        $this->send = $send;
-        $this->show = $show;
-    }
-
-    public function set_NameModule(string $nameModule = "")
-    {
+    public function set_NameModule(string $nameModule = "") {
         $this->nameModule = $nameModule;
     }
 
-    public function ajax(): string
-    {
+    public function ajax(): string {
 
         return $this->nameModule . $this->ajax;
     }
 
-    public function files(): string
-    {
+    public function files(): string {
         return $this->nameModule . $this->files;
     }
 
-    public function send(): string
-    {
+    public function send(): string {
         return $this->nameModule . $this->send;
     }
 
-    public function show(): string
-    {
+    public function show(): string {
         return $this->nameModule . $this->show;
     }
 
-    public function is_ajax(): bool
-    {
+    public function get(): string {
+        return $this->nameModule . $this->get;
+    }
+
+    public function post(): string {
+        return $this->nameModule . $this->post;
+    }
+
+    public function put(): string {
+        return $this->nameModule . $this->put;
+    }
+
+    public function delete(): string {
+        return $this->nameModule . $this->delete;
+    }
+
+    public function is_ajax(): bool {
 
         if (preg_match("/[^.]+" . $this->ajax . "/i", $this->nameRoute)) {
             return true;
@@ -69,8 +74,7 @@ class NamesRoute implements NamesRouteInterface
         }
     }
 
-    public function is_files(): bool
-    {
+    public function is_files(): bool {
         if (preg_match("/[^.]+" . $this->files . "/i", $this->nameRoute)) {
             return true;
         } else {
@@ -78,8 +82,7 @@ class NamesRoute implements NamesRouteInterface
         }
     }
 
-    public function is_send(): bool
-    {
+    public function is_send(): bool {
         if (preg_match("/[^.]+" . $this->send . "/i", $this->nameRoute)) {
             return true;
         } else {
@@ -87,8 +90,7 @@ class NamesRoute implements NamesRouteInterface
         }
     }
 
-    public function is_show(): bool
-    {
+    public function is_show(): bool {
         if (preg_match("/[^.]+" . $this->show . "/i", $this->nameRoute)) {
             return true;
         } else {
@@ -96,8 +98,8 @@ class NamesRoute implements NamesRouteInterface
         }
     }
 
-    public function set_NameRoute(string $nameRoute)
-    {
-        $this->nameRoute=$nameRoute;
+    public function set_NameRoute(string $nameRoute) {
+        $this->nameRoute = $nameRoute;
     }
+
 }
