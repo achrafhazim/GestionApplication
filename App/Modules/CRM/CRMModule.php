@@ -32,7 +32,8 @@ class CRMModule extends AbstractModule {
        //display
             //JSON
             //   affiche liset      methode get        /api/controle            variable GET
-            //                                         /api/controle?id=:id&by=id     variable GET
+            //                                         /api/controle/id=:id    variable GET
+            //                                         /api/controle?condition="id>10/00/88 and id <77" & type=json & select="id,nom"    variable GET
             //                                         /api/controle?start=:id&stop=:id variable GET
             
            

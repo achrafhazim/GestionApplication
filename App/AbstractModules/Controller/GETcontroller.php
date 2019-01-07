@@ -7,8 +7,8 @@
  */
 
 namespace App\AbstractModules\Controller;
-use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 
+use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,32 +40,46 @@ class GETcontroller extends AbstractController {
                             ->withStatus(404)
                             ->withHeader('Content-Type', 'application/json; charset=utf-8');
         }
-        
-        
+
+
         return $this->ajax_js();
     }
 
-    public function all($param) {
-        
+    public function fitlre(array $query) {
+        if (isset($query["fitlre"])) {
+            return $query["fitlre"];
+        }
+        return "id";
     }
 
-    public function item($param) {
-        
+    public function desplayType(array $query) {
+           if (isset($query["desplayType"])) {
+            return $query["desplayType"];
+        }
+        return "json";
     }
 
-    public function marge($param) {
-        
+    public function condition(array $query) {
+           if (isset($query["condition"])) {
+            return $query["condition"];
+        }
+        return "=";
     }
 
     public function ajax_js(): ResponseInterface {
 
         $query = $this->getRequest()->getQueryParams();
+        var_dump($query);        die();
+        
         $modeshow = $this->getModeShow($query);
+        $select = $this->select($query);
         
-        $selectBy= $this->selectBy($query);
-        $desplayType= $this->desplayType($query);
-        $condition= $this->condition($query);
+        $desplayType = $this->desplayType($query);
+        $condition = $this->condition($query);
         
+        
+        
+
         $modeSelect = $modeshow["modeSelect"];
 
         $data = $this->getModel()->showAjax($modeSelect, true);
