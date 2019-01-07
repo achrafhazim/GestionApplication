@@ -31,44 +31,47 @@ class CRMModule extends AbstractModule {
         ];
        //display
             //JSON
-            //   affiche liset      methode get        /api/controle        variable GET
-            //                                         /api/controle/json/:id     variable GET
-            //                                         /api/controle/json?startid=:id&stopid=:id variable GET
-            //HTML
-            //   affiche liset      methode get        /api/controle/new            variable GET
-            //                                         /api/controle/edit/:id      variable GET
-            //                                         /api/controle/delete/:id     variable GET
-            //                                         /api/controle/delete?startid=:id&stopid=:id variable GET
+            //   affiche liset      methode get        /api/controle            variable GET
+            //                                         /api/controle?id=:id&by=id     variable GET
+            //                                         /api/controle?start=:id&stop=:id variable GET
+            
+           
+            
         //action
             //JSON
-            //   action add         methode post  /api/controle              variable GET
-            //   action update      methode put   /api/controle/:id          variable GET
-            //   action delete      methode delete  /api/controle/:id        variable GET
-           
+            //   action add         methode post     /api/controle              variable GET
+            //   action update      methode put      /api/controle/:id          variable GET
+            //   action delete      methode delete   /api/controle/:id          variable GET
+               
+        //html
+            //   affiche liset      methode get        /controle/new            variable GET
+            //                                         /controle/edit/:id       variable GET
+            //                                         /controle/delete/:id     variable GET
+            //                                         /controle/delete?startid=:id&stopid=:id variable GET
         
         $router->addRoute_get(
-                "/api/{controle:[a-z\$]+}/{action:[a-z]+}[/{id:[0-9\,]+}]",
+               "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
                 new \App\AbstractModules\Controller\GETcontroller($Options),
                 /// name route
                 $nameRoute->get() ,
                 self::NameModule
         );
         $router->addRoute_post(
-                "/api/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
                 new \App\AbstractModules\Controller\POSTcontroller($Options),
                 /// name route
                 $nameRoute->post() ,
                 self::NameModule
         );
         $router->addRoute_put(
-                "/api/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
                 new \App\AbstractModules\Controller\PUTcontroller($Options),
                 /// name route
                 $nameRoute->put() ,
                 self::NameModule
         );
         $router->addRoute_delete(
-                "/api/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
                 new \App\AbstractModules\Controller\DELETEcontroller($Options),
                 /// name route
                 $nameRoute->delete() ,
