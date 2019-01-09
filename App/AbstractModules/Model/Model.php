@@ -75,7 +75,7 @@ class Model extends m
 
             // get data
             $shema_FOREIGN = $this->getschema($nameTable_FOREIGN);
-            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->select(
+            $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->find(
                 $conditions,
                 $mode,
                 $shema_FOREIGN
@@ -204,7 +204,7 @@ class Model extends m
     {
 
         $schema = $this->getSchema();
-        $Entitys = $this->select($id, $mode);
+        $Entitys = $this->find($id, $mode);
 
         return new Intent_Show($schema, $Entitys, $mode);
     }
@@ -218,7 +218,7 @@ class Model extends m
     public function showAjax($mode, $id = true): array
     {
 
-        $entity = $this->select($id, $mode);
+        $entity = $this->find($id, $mode);
 
         return Tools::entitys_TO_array($entity);
     }

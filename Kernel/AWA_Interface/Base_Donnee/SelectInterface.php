@@ -15,8 +15,7 @@ use Kernel\Model\Entitys\EntitysSchema;
  *
  * @author wassime
  */
-interface SelectInterface extends MODE_SELECT_Interface
-{
+interface SelectInterface extends MODE_SELECT_Interface {
 
     /**
      * get id (exmple:<a class="btn "  role="button" href="/CRM/files/clients_2018-08-01-16-32-12"  data-regex="/clients_2018-08-01-16-32-12/" > <spam class="glyphicon glyphicon-download-alt"></spam> 6</a>)
@@ -44,6 +43,15 @@ interface SelectInterface extends MODE_SELECT_Interface
     public function find_by_id($id, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): EntitysDataTable;
 
     /**
+     * recherche par conditions
+     * @param type $where
+     * @param array $mode
+     * @param EntitysSchema $schema
+     * @return array
+     */
+    public function find($where, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array;
+
+    /**
      * pour select data to table
 
      * @param type $id
@@ -51,7 +59,7 @@ interface SelectInterface extends MODE_SELECT_Interface
      * @param EntitysSchema $schema
      * @return array
      */
-    public function select($id = true, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array;
+//    public function select($id = true, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array;
 
     /**
      * select donnee simple return array assoc

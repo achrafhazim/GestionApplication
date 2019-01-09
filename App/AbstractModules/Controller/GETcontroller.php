@@ -29,6 +29,9 @@ class GETcontroller extends AbstractController {
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
+        $id=(int)$this->getRoute()->getParam("id");
+        
+       
 
         $classModel = $this->getClassModel();
         $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
@@ -42,7 +45,7 @@ class GETcontroller extends AbstractController {
         }
 
 
-        return $this->ajax_js();
+        return $this->ajax_js($id);
     }
 
  
@@ -61,18 +64,27 @@ class GETcontroller extends AbstractController {
          if (isset($query["where"])) {
             return $query["where"];
         }
-        return true;
+        return "id>0";
     }
 
-      public function ajax_js(): ResponseInterface {
+      public function ajax_js($id): ResponseInterface {
+          $query = $this->getRequest()->getQueryParams();
+        
+          if ($id==0) {
+              $condition = $this->condition($query);
+              
+          } else {
+              $condition="id<$id";
+          }
+           
 
-        $query = $this->getRequest()->getQueryParams();
+        
         $modeshow = $this->getModeShow($query);
         $desplayType = $this->desplayType($query);
        //  $fitlre = $this->fitlre($query);
         //$limit = $this->limit($query);
         // $ordeby = $this->ordeby($query);
-        $condition = $this->condition($query);
+        
 
 
 
@@ -80,8 +92,9 @@ class GETcontroller extends AbstractController {
         $modeSelect = $modeshow["modeSelect"];
 
         $Model= $this->getModel();
-        $data=$Model->showAjax($modeSelect, $condition);
         
+        $data=$Model->showAjax($modeSelect, $condition);
+        //var_dump($condition);die();
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
