@@ -45,44 +45,43 @@ class GETcontroller extends AbstractController {
         return $this->ajax_js();
     }
 
-    public function fitlre(array $query) {
-        if (isset($query["fitlre"])) {
-            return $query["fitlre"];
-        }
-        return "id";
-    }
+ 
 
     public function desplayType(array $query) {
-           if (isset($query["desplayType"])) {
+        if (isset($query["desplayType"])) {
             return $query["desplayType"];
         }
         return "json";
     }
 
     public function condition(array $query) {
-           if (isset($query["condition"])) {
+        if (isset($query["condition"])) {
             return $query["condition"];
         }
-        return "=";
+         if (isset($query["where"])) {
+            return $query["where"];
+        }
+        return true;
     }
 
-    public function ajax_js(): ResponseInterface {
+      public function ajax_js(): ResponseInterface {
 
         $query = $this->getRequest()->getQueryParams();
-        var_dump($query);        die();
-        
         $modeshow = $this->getModeShow($query);
-        $select = $this->select($query);
-        
         $desplayType = $this->desplayType($query);
+       //  $fitlre = $this->fitlre($query);
+        //$limit = $this->limit($query);
+        // $ordeby = $this->ordeby($query);
         $condition = $this->condition($query);
-        
-        
-        
+
+
+
 
         $modeSelect = $modeshow["modeSelect"];
 
-        $data = $this->getModel()->showAjax($modeSelect, true);
+        $Model= $this->getModel();
+        $data=$Model->showAjax($modeSelect, $condition);
+        
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
