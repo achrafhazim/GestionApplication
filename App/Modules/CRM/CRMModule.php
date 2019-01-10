@@ -29,73 +29,43 @@ class CRMModule extends AbstractModule {
             "middlewares" => $this->middlewares,
             "nameRoute" => $nameRoute
         ];
-       //display
-            //JSON
-            //   affiche liset      methode get        /api/controle            variable GET
-            //                                         /api/controle/id=:id    variable GET
-            //                                         /api/controle?condition="id>10/00/88 and id <77" & type=json & select="id,nom"    variable GET
-            //                                         /api/controle?start=:id&stop=:id variable GET
-            
-           
-            
-        //action
-            //JSON
-            //   action add         methode post     /api/controle              variable GET
-            //   action update      methode put      /api/controle/:id          variable GET
-            //   action delete      methode delete   /api/controle/:id          variable GET
-               
-        //html
-            //   affiche liset      methode get        /controle/new            variable GET
-            //                                         /controle/edit/:id       variable GET
-            //                                         /controle/delete/:id     variable GET
-            //                                         /controle/delete?startid=:id&stopid=:id variable GET
-        
+ 
         $router->addRoute_get(
-               "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
-                new \App\AbstractModules\Controller\GETcontroller($Options),
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\GETcontroller($Options),
                 /// name route
-                $nameRoute->get() ,
-                self::NameModule
+                $nameRoute->get(), self::NameModule
         );
         $router->addRoute_post(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
-                new \App\AbstractModules\Controller\POSTcontroller($Options),
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\POSTcontroller($Options),
                 /// name route
-                $nameRoute->post() ,
-                self::NameModule
+                $nameRoute->post(), self::NameModule
         );
         $router->addRoute_put(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
-                new \App\AbstractModules\Controller\PUTcontroller($Options),
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\PUTcontroller($Options),
                 /// name route
-                $nameRoute->put() ,
-                self::NameModule
+                $nameRoute->put(), self::NameModule
         );
         $router->addRoute_delete(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]",
-                new \App\AbstractModules\Controller\DELETEcontroller($Options),
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\DELETEcontroller($Options),
                 /// name route
-                $nameRoute->delete() ,
-                self::NameModule
+                $nameRoute->delete(), self::NameModule
         );
-  
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         $router->addRoute_get(
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
-                new ShowController($Options),
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($Options),
                 /// name route
-                $nameRoute->show() ,
-                self::NameModule
+                $nameRoute->show(), self::NameModule
         );
-        
-        
-        
-        
+
+
+
+
 //        $router->addRoute_get(
 //                "/_clients[/{action:[a-z]+}-{id:[0-9\,]+}]", new Controller\Clients($Options), $nameRoute->show(), self::NameModule
 //        );
@@ -104,8 +74,8 @@ class CRMModule extends AbstractModule {
                 "/{controle:[a-z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($Options), $nameRoute->send(), self::NameModule
         );
 
-        
-         $router->addRoute_any(
+
+        $router->addRoute_any(
                 "/ajax/{controle:[a-z\$]+}", new AjaxController($Options), $nameRoute->ajax(), self::NameModule
         );
 
