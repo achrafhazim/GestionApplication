@@ -1,75 +1,63 @@
 <?php
 
-       //display
-        //JSON
-        //   affiche liset      methode get        /api/controle            variable GET
-        //                                         /api/controle/id=:id    variable GET
-        //                                         /api/controle?......    variable GET
-        
-
-        /*
-         *by    filde_where default id
-         params :/id  or :p :p1 :p2 .....
-         * Opérateur op default = Égale
-
-                    =	        |  e       |  Égale
-                    !=	        |  pe      |  Pas égale
-                    >	        |  s       |  Supérieur à
-                    <	        |  i       |  Inférieur à
-                    >=	        |  se      |  Supérieur ou égale à
-                    <=	        |  ie      |  Inférieur ou égale à
-                    IN	        |  in      |  Liste de plusieurs valeurs possibles
-                    BETWEEN	    |  between |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
-                    LIKE	    |  like    |  Recherche en spécifiant le début, milieu ou fin d'un mot.
-                    IS NULL	    |  null    |  Valeur est nulle
-                    IS NOT NULL	|  notnull |  Valeur n'est pas nulle
-         
-          *LIMIT   limit      default null
+//display
+//JSON
+//   affiche liset      methode get        /api/controle            variable GET
+//                                         /api/controle/id=:id    variable GET
+//                                         /api/controle?......    variable GET
 
 
+/*
+ * by    filde_where default id
+  params :/id  or :p :p1 :p2 .....
+ * Opérateur op default = Égale
 
+  =	        |  e       |  Égale
+  !=	        |  pe      |  Pas égale
+  >	        |  s       |  Supérieur à
+  <	        |  i       |  Inférieur à
+  >=	        |  se      |  Supérieur ou égale à
+  <=	        |  ie      |  Inférieur ou égale à
+  IN	        |  in      |  Liste de plusieurs valeurs possibles
+  BETWEEN	    |  between |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
+  LIKE	    |  like    |  Recherche en spécifiant le début, milieu ou fin d'un mot.
+  IS NULL	    |  null    |  Valeur est nulle
+  IS NOT NULL	|  notnull |  Valeur n'est pas nulle
 
-
-         * ORDER BY   colonne1 DESC, colonne2 ASC
-           orderby default id
-           suffixe default ASC  (ASC ;DESC)
+ * LIMIT   limit      default null
 
 
 
 
-         * desplayType default json
-         * getModeShow
-         - select_pere default MODE_SELECT_Interface::_DEFAULT
-         - select_fils default MODE_SELECT_Interface::_NULL
+
+ * ORDER BY   colonne1 DESC, colonne2 ASC
+  orderby default id
+  suffixe default ASC  (ASC ;DESC)
 
 
 
 
-         * **** raport
-         * GROUP BY  HAVING
-         * ****Fonctions d’agrégation SQL
-          -AVG() pour calculer la moyenne sur un ensemble d’enregistrement
-          -COUNT() pour compter le nombre d’enregistrement sur une table ou une colonne distincte
-          -MAX() pour récupérer la valeur maximum d’une colonne sur un ensemble de ligne. Cela s’applique à la fois pour des données numériques ou alphanumérique
-          -MIN() pour récupérer la valeur minimum de la même manière que MAX()
-          -SUM() pour calculer la somme sur un ensemble d’enregistrement
-         * *****
-         * 
-         * 
-         * 
-         */
+ * desplayType default json
+ * getModeShow
+  - select_pere default MODE_SELECT_Interface::_DEFAULT
+  - select_fils default MODE_SELECT_Interface::_NULL
 
-        //action
-        //JSON
-        //   action add         methode post     /api/controle              variable GET
-        //   action update      methode put      /api/controle/:id          variable GET
-        //   action delete      methode delete   /api/controle/:id          variable GET
-        //html
-        //   affiche liset      methode get        /controle/new            variable GET
-        //                                         /controle/edit/:id       variable GET
-        //                                         /controle/delete/:id     variable GET
-        //                                         /controle/delete?startid=:id&stopid=:id variable GET
 
+
+
+ * **** raport
+ * GROUP BY  HAVING
+ * ****Fonctions d’agrégation SQL
+  -AVG() pour calculer la moyenne sur un ensemble d’enregistrement
+  -COUNT() pour compter le nombre d’enregistrement sur une table ou une colonne distincte
+  -MAX() pour récupérer la valeur maximum d’une colonne sur un ensemble de ligne. Cela s’applique à la fois pour des données numériques ou alphanumérique
+  -MIN() pour récupérer la valeur minimum de la même manière que MAX()
+  -SUM() pour calculer la somme sur un ensemble d’enregistrement
+ * *****
+ * 
+ * 
+ * 
+ */
 
 namespace App\AbstractModules\Controller;
 
@@ -113,34 +101,31 @@ class GETcontroller extends AbstractController {
         return $this->ajax_js($id);
     }
 
-    public function desplayType(array $query) {
-        if (isset($query["desplayType"])) {
-            return $query["desplayType"];
-        }
-        return "json";
-    }
-
-
-    public function condition(array $query) {
+    public function condition(array $GET) {
         
     }
 
     public function ajax_js($id): ResponseInterface {
-        $query = $this->getRequest()->getQueryParams();
+        $GET = $this->getRequest()->getQueryParams();
 
+        var_dump($GET);
+        var_dump($this->operateur($GET));
+        var_dump($this->params($GET));
+        var_dump($this->limit($GET));
+        die();
         if ($id == 0) {
-            $condition = $this->condition($query);
+            $condition = $this->condition($GET);
         } else {
             $condition = "id=$id";
         }
 
 
 
-        $modeshow = $this->getModeShow($query);
-        $desplayType = $this->desplayType($query);
-        //  $fitlre = $this->fitlre($query);
-        //$limit = $this->limit($query);
-        // $ordeby = $this->ordeby($query);
+        $modeshow = $this->getModeShow($GET);
+        $desplayType = $this->desplayType($GET);
+//  $fitlre = $this->fitlre($GET);
+//$limit = $this->limit($GET);
+// $ordeby = $this->ordeby($GET);
 
 
 
@@ -151,7 +136,7 @@ class GETcontroller extends AbstractController {
         $Model = $this->getModel();
 
         $data = $Model->showAjax($modeSelect, $condition);
-        //var_dump($condition);die();
+//var_dump($condition);die();
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
@@ -176,7 +161,15 @@ class GETcontroller extends AbstractController {
 
         return ["type" => $type, "modeSelect" => [$parent, $child]];
     }
+
 ///**********************************************************************************/////
+    private function desplayType(array $GET) {
+        if (isset($GET["desplayType"])) {
+            return $GET["desplayType"];
+        }
+        return "json";
+    }
+
     private function parseMode(string $modefr, $default): string {
         switch ($modefr) {
             case "rien":
@@ -198,18 +191,87 @@ class GETcontroller extends AbstractController {
         }
         return $mode;
     }
-    
-    private function by($param) {
-        
+
+    private function by(array $GET): string {
+        if (isset($GET["by"])) {
+            return $GET["by"];
+        }
+        return "id";
     }
-     private function param($param) {
-        
+
+    //params :/id  or :p :p1 :p2 .....
+    private function params(array $GET) {
+        $params = [];
+        if (isset($GET["id"])) {
+            $params["id"] = $GET["id"];
+        }
+        foreach ($GET as $key => $value) {
+            if (preg_match('/^p[0-9]*/i', $key) > 0) {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
     }
-     private function operateur($param) {
-        
+
+    /**
+     * operateur
+     * @param array $GET
+     * @return string
+     */
+    private function operateur(array $GET): string {
+        /* Opérateur op default = Égale
+
+          =	        |  e       |  Égale
+          !=	        |  pe      |  Pas égale
+          >	        |  s       |  Supérieur à
+          <	        |  i       |  Inférieur à
+          >=	        |  se      |  Supérieur ou égale à
+          <=	        |  ie      |  Inférieur ou égale à
+          IN	        |  in      |  Liste de plusieurs valeurs possibles
+          BETWEEN	    |  between |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
+          LIKE	    |  like    |  Recherche en spécifiant le début, milieu ou fin d'un mot.
+          IS NULL	    |  null    |  Valeur est nulle
+          IS NOT NULL	|  notnull |  Valeur n'est pas nulle
+
+         */
+        if (isset($GET["op"])) {
+            $op = $GET["op"];
+            switch ($op) {
+                case "e":
+                    return "=";
+                case "pe":
+                    return "!=";
+                case "s":
+                    return ">";
+                case "i":
+                    return "<";
+                case "se":
+                    return ">=";
+                case "ie":
+                    return "<=";
+                case "in":
+                    return "IN";
+                case "between":
+                    return "BETWEEN";
+                case "like":
+                    return "LIKE";
+                case "null":
+                    return "IS NULL";
+                case "notnull":
+                    return "IS NOT NULL";
+                default:
+                    return "=";
+            }
+        }
+        return "=";
     }
-      private function limit($param) {
-        
+
+    private function limit(array $GET): int {
+        if (isset($GET["limit"])) {
+            return (int) $GET["limit"];
+        }
+        return 0;
     }
 
 }

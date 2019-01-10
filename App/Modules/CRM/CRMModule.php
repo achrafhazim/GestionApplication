@@ -30,11 +30,23 @@ class CRMModule extends AbstractModule {
             "nameRoute" => $nameRoute
         ];
  
+        
         $router->addRoute_get(
                 "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\GETcontroller($Options),
                 /// name route
                 $nameRoute->get(), self::NameModule
         );
+        
+        //action
+//JSON
+//   action add         methode post     /api/controle              variable GET
+//   action update      methode put      /api/controle/:id          variable GET
+//   action delete      methode delete   /api/controle/:id          variable GET
+//html
+//   affiche liset      methode get        /controle/new            variable GET
+//                                         /controle/edit/:id       variable GET
+//                                         /controle/delete/:id     variable GET
+//                                         /controle/delete?startid=:id&stopid=:id variable GET
         $router->addRoute_post(
                 "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\POSTcontroller($Options),
                 /// name route
