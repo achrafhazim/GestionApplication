@@ -38,9 +38,9 @@
 
 
  * desplayType default json
- * getModeShow
-  - select_pere default MODE_SELECT_Interface::_DEFAULT
-  - select_fils default MODE_SELECT_Interface::_NULL
+ * ModeSelect
+  - champs_pere default MODE_SELECT_Interface::_DEFAULT
+  - champs_fils default MODE_SELECT_Interface::_NULL
 
 
 
@@ -101,10 +101,6 @@ class GETcontroller extends AbstractController {
         return $this->ajax_js($id);
     }
 
-    public function condition(array $GET) {
-        
-    }
-
     public function ajax_js($id): ResponseInterface {
         $GET = $this->getRequest()->getQueryParams();
 
@@ -113,59 +109,54 @@ class GETcontroller extends AbstractController {
         var_dump($this->params($GET));
         var_dump($this->limit($GET));
         die();
-        if ($id == 0) {
-            $condition = $this->condition($GET);
-        } else {
-            $condition = "id=$id";
-        }
+    
 
 
 
-        $modeshow = $this->getModeShow($GET);
+        $ModeSelect = $this->ModeSelect($GET);
         $desplayType = $this->desplayType($GET);
-//  $fitlre = $this->fitlre($GET);
-//$limit = $this->limit($GET);
-// $ordeby = $this->ordeby($GET);
 
 
+        $data = $this->getModel()->showAjax($ModeSelect, $condition);
 
-
-
-        $modeSelect = $modeshow["modeSelect"];
-
-        $Model = $this->getModel();
-
-        $data = $Model->showAjax($modeSelect, $condition);
-//var_dump($condition);die();
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
-    protected function getModeShow(array $modeHTTP): array {
+    protected function ModeSelect(array $GET): array {
 
         $parent = MODE_SELECT_Interface::_DEFAULT;
         $child = MODE_SELECT_Interface::_NULL;
 
-        $type = "json";
-        if (isset($modeHTTP["pere"])) {
-            $parent = $this->parseMode($modeHTTP["pere"], $parent);
+
+        if (isset($GET["champs_pere"])) {
+            $parent = $this->parseMode($GET["champs_pere"], $parent);
         }
-        if (isset($modeHTTP["fils"])) {
-            $child = $this->parseMode($modeHTTP["fils"], $child);
+        if (isset($GET["champs_fils"])) {
+            $child = $this->parseMode($GET["champs_fils"], $child);
             if ($child != MODE_SELECT_Interface::_NULL) {
-                $type = "HTML";
+                
             }
         }
 
 
-        return ["type" => $type, "modeSelect" => [$parent, $child]];
+        return [$parent, $child];
     }
 
 ///**********************************************************************************/////
     private function desplayType(array $GET) {
-        if (isset($GET["desplayType"])) {
-            return $GET["desplayType"];
+        if (isset($GET["desplaytype"])) {
+            $type = strtolower($GET["desplaytype"]);
+            switch ($type) {
+                case "json":
+                    return "json";
+                case "html":
+                    return "html";
+
+                default:
+                    return "json";
+            }
         }
         return "json";
     }
