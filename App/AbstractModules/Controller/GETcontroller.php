@@ -5,6 +5,7 @@
 //   affiche liset      methode get        /api/controle            variable GET
 //                                         /api/controle/id=:id    variable GET
 //                                         /api/controle?......    variable GET
+//                                         /api/controle?by=id|date&op=pe|be&p1=44&p2=2/9/2012|2/9/2017&limit=10    variable GET
 
 
 /*
@@ -12,31 +13,19 @@
   params :/id  or :p :p1 :p2 .....
  * Opérateur op default = Égale
 
-  =	        |  e       |  Égale
+  =	            |  e       |  Égale
   !=	        |  pe      |  Pas égale
-  >	        |  s       |  Supérieur à
-  <	        |  i       |  Inférieur à
+  >	            |  s       |  Supérieur à
+  <	            |  i       |  Inférieur à
   >=	        |  se      |  Supérieur ou égale à
   <=	        |  ie      |  Inférieur ou égale à
   IN	        |  in      |  Liste de plusieurs valeurs possibles
-  BETWEEN	    |  between |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
-  LIKE	    |  like    |  Recherche en spécifiant le début, milieu ou fin d'un mot.
-  IS NULL	    |  null    |  Valeur est nulle
-  IS NOT NULL	|  notnull |  Valeur n'est pas nulle
+  BETWEEN	    |  be      |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
+  LIKE	        |  li      |  Recherche en spécifiant le début, milieu ou fin d'un mot.
+  IS NULL	    |  nu      |  Valeur est nulle
+  IS NOT NULL	|  notnu   |  Valeur n'est pas nulle
 
  * LIMIT   limit      default null
-
-
-
-
-
- * ORDER BY   colonne1 DESC, colonne2 ASC
-  orderby default id
-  suffixe default ASC  (ASC ;DESC)
-
-
-
-
  * desplayType default json
  * ModeSelect
   - champs_pere default MODE_SELECT_Interface::_DEFAULT
@@ -103,25 +92,30 @@ class GETcontroller extends AbstractController {
 
     public function ajax_js($id): ResponseInterface {
         $GET = $this->getRequest()->getQueryParams();
-
-        var_dump($GET);
-        var_dump($this->operateur($GET));
-        var_dump($this->params($GET));
-        var_dump($this->limit($GET));
-        die();
-    
-
-
-
+        $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
+
+
+
+        $data = $this->getModel()->showAjax($ModeSelect, $query);
         $desplayType = $this->desplayType($GET);
-
-
-        $data = $this->getModel()->showAjax($ModeSelect, $condition);
 
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+    }
+
+    protected function query($id = null, $GET = []) {
+        if ($id == null) {
+            //var_dump($GET);
+            var_dump("operateur", $this->operateur($GET));
+            var_dump("by", $this->by($GET));
+            var_dump("params", $this->params($GET));
+            var_dump("limit", $this->limit($GET));
+            die();
+        } else {
+            return ["id" => $id];
+        }
     }
 
     protected function ModeSelect(array $GET): array {
@@ -183,22 +177,25 @@ class GETcontroller extends AbstractController {
         return $mode;
     }
 
-    private function by(array $GET): string {
+    private function by(array $GET): array {
         if (isset($GET["by"])) {
-            return $GET["by"];
+            return explode('|', $GET["by"]);
         }
-        return "id";
+        return ["id"];
     }
 
     //params :/id  or :p :p1 :p2 .....
     private function params(array $GET) {
-        $params = [];
+
         if (isset($GET["id"])) {
-            $params["id"] = $GET["id"];
+            return ["id" => $GET["id"]];
         }
+
+        $params = [];
         foreach ($GET as $key => $value) {
-            if (preg_match('/^p[0-9]*/i', $key) > 0) {
-                $params[$key] = $value;
+            if (preg_match('/^p[0-9]+/i', $key) > 0) {
+
+                $params[$key] = explode('|', $value);
             }
         }
 
@@ -206,56 +203,74 @@ class GETcontroller extends AbstractController {
     }
 
     /**
-     * operateur
+     * 
      * @param array $GET
-     * @return string
+     * @return array
      */
-    private function operateur(array $GET): string {
+    private function operateur(array $GET): array {
         /* Opérateur op default = Égale
 
-          =	        |  e       |  Égale
+          =	            |  e       |  Égale
           !=	        |  pe      |  Pas égale
-          >	        |  s       |  Supérieur à
-          <	        |  i       |  Inférieur à
+          >	            |  s       |  Supérieur à
+          <	            |  i       |  Inférieur à
           >=	        |  se      |  Supérieur ou égale à
           <=	        |  ie      |  Inférieur ou égale à
           IN	        |  in      |  Liste de plusieurs valeurs possibles
-          BETWEEN	    |  between |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
-          LIKE	    |  like    |  Recherche en spécifiant le début, milieu ou fin d'un mot.
-          IS NULL	    |  null    |  Valeur est nulle
-          IS NOT NULL	|  notnull |  Valeur n'est pas nulle
-
+          BETWEEN	    |  be      |  Valeur comprise dans un intervalle donnée (utile pour les nombres ou dates)
+          LIKE	        |  li      |  Recherche en spécifiant le début, milieu ou fin d'un mot.
+          IS NULL	    |  nu      |  Valeur est nulle
+          IS NOT NULL	|  notnu   |  Valeur n'est pas nulle
+         * 
          */
+
         if (isset($GET["op"])) {
-            $op = $GET["op"];
-            switch ($op) {
-                case "e":
-                    return "=";
-                case "pe":
-                    return "!=";
-                case "s":
-                    return ">";
-                case "i":
-                    return "<";
-                case "se":
-                    return ">=";
-                case "ie":
-                    return "<=";
-                case "in":
-                    return "IN";
-                case "between":
-                    return "BETWEEN";
-                case "like":
-                    return "LIKE";
-                case "null":
-                    return "IS NULL";
-                case "notnull":
-                    return "IS NOT NULL";
-                default:
-                    return "=";
+            $operateurs = [];
+            $ops = explode('|', $GET["op"]);
+            foreach ($ops as $op) {
+
+                switch ($op) {
+                    case "e":
+                        $operateurs[] = "=";
+                        break;
+                    case "pe":
+                        $operateurs[] = "!=";
+                        break;
+                    case "s":
+                        $operateurs[] = ">";
+                        break;
+                    case "i":
+                        $operateurs[] = "<";
+                        break;
+                    case "se":
+                        $operateurs[] = ">=";
+                        break;
+                    case "ie":
+                        $operateurs[] = "<=";
+                        break;
+                    case "in":
+                        $operateurs[] = "IN";
+                        break;
+                    case "be":
+                        $operateurs[] = "BETWEEN";
+                        break;
+                    case "li":
+                        $operateurs[] = "LIKE";
+                        break;
+                    case "nu":
+                        $operateurs[] = "IS NULL";
+                        break;
+                    case "notnu":
+                        $operateurs[] = "IS NOT NULL";
+                        break;
+                    default:
+                        $operateurs[] = "=";
+                        break;
+                }
             }
+            return $operateurs;
         }
-        return "=";
+        return ["="];
     }
 
     private function limit(array $GET): int {
