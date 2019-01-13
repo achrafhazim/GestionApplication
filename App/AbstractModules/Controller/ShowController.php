@@ -91,7 +91,7 @@ use function substr;
     }
 
     protected function showDataTable(string $name_views, string $nameRouteGetDataAjax): ResponseInterface {
-
+       
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -113,10 +113,13 @@ use function substr;
             $data["intent"] = $this->getModel()->show($modeSelect, true);
         } elseif ($modeshow["type"] === "json") {
             $url = $this->getRouter()
-                    ->generateUri($nameRouteGetDataAjax, ["controle" => $this->getNameController()]);
+                    ->generateUri($nameRouteGetDataAjax, 
+                            ["controle" => $this->getNameController()]);
 
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;
+            var_dump($get);die();
+            $data["ajax"]='/CRM/api/clients?p0=7|13&op=be';
         }
 
 

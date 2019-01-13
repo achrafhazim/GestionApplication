@@ -25,7 +25,7 @@
   IS NULL	    |  nu      |  Valeur est nulle
   IS NOT NULL	|  notnu   |  Valeur n'est pas nulle
 
- * LIMIT   limit      default null
+
  * desplayType default json
  * ModeSelect
   - champs_pere default MODE_SELECT_Interface::_DEFAULT
@@ -71,6 +71,7 @@ class GETcontroller extends AbstractController {
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
+        $method_HTTP = $this->getRequest()->getMethod();
         $id = (int) $this->getRoute()->getParam("id");
 
 
@@ -87,60 +88,37 @@ class GETcontroller extends AbstractController {
         }
 
 
-        return $this->ajax_js($id);
+
+        if ($method_HTTP === "GET") {
+            return $this->GET_REST($id);
+        }
     }
 
-    public function ajax_js($id): ResponseInterface {
+    public function GET_REST($id): ResponseInterface {
         $GET = $this->getRequest()->getQueryParams();
         $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
-
-
-
         $data = $this->getModel()->showAjax($ModeSelect, $query);
-        $desplayType = $this->desplayType($GET);
 
+
+        $desplayType = $this->desplayType($GET);
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
     protected function query($id = null, $GET = []) {
+
+
         if ($id == null) {
-            //var_dump($GET);
-            var_dump("operateur", $this->operateur($GET));
-            var_dump("by", $this->by($GET));
-            var_dump("params", $this->params($GET));
-            var_dump("limit", $this->limit($GET));
-            die();
+            return $this->query_GET($GET);
         } else {
-            return ["id" => $id];
+            return $this->query_id($id);
         }
     }
 
-    protected function ModeSelect(array $GET): array {
-
-        $parent = MODE_SELECT_Interface::_DEFAULT;
-        $child = MODE_SELECT_Interface::_NULL;
-
-
-        if (isset($GET["champs_pere"])) {
-            $parent = $this->parseMode($GET["champs_pere"], $parent);
-        }
-        if (isset($GET["champs_fils"])) {
-            $child = $this->parseMode($GET["champs_fils"], $child);
-            if ($child != MODE_SELECT_Interface::_NULL) {
-                
-            }
-        }
-
-
-        return [$parent, $child];
-    }
-
-///**********************************************************************************/////
-    private function desplayType(array $GET) {
-        if (isset($GET["desplaytype"])) {
+    protected function desplayType(array $GET) {
+        if (isset($GET["d_type"])) {
             $type = strtolower($GET["desplaytype"]);
             switch ($type) {
                 case "json":
@@ -154,6 +132,28 @@ class GETcontroller extends AbstractController {
         }
         return "json";
     }
+
+    protected function ModeSelect(array $GET): array {
+
+        $parent = MODE_SELECT_Interface::_DEFAULT;
+        $child = MODE_SELECT_Interface::_NULL;
+
+
+        if (isset($GET["champs_p"])) {
+            $parent = $this->parseMode($GET["champs_p"], $parent);
+        }
+        if (isset($GET["champs_f"])) {
+            $child = $this->parseMode($GET["champs_f"], $child);
+            if ($child != MODE_SELECT_Interface::_NULL) {
+                
+            }
+        }
+
+
+        return [$parent, $child];
+    }
+
+///**********************************************************************************/////
 
     private function parseMode(string $modefr, $default): string {
         switch ($modefr) {
@@ -177,29 +177,49 @@ class GETcontroller extends AbstractController {
         return $mode;
     }
 
-    private function by(array $GET): array {
-        if (isset($GET["by"])) {
-            return explode('|', $GET["by"]);
-        }
-        return ["id"];
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * parst query par URL
+     * @param type $id
+     * @return array
+     */
+    private function query_id($id): array {
+        return ["id" => $id];
     }
 
-    //params :/id  or :p :p1 :p2 .....
-    private function params(array $GET) {
+    /**
+     * parst query par methode GET
+     * @param type $GET
+     * @return array
+     */
+    private function query_GET($GET): array {
+        $by = $this->by($GET);
+        $q = [];
+        foreach ($by as $index => $champ) {
+            $op = $this->operateur($GET, $index);
+            $params_index = $this->params($GET, $index);
 
-        if (isset($GET["id"])) {
-            return ["id" => $GET["id"]];
-        }
+            if ($op === "IS NULL" || $op === "IS NOT NULL") {
+                $q[] = $champ . "  " . $op . "  ";
+            } elseif ($op === "BETWEEN" && !empty($params_index)) {
 
-        $params = [];
-        foreach ($GET as $key => $value) {
-            if (preg_match('/^p[0-9]+/i', $key) > 0) {
+                $param = implode(" AND ", $params_index);
+                $q[] = $champ . "  " . $op . "  " . $param;
+            } elseif ($op === "IN" && !empty($params_index)) {
 
-                $params[$key] = explode('|', $value);
+                $param = implode(" , ", $params_index);
+                $q[] = $champ . "  " . $op . "  ( " . $param . " ) ";
+            } elseif (!empty($params_index)) {
+
+                $param = $params_index[0];
+                $q[] = $champ . "  " . $op . " '" . $param . "' ";
+            } else {
+                $q[] = " 1 ";
             }
         }
 
-        return $params;
+        return $q;
     }
 
     /**
@@ -207,7 +227,39 @@ class GETcontroller extends AbstractController {
      * @param array $GET
      * @return array
      */
-    private function operateur(array $GET): array {
+    private function by(array $GET): array {
+        if (isset($GET["by"])) {
+            return explode('|', $GET["by"]);
+        }
+        return ["id"];
+    }
+
+    //params :/id  or ?:p0 ?:p1 ?:p2 .....
+    private function params(array $GET, int $index = -1): array {
+        $params = [];
+
+        foreach ($GET as $key => $value) {
+            if (preg_match('/^p[0-9]+/i', $key)) {
+
+                $params[] = explode('|', $value);
+            }
+        }
+
+        if ($index == -1) {
+            return $params;
+        } elseif (isset($params[$index])) {
+            return $params[$index];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * 
+     * @param array $GET
+     * @return array|string
+     */
+    private function operateur(array $GET, int $index) {
         /* Opérateur op default = Égale
 
           =	            |  e       |  Égale
@@ -268,16 +320,16 @@ class GETcontroller extends AbstractController {
                         break;
                 }
             }
-            return $operateurs;
-        }
-        return ["="];
-    }
 
-    private function limit(array $GET): int {
-        if (isset($GET["limit"])) {
-            return (int) $GET["limit"];
+            if ($index == -1) {
+                return $operateurs;
+            } elseif (isset($operateurs[$index])) {
+                return $operateurs[$index];
+            } else {
+                return "=";
+            }
         }
-        return 0;
+        return "=";
     }
 
 }

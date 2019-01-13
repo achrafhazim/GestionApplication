@@ -3,6 +3,7 @@
  * voir table par json
  */
 function DataTable_awa(id, btn_show_php, routes, urlAjax) {
+     console.log(urlAjax);
 
     var table = $(id);
     var btn_php = parse_btn_show_php(btn_show_php);
@@ -169,7 +170,7 @@ function DataTable_awa(id, btn_show_php, routes, urlAjax) {
     }
 
     function set_data_ajax(urlAjax, param) {
-
+       
         $
                 .ajax({
                     type: "GET",

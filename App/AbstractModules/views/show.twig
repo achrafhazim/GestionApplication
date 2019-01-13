@@ -29,7 +29,6 @@
 {% block container %}
 
 
-
     <div class ="">
 
         <div class="row" style="width:90% ; margin: auto ;    margin-top: 10px;">
@@ -87,12 +86,12 @@
     {% if Html_or_Json=='json' %}
 
         <script>DataTable_awa('#DataTableJs',
-                    "{{btnDataTable}}",
+                    "{{btnDataTable|raw }}",
                     '{{input_tableJson()}}',
-                    "{{ajax}}");</script>
+                    '{{ajax|raw }}');</script>
         {% elseif Html_or_Json=='HTML' %}
         <script>DataTable_awa('#DataTableJs',
-                    "{{btnDataTable}}",
+                    "{{btnDataTable|raw }}",
                     '{{input_tableJson()}}'
                     );</script>
         {% endif %} 
