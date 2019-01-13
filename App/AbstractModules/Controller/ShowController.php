@@ -53,7 +53,7 @@ use function substr;
     public function run($id): ResponseInterface {
         switch (true) {
             case $this->Actions()->is_index():
-                return $this->showDataTable("show", $this->getNamesRoute()->ajax());
+                return $this->showDataTable("show", $this->getNamesRoute()->get());
 
 
             case $this->Actions()->is_update():
@@ -118,8 +118,7 @@ use function substr;
 
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;
-            var_dump($get);die();
-            $data["ajax"]='/CRM/api/clients?p0=7|13&op=be';
+            
         }
 
 
