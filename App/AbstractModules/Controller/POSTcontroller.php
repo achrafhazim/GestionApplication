@@ -7,6 +7,7 @@
  */
 
 namespace App\AbstractModules\Controller;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\PasswordInterface;
 use Kernel\Event\Event;
@@ -22,16 +23,16 @@ use function str_replace;
  *
  * @author wassime
  */
-class POSTcontroller extends AbstractController{
-       public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+class POSTcontroller extends AbstractController {
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
-      $this->setNameController($this->getRoute()->getParam("controle"));
+        $this->setNameController($this->getRoute()->getParam("controle"));
 
         $classModel = $this->getClassModel();
 
@@ -42,12 +43,10 @@ class POSTcontroller extends AbstractController{
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-         return $this->send_data("show_item", $this->getNamesRoute()->files());
-       
+        return $this->send_data("show_item", $this->getNamesRoute()->files());
     }
 
-    public function send_data(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    public function send_data(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->getChild() !== false) {
             return $this->send_data_ParantChild($view_show, $routeFile);
         } else {
@@ -55,8 +54,7 @@ class POSTcontroller extends AbstractController{
         }
     }
 
-    protected function send_data_normal(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    protected function send_data_normal(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -111,8 +109,7 @@ class POSTcontroller extends AbstractController{
         return $this->render($view_show, ["intent" => $intent]);
     }
 
-    protected function send_data_ParantChild(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    protected function send_data_ParantChild(string $view_show, string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -184,8 +181,7 @@ class POSTcontroller extends AbstractController{
 
     ///////////////////////////////////////////////////////////////////
 
-    private function parseDataPerant_child(array $data_set): array
-    {
+    private function parseDataPerant_child(array $data_set): array {
 
         $data_parent = [];
         $data_child = [];
@@ -215,8 +211,7 @@ class POSTcontroller extends AbstractController{
         ];
     }
 
-    private function generateIconShow(string $nameRoute, array $keyFilesSave, bool $default = true): array
-    {
+    private function generateIconShow(string $nameRoute, array $keyFilesSave, bool $default = true): array {
 
         if ($default) {
             /**
@@ -256,8 +251,7 @@ class POSTcontroller extends AbstractController{
      * @param array $insert
      * @param array $IconShowFiles
      */
-    private function deleteFile(array $insert, array $IconShowFiles)
-    {
+    private function deleteFile(array $insert, array $IconShowFiles) {
 
         if (isset($insert['id']) && $insert['id'] != "" && !empty($IconShowFiles)) {
             $eventManager = $this->getContainer()->get(EventManagerInterface::class);
@@ -272,8 +266,7 @@ class POSTcontroller extends AbstractController{
     /**
      * ecypt password
      */
-    protected function encryptPassword(array $dataForm): array
-    {
+    protected function encryptPassword(array $dataForm): array {
         if (isset($dataForm["password"])) {
             $password = $this->getContainer()->get(PasswordInterface::class);
             $hash = $password->encrypt($dataForm["password"]);
@@ -285,4 +278,5 @@ class POSTcontroller extends AbstractController{
 
         return$dataForm;
     }
+
 }
