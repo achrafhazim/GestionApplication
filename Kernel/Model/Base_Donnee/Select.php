@@ -239,7 +239,7 @@ class Select extends MetaDatabase implements SelectInterface {
         } elseif ($mode[0] === self::_DEFAULT) {
             $fields = $schema->select_default();
         } else {
-            throw new \TypeError(" Error mode ");
+            $fields = $schema->select_id();
         }
 
         return $fields;

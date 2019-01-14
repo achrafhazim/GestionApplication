@@ -26,10 +26,10 @@
   IS NOT NULL	|  notnu   |  Valeur n'est pas nulle
 
 
- * desplayType default json
+
  * ModeSelect
-  - champs_pere default MODE_SELECT_Interface::_DEFAULT
-  - champs_fils default MODE_SELECT_Interface::_NULL
+  - s_p default MODE_SELECT_Interface::_DEFAULT
+  - s_f default MODE_SELECT_Interface::_NULL
 
 
 
@@ -90,18 +90,19 @@ class GETcontroller extends AbstractController {
 
 
         if ($method_HTTP === "GET") {
-            return $this->GET_REST($id);
+            $GET = $this->getRequest()->getQueryParams();
+            return $this->GET_REST($id, $GET);
         }
     }
 
-    public function GET_REST($id): ResponseInterface {
-        $GET = $this->getRequest()->getQueryParams();
+    public function GET_REST($id, $GET): ResponseInterface {
+
+
         $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
-        $data = $this->getModel()->showAjax($ModeSelect, $query);
 
-
-        $desplayType = $this->desplayType($GET);
+        $entity = $this->getModel()->find($query, $ModeSelect);
+        $data = Tools::entitys_TO_array($entity);
         $json = Tools::json_js($data);
         $this->getResponse()->getBody()->write($json);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
@@ -117,33 +118,17 @@ class GETcontroller extends AbstractController {
         }
     }
 
-    protected function desplayType(array $GET) {
-        if (isset($GET["d_type"])) {
-            $type = strtolower($GET["desplaytype"]);
-            switch ($type) {
-                case "json":
-                    return "json";
-                case "html":
-                    return "html";
-
-                default:
-                    return "json";
-            }
-        }
-        return "json";
-    }
-
     protected function ModeSelect(array $GET): array {
 
         $parent = MODE_SELECT_Interface::_DEFAULT;
         $child = MODE_SELECT_Interface::_NULL;
 
 
-        if (isset($GET["champs_p"])) {
-            $parent = $this->parseMode($GET["champs_p"], $parent);
+        if (isset($GET["s_p"])) {
+            $parent = $this->parseMode($GET["s_p"], $parent);
         }
-        if (isset($GET["champs_f"])) {
-            $child = $this->parseMode($GET["champs_f"], $child);
+        if (isset($GET["s_f"])) {
+            $child = $this->parseMode($GET["s_f"], $child);
             if ($child != MODE_SELECT_Interface::_NULL) {
                 
             }
@@ -157,16 +142,16 @@ class GETcontroller extends AbstractController {
 
     private function parseMode(string $modefr, $default): string {
         switch ($modefr) {
-            case "rien":
+            case "0":
                 $mode = MODE_SELECT_Interface::_NULL;
                 break;
-            case "resume":
+            case "1":
                 $mode = MODE_SELECT_Interface::_MASTER;
                 break;
-            case "defaut":
+            case "2":
                 $mode = MODE_SELECT_Interface::_DEFAULT;
                 break;
-            case "tous":
+            case "*":
                 $mode = MODE_SELECT_Interface::_ALL;
                 break;
 

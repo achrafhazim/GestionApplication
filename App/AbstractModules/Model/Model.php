@@ -209,19 +209,7 @@ class Model extends m
         return new Intent_Show($schema, $Entitys, $mode);
     }
 
-    /**
-     * self::mode
-     * @param type $mode
-     * @param type $id
-     * @return array
-     */
-    public function showAjax($mode, $id = true): array
-    {
-
-        $entity = $this->find($id, $mode);
-
-        return Tools::entitys_TO_array($entity);
-    }
+ 
 
 // save data
 

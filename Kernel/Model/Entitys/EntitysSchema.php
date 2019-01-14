@@ -212,7 +212,17 @@ class EntitysSchema implements MODE_SELECT_Interface
     /*
      * SELECT SQL
      */
+   public function select_id()
+    {
 
+        $select = [];
+        
+            $select[] = $this->NameTable . "." . "id";
+ 
+        return $select;
+    }
+    
+    
     public function select_default()
     {
 

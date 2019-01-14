@@ -114,7 +114,7 @@ use function substr;
         } elseif ($modeshow["type"] === "json") {
             $url = $this->getRouter()
                     ->generateUri($nameRouteGetDataAjax, 
-                            ["controle" => $this->getNameController()]);
+                  ["controle" => $this->getNameController()]);
 
             $get = "?" . $this->getRequest()->getUri()->getQuery();
             $data["ajax"] = $url . $get;

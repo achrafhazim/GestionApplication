@@ -12,8 +12,7 @@ namespace Kernel\AWA_Interface\Base_Donnee;
  *
  * @author wassime
  */
-interface MODE_SELECT_Interface
-{
+interface MODE_SELECT_Interface {
 
     const _DEFAULT = "DEFAULT";
     const _MASTER = "MASTER";
@@ -21,17 +20,17 @@ interface MODE_SELECT_Interface
     const _NULL = "EMPTY";
 
 
-
-    /*     * ************* */
-    const MODE_SELECT_DEFAULT_DEFAULT = [self::_DEFAULT, self::_DEFAULT];
-    const MODE_SELECT_DEFAULT_MASTER = [self::_DEFAULT, self::_MASTER];
-    const MODE_SELECT_DEFAULT_ALL = [self::_DEFAULT, self::_ALL];
-    const MODE_SELECT_DEFAULT_NULL = [self::_DEFAULT, self::_NULL];
     /*     * ************* */
     const MODE_SELECT_MASTER_DEFAULT = [self::_MASTER, self::_DEFAULT];
     const MODE_SELECT_MASTER_MASTER = [self::_MASTER, self::_MASTER];
     const MODE_SELECT_MASTER_ALL = [self::_MASTER, self::_ALL];
     const MODE_SELECT_MASTER_NULL = [self::_MASTER, self::_NULL];
+    /*     * ************* */
+    const MODE_SELECT_DEFAULT_DEFAULT = [self::_DEFAULT, self::_DEFAULT];
+    const MODE_SELECT_DEFAULT_MASTER = [self::_DEFAULT, self::_MASTER];
+    const MODE_SELECT_DEFAULT_ALL = [self::_DEFAULT, self::_ALL];
+    const MODE_SELECT_DEFAULT_NULL = [self::_DEFAULT, self::_NULL];
+
     /*     * ************* */
     const MODE_SELECT_ALL_DEFAULT = [self::_ALL, self::_DEFAULT];
     const MODE_SELECT_ALL_MASTER = [self::_ALL, self::_MASTER];
