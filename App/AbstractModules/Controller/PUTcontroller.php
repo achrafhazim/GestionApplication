@@ -7,6 +7,7 @@
  */
 
 namespace App\AbstractModules\Controller;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\PasswordInterface;
 use Kernel\Event\Event;
@@ -22,16 +23,16 @@ use function str_replace;
  *
  * @author wassime
  */
-class PUTcontroller extends AbstractController{
-       public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+class PUTcontroller extends AbstractController {
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
 
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
         $this->setRoute($this->getRouter()->match($this->getRequest()));
-      $this->setNameController($this->getRoute()->getParam("controle"));
+        $this->setNameController($this->getRoute()->getParam("controle"));
 
         $classModel = $this->getClassModel();
 
@@ -42,21 +43,26 @@ class PUTcontroller extends AbstractController{
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-         return $this->send_data("show_item", $this->getNamesRoute()->files());
-       
+        return $this->send_data($this->getNamesRoute()->files());
     }
 
-    public function send_data(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    public function send_data(string $routeFile = ""): ResponseInterface {
+//        $method = $_SERVER['REQUEST_METHOD'];
+//        if ('PUT' === $method) {
+//            
+//            parse_str($this->getRequest()->getBody()->getContents(), $_PUTpsr);
+//      
+//           
+//        }
+        //  die();
         if ($this->getChild() !== false) {
-            return $this->send_data_ParantChild($view_show, $routeFile);
+            return $this->send_data_ParantChild($routeFile);
         } else {
-            return $this->send_data_normal($view_show, $routeFile);
+            return $this->send_data_normal($routeFile);
         }
     }
 
-    protected function send_data_normal(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    protected function send_data_normal(string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -80,39 +86,32 @@ class PUTcontroller extends AbstractController{
          * get data post
          *
          */
-        $POST = $this->getRequest()->getParsedBody();
+        //$POST = $this->getRequest()->getParsedBody();
+        parse_str($this->getRequest()->getBody()->getContents(), $PUT);
         /**
          * ecypte password
          */
-        $POST = $this->encryptPassword($POST);
+        $PUT = $this->encryptPassword($PUT);
         /**
          * update
          * remove file has is
          */
-        $this->deleteFile($POST, $IconShowFiles);
+        $this->deleteFile($PUT, $IconShowFiles);
         /**
          * merge data post and id files generate save
          */
-        $insert = array_merge($POST, $IconShowFiles);
+        $insert = array_merge($PUT, $IconShowFiles);
 
 
         /**
          * set data to database
          */
         $id_parent = $this->getModel()->setData($insert);
-
-        /**
-         * get data save to model
-         */
-        $intent = $this->getModel()->show_styleForm($id_parent);
-        /**
-         * show data get par model
-         */
-        return $this->render($view_show, ["intent" => $intent]);
+        echo $id_parent;
+        die($id_parent);
     }
 
-    protected function send_data_ParantChild(string $view_show, string $routeFile = ""): ResponseInterface
-    {
+    protected function send_data_ParantChild(string $routeFile = ""): ResponseInterface {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -121,11 +120,13 @@ class PUTcontroller extends AbstractController{
 
 
         // get data insert merge par parent et child
-        $insertcler = $request->getParsedBody();
+        // $insertcler = $request->getParsedBody();
+        //$POST = $this->getRequest()->getParsedBody();
+        parse_str($this->getRequest()->getBody()->getContents(), $PUT);
         /**
          * ecypte password
          */
-        $insert = $this->encryptPassword($insertcler);
+        $insert = $this->encryptPassword($PUT);
 
         // parse data
         $parseData = $this->parseDataPerant_child($insert);
@@ -174,18 +175,13 @@ class PUTcontroller extends AbstractController{
         $this->getModel()->setData($data_child, $table_parent, $id_parent);
 
 
-        /// show etem save
-        $this->chargeModel($this->getNameController());
-
-        $intent = $this->getModel()->show_styleForm($id_parent);
-
-        return $this->render($view_show, ["intent" => $intent]);
+        echo $id_parent;
+        die($id_parent);
     }
 
     ///////////////////////////////////////////////////////////////////
 
-    private function parseDataPerant_child(array $data_set): array
-    {
+    private function parseDataPerant_child(array $data_set): array {
 
         $data_parent = [];
         $data_child = [];
@@ -215,8 +211,7 @@ class PUTcontroller extends AbstractController{
         ];
     }
 
-    private function generateIconShow(string $nameRoute, array $keyFilesSave, bool $default = true): array
-    {
+    private function generateIconShow(string $nameRoute, array $keyFilesSave, bool $default = true): array {
 
         if ($default) {
             /**
@@ -256,8 +251,7 @@ class PUTcontroller extends AbstractController{
      * @param array $insert
      * @param array $IconShowFiles
      */
-    private function deleteFile(array $insert, array $IconShowFiles)
-    {
+    private function deleteFile(array $insert, array $IconShowFiles) {
 
         if (isset($insert['id']) && $insert['id'] != "" && !empty($IconShowFiles)) {
             $eventManager = $this->getContainer()->get(EventManagerInterface::class);
@@ -272,8 +266,7 @@ class PUTcontroller extends AbstractController{
     /**
      * ecypt password
      */
-    protected function encryptPassword(array $dataForm): array
-    {
+    protected function encryptPassword(array $dataForm): array {
         if (isset($dataForm["password"])) {
             $password = $this->getContainer()->get(PasswordInterface::class);
             $hash = $password->encrypt($dataForm["password"]);
@@ -285,4 +278,5 @@ class PUTcontroller extends AbstractController{
 
         return$dataForm;
     }
+
 }
