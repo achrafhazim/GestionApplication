@@ -43,10 +43,10 @@ class POSTcontroller extends AbstractController {
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-        return $this->send_data( $this->getNamesRoute()->files());
+        return $this->send_data($this->getNamesRoute()->files());
     }
 
-    public function send_data( string $routeFile = ""): ResponseInterface {
+    public function send_data(string $routeFile = ""): ResponseInterface {
         if ($this->getChild() !== false) {
             return $this->send_data_ParantChild($routeFile);
         } else {
@@ -55,39 +55,11 @@ class POSTcontroller extends AbstractController {
     }
 
     protected function send_data_normal(string $routeFile = ""): ResponseInterface {
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
+       
 
-        /**
-         * save les files
-         * get id files save
-         */
-        $file_Upload = $this->getFile_Upload();
-        $file_Upload->setPreffix($this->getNameController());
-        $uploadedFiles = $this->getRequest()->getUploadedFiles();
-        $keyFilesSave = $file_Upload->save($uploadedFiles);
+        $IconShowFiles = $this->save_files($routeFile);
+        $POST = $this->data_HTTP();
 
-        /**
-         * generate Uri Files save
-         * pour view
-         */
-        $IconShowFiles = $this->generateIconShow($routeFile, $keyFilesSave);
-
-        /**
-         * get data post
-         *
-         */
-        $POST = $this->getRequest()->getParsedBody();
-        /**
-         * ecypte password
-         */
-        $POST = $this->encryptPassword($POST);
-        /**
-         * update
-         * remove file has is
-         */
-        $this->deleteFile($POST, $IconShowFiles);
         /**
          * merge data post and id files generate save
          */
@@ -168,6 +140,38 @@ class POSTcontroller extends AbstractController {
         die($id_parent);
     }
 
+    ////////////////////////////////////////////////////////////////////
+    private function save_files($routeFile): array {
+        /**
+         * save les files
+         * get id files save
+         */
+        $file_Upload = $this->getFile_Upload();
+        $file_Upload->setPreffix($this->getNameController());
+        $uploadedFiles = $this->getRequest()->getUploadedFiles();
+        $keyFilesSave = $file_Upload->save($uploadedFiles);
+
+        /**
+         * generate Uri Files save
+         * pour view
+         */
+        $IconShowFiles = $this->generateIconShow($routeFile, $keyFilesSave);
+        return $IconShowFiles;
+    }
+
+    private function data_HTTP(): array {
+        /**
+         * get data post
+         *
+         */
+        $POST = $this->getRequest()->getParsedBody();
+        /**
+         * ecypte password
+         */
+        $POSTencrypt = $this->encryptPassword($POST);
+        return $POSTencrypt;
+    }
+
     ///////////////////////////////////////////////////////////////////
 
     private function parseDataPerant_child(array $data_set): array {
@@ -232,23 +236,6 @@ class POSTcontroller extends AbstractController {
                 $IconShowFiles [$key] = $this->generateIconShow($nameRoute, $keyFileSave);
             }
             return $IconShowFiles;
-        }
-    }
-
-    /**
-     * delete file par event
-     * @param array $insert
-     * @param array $IconShowFiles
-     */
-    private function deleteFile(array $insert, array $IconShowFiles) {
-
-        if (isset($insert['id']) && $insert['id'] != "" && !empty($IconShowFiles)) {
-            $eventManager = $this->getContainer()->get(EventManagerInterface::class);
-
-            $event = new Event();
-            $event->setName("delete_files");
-            $event->setParams(["url_id_file" => $this->getModel()->get_idfile($insert['id'])]);
-            $eventManager->trigger($event);
         }
     }
 

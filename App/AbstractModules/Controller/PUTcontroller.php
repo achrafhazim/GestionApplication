@@ -211,6 +211,15 @@ class PUTcontroller extends AbstractController {
         ];
     }
 
+    
+    //////files///////////////////////////////////////////////////////
+    /**
+     * 
+     * @param string $nameRoute
+     * @param array $keyFilesSave
+     * @param bool $default
+     * @return array
+     */
     private function generateIconShow(string $nameRoute, array $keyFilesSave, bool $default = true): array {
 
         if ($default) {
