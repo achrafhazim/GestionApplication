@@ -31,12 +31,10 @@ abstract class Controller implements MiddlewareInterface {
     private $container;
     private $model;
     private $File_Upload;
-    private $renderer;
     private $router;
     private $route;
     private $request;
     private $response;
-    private $data_views = [];
     private $middlewares = [];
     private $nameController = "";
     private $namesControllers = [];
@@ -64,7 +62,7 @@ abstract class Controller implements MiddlewareInterface {
         $this->erreur["Model"] = false;
 
         $this->setRouter($this->getContainer()->get(RouterInterface::class));
-        $this->setRenderer($this->getContainer()->get(RendererInterface::class));
+
         $this->setFile_Upload($this->getContainer()->get(File_UploadInterface::class));
     }
 
@@ -289,57 +287,15 @@ abstract class Controller implements MiddlewareInterface {
         return $flag;
     }
 
-    /// view
-    function add_data_views(array $data_views): array {
+    /// File_Upload
 
-        $this->data_views = array_merge($this->data_views, $data_views);
-        return $this->data_views;
-    }
 
     function getFile_Upload(): File_UploadInterface {
         return $this->File_Upload;
     }
 
-    function getRenderer(): RendererInterface {
-        return $this->renderer;
-    }
-
     function setFile_Upload(File_UploadInterface $File_Upload) {
         $this->File_Upload = $File_Upload;
-    }
-
-    function setRenderer(RendererInterface $renderer) {
-        $this->renderer = $renderer;
-    }
-
-    public function render($name_view, array $data = []): ResponseInterface {
-        $renderer = $this->getRenderer();
-
-        $renderer->addGlobal("_page", ucfirst(str_replace("$", "  ", $this->getNameController())));
-        $renderer->addGlobal("_Controller", $this->getNameController());
-        $renderer->addGlobal("_Action", $this->Actions());
-        $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
-
-        $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
-        $data_view = $this->add_data_views($data);
-
-
-        $pathview = $this->getContainer()->get("Modules") .
-                $this->getNameModule() . D_S .
-                "views" . D_S .
-                $this->getNameController() . D_S;
-
-        if (is_dir($pathview)) {
-            $render = $renderer->render("@{$this->getNameModule()}{$this->getNameController()}/" . $name_view, $data_view);
-        } else {
-            $render = $renderer->render("@default_view/" . $name_view, $data_view);
-        }
-
-
-
-        $response = $this->getResponse();
-        $response->getBody()->write($render);
-        return $response;
     }
 
 }

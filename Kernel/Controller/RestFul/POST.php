@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\AbstractModules\Controller;
+namespace Kernel\Controller\RestFul;
 
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\PasswordInterface;
@@ -23,28 +23,16 @@ use function str_replace;
  *
  * @author wassime
  */
-class POSTcontroller extends AbstractController {
+class POST  {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        parent::process($request, $handler);
+    private $Container;
+    private $model;
 
-        if ($this->getResponse()->getStatusCode() != 200) {
-            return $this->getResponse();
-        }
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
-
-        $classModel = $this->getClassModel();
-
-        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
-        $this->chargeModel($this->getNameController());
-
-
-        if ($this->is_Erreur()) {
-            return $this->getResponse()->withStatus(404);
-        }
-        return $this->send_data($this->getNamesRoute()->files());
+    function __construct($Container, $model) {
+        $this->Container = $Container;
+        $this->model = $model;
     }
+ 
 
     public function send_data(string $routeFile = ""): ResponseInterface {
         if ($this->getChild() !== false) {

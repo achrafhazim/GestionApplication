@@ -36,31 +36,35 @@ class CRMModule extends AbstractModule {
 //   action add         methode post     /api/controle              variable GET
 //   action update      methode put      /api/controle/:id          variable GET
 //   action delete      methode delete   /api/controle/:id          variable GET
-        $router->addRoute_get(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\GETcontroller($Options),
+//        $router->addRoute_get(
+//                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\GETcontroller($Options),
+//                /// name route
+//                $nameRoute->get(), self::NameModule
+//        );
+//        
+//
+//
+//        $router->addRoute_post(
+//                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\POSTcontroller($Options),
+//                /// name route
+//                $nameRoute->post(), self::NameModule
+//        );
+//        $router->addRoute_put(
+//                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\PUTcontroller($Options),
+//                /// name route
+//                $nameRoute->put(), self::NameModule
+//        );
+//        $router->addRoute_delete(
+//                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\DELETEcontroller($Options),
+//                /// name route
+//                $nameRoute->delete(), self::NameModule
+//        );
+
+  $router->addRoute_any(
+                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \Kernel\Controller\RestFul($Options),
                 /// name route
                 $nameRoute->get(), self::NameModule
         );
-        
-
-
-        $router->addRoute_post(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\POSTcontroller($Options),
-                /// name route
-                $nameRoute->post(), self::NameModule
-        );
-        $router->addRoute_put(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\PUTcontroller($Options),
-                /// name route
-                $nameRoute->put(), self::NameModule
-        );
-        $router->addRoute_delete(
-                "/api/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \App\AbstractModules\Controller\DELETEcontroller($Options),
-                /// name route
-                $nameRoute->delete(), self::NameModule
-        );
-
-
 
 
 

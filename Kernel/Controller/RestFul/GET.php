@@ -48,64 +48,35 @@
  * 
  */
 
-namespace App\AbstractModules\Controller;
+namespace Kernel\Controller\RestFul;
 
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Description of GETcontroller
  *
  * @author wassime
  */
-class GETcontroller extends AbstractController {
+class GET {
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-        parent::process($request, $handler);
+    private $Container;
+    private $model;
 
-        if ($this->getResponse()->getStatusCode() != 200) {
-            return $this->getResponse();
-        }
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
-        $method_HTTP = $this->getRequest()->getMethod();
-        $id = (int) $this->getRoute()->getParam("id");
-
-
-
-        $classModel = $this->getClassModel();
-        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
-        $this->chargeModel($this->getNameController());
-
-
-        if ($this->is_Erreur()) {
-            return $this->getResponse()
-                            ->withStatus(404)
-                            ->withHeader('Content-Type', 'application/json; charset=utf-8');
-        }
-
-
-
-        if ($method_HTTP === "GET") {
-            $GET = $this->getRequest()->getQueryParams();
-            return $this->GET_REST($id, $GET);
-        }
+    function __construct($Container, $model) {
+        $this->Container = $Container;
+        $this->model = $model;
     }
 
-    public function GET_REST($id, $GET): ResponseInterface {
+    public function run(int $id = 0, array $GET = []) {
 
 
         $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
 
-        $entity = $this->getModel()->find($query, $ModeSelect);
+        $entity = $this->model->find($query, $ModeSelect);
         $data = Tools::entitys_TO_array($entity);
-        $json = Tools::json_js($data);
-        $this->getResponse()->getBody()->write($json);
-        return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        return $data;
     }
 
     protected function query($id = null, $GET = []) {

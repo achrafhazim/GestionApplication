@@ -6,20 +6,19 @@
  * and open the template in the editor.
  */
 
-namespace App\AbstractModules\Controller;
+namespace Kernel\Controller;
 
-use Kernel\AWA_Interface\EventManagerInterface;
-use Kernel\Event\Event;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Kernel\Tools\Tools;
 
 /**
- * Description of DELETEcontroller
+ * Description of RestFul
  *
  * @author wassime
  */
-class DELETEcontroller extends AbstractController {
+class RestFul extends Controller {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);
@@ -30,7 +29,7 @@ class DELETEcontroller extends AbstractController {
         $this->setRoute($this->getRouter()->match($this->getRequest()));
         $this->setNameController($this->getRoute()->getParam("controle"));
         $method_HTTP = $this->getRequest()->getMethod();
-        $id = (int) $this->getRoute()->getParam("id");
+
 
 
 
@@ -47,36 +46,33 @@ class DELETEcontroller extends AbstractController {
 
 
 
+        if ($method_HTTP === "GET") {
+
+            $api = new RestFul\GET($this->getContainer(), $this->getModel());
+            $GET = $this->getRequest()->getQueryParams();
+            $id = (int) $this->getRoute()->getParam("id");
+            $data = $api->run($id, $GET);
+            $json = Tools::json_js($data);
+            $this->getResponse()->getBody()->write($json);
+            return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        }
         if ($method_HTTP === "DELETE") {
-
-            return $this->DELETE_REST($id);
+            $api = new RestFul\DELETE($this->getContainer(), $this->getModel());
+            $id = (int) $this->getRoute()->getParam("id");
+            $code = $api->run($id);
+            die($code);
         }
-    }
-
-    protected function DELETE_REST($id): ResponseInterface {
-
-        $conditon = ['id' => $id];
-
-        $url_id_file = $this->getModel()->get_idfile($id);
-
-        $etat = $this->getModel()->delete($conditon);
-
-        if ($etat == -1) {
-            $r = $this->getResponse()->withStatus(406);
-            // satutus code par java script
-            $r->getBody()->write("accès refusé  de supprimer ID  $id");
-            return $r;
-        } else {
-            $this->getResponse()->getBody()->write("ok delete  $id");
-
-            $eventManager = $this->getContainer()->get(EventManagerInterface::class);
-            $event = new Event();
-            $event->setName("delete_files");
-            $event->setParams(["url_id_file" => $url_id_file]);
-            $eventManager->trigger($event);
+        if ($method_HTTP === "POST") {
+            $api = new RestFul\POST($this->getContainer(), $this->getModel());
+            $code = $api->run();
+            die($code);
         }
-
-        return $this->getResponse();
+        if ($method_HTTP === "PUT") {
+            $api = new RestFul\PUT($this->getContainer(), $this->getModel());
+            $id = (int) $this->getRoute()->getParam("id");
+            $code = $api->run($id);
+            die($code);
+        }
     }
 
 }

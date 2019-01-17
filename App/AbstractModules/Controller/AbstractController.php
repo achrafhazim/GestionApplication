@@ -15,12 +15,25 @@
 namespace App\AbstractModules\Controller;
 
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
-use Kernel\Controller\Controller;
+use Kernel\Controller\WebController;
 
-abstract class AbstractController extends Controller {
+abstract class AbstractController extends WebController {
+    
+    
+    
+    
+    
+  
+
+    
+    
+    
+    
+
+//////////////////////////////////////////////////////////////////////
 
     protected function getModeShow(array $modeHTTP): array {
-        
+
         $parent = MODE_SELECT_Interface::_DEFAULT;
         $child = MODE_SELECT_Interface::_NULL;
 
