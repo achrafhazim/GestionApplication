@@ -6,7 +6,6 @@ use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\ModelInterface;
 use Kernel\AWA_Interface\NamesRouteInterface;
-use Kernel\AWA_Interface\RendererInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
@@ -16,12 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use const ROOT_WEB;
-use function array_merge;
 use function in_array;
 use function is_a;
 use function preg_match;
-use function str_replace;
 use function ucfirst;
 
 abstract class Controller implements MiddlewareInterface {
@@ -29,7 +25,7 @@ abstract class Controller implements MiddlewareInterface {
     private $erreur = [];
     private $action = [];
     private $container;
-    private $model;
+    private $model = null;
     private $File_Upload;
     private $router;
     private $route;
@@ -71,35 +67,6 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     //
-    public function getClassModel(): string {
-        $type = "Model";
-
-        $modul = $this->getNameModule();
-        $controller = ucfirst($this->getNameController());
-
-        $class = "\App\Modules\\$modul\\$type\\$controller";
-
-        if (class_exists($class)) {
-
-            return $class;
-        }
-
-        $classDefault = "\App\Modules\\$modul\\$type\\$type";
-
-        if (class_exists($classDefault)) {
-
-            return $classDefault;
-        }
-        $classDAbstractModules = "\App\AbstractModules\\$type\\$type";
-
-        if (class_exists($classDAbstractModules)) {
-
-            return $classDAbstractModules;
-        }
-
-        // error
-    }
-
 // psr 7
 
     function setRequest(ServerRequestInterface $request) {
@@ -172,10 +139,12 @@ abstract class Controller implements MiddlewareInterface {
 
 
     function is_Erreur(string $MC = ""): bool {
+
+
         if ($MC == "") {
-            return !$this->erreur["Controller"] || !$this->erreur["Model"];
+            return $this->erreur["Controller"] || $this->erreur["Model"];
         } else {
-            return !$this->erreur[$MC];
+            return $this->erreur[$MC];
         }
     }
 
@@ -192,14 +161,53 @@ abstract class Controller implements MiddlewareInterface {
     }
 
     /// model
+    public function getClassModel(): string {
+        $type = "Model";
+
+        $modul = $this->getNameModule();
+        $controller = ucfirst($this->getNameController());
+
+        $class = "\App\Modules\\$modul\\$type\\$controller";
+
+        if (class_exists($class)) {
+
+            return $class;
+        }
+
+        $classDefault = "\App\Modules\\$modul\\$type\\$type";
+
+        if (class_exists($classDefault)) {
+
+            return $classDefault;
+        }
+        $classDAbstractModules = "\App\AbstractModules\\$type\\$type";
+
+        if (class_exists($classDAbstractModules)) {
+
+            return $classDAbstractModules;
+        }
+
+        // error
+    }
+
     function setModel(ModelInterface $model) {
         $this->model = $model;
     }
 
     protected function getModel(string $nameTable = ""): ModelInterface {
+
+        if ($this->model === null) {
+            $classModel = $this->getClassModel();
+            $this->setModel(new $classModel($this->getContainer()->get("pathModel"),
+                            $this->getContainer()->get("tmp")));
+        }
+
         if ($nameTable !== "") {
             $this->chargeModel($nameTable);
+        } else {
+            $this->chargeModel($this->getNameController());
         }
+
         return $this->model;
     }
 
@@ -209,8 +217,9 @@ abstract class Controller implements MiddlewareInterface {
 
     protected function chargeModel($table): bool {
         $flag = $this->hasModel();
+
         if ($flag) {
-            $flag = $this->getModel()->setTable($table);
+            $flag = $this->model->setTable($table);
             $this->erreur["Model"] = $flag;
         }
         return $flag;
@@ -283,7 +292,7 @@ abstract class Controller implements MiddlewareInterface {
             }
         }
         //etat du erreur
-        $this->erreur["Controller"] = $flag;
+        $this->erreur["Controller"] = !$flag;
         return $flag;
     }
 

@@ -33,12 +33,11 @@ class RestFul extends Controller {
 
 
 
-        $classModel = $this->getClassModel();
-        $this->setModel(new $classModel($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
-        $this->chargeModel($this->getNameController());
 
 
-        if ($this->is_Erreur()) {
+
+        if ($this->is_Erreur("Controller")) {
+
             return $this->getResponse()
                             ->withStatus(404)
                             ->withHeader('Content-Type', 'application/json; charset=utf-8');
