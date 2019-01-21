@@ -113,6 +113,10 @@ abstract class Controller implements MiddlewareInterface {
         $this->setRequest($request);
         $this->setResponse($Response);
 
+        $route = $this->getRouter()->match($this->getRequest());
+        $this->setRoute($route);
+        $namecontrole = $this->getRoute()->getParam("controle");
+        $this->setNameController($namecontrole);
 
         return $this->getResponse();
     }
