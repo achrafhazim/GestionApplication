@@ -1,7 +1,7 @@
 "use strict";
-(function() {
+(function () {
 
-    $("form").submit(function(e) {
+    $("form").submit(function (e) {
         e.preventDefault();
         var formdata = chargeFormData();
         $("#refresh").removeClass("hidden")
@@ -37,26 +37,26 @@
         var formdata = new FormData();
         $(
                 "input:not([type='submit'],[type='reset'],[type='checkbox'],[type='button'],[type='file']) ,textarea,select:not([multiple])")
-                .each(function() {
+                .each(function () {
                     gestion_erreur(this);
                     formdata.append(this.name, $(this).val());
                 });
-        $("select[multiple]").each(function() {
+        $("select[multiple]").each(function () {
             gestion_erreur(this);
             var name = this.name;
-            $($(this).val()).each(function() {
+            $($(this).val()).each(function () {
                 formdata.append(name, this);
             })
 
         });
-        $("input[type='file']").each(function() {
+        $("input[type='file']").each(function () {
             gestion_erreur(this);
             var name = this.name;
-            $(this.files).each(function() {
+            $(this.files).each(function () {
                 formdata.append(name, this);
             })
         });
-        $("input[type='checkbox']").each(function(key, val) {
+        $("input[type='checkbox']").each(function (key, val) {
             gestion_erreur(this);
             if ($(this).is(":checked")) {
                 formdata.append($(val).attr('name'), 1);
@@ -76,8 +76,27 @@
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
+
         ajax.open("POST", "#");
+        ajax.setRequestHeader("cache-control", "no-cache");
+
         ajax.send(formdata);
+      //  restfull
+//        var result = {};
+//        for (var entry of formdata.entries())
+//        {
+//            result[entry[0]] = entry[1];
+//        }
+//        ///set json string
+//        var json = JSON.stringify(result);
+//        console.log(json);
+//        ajax.send(json);
+
+
+
+
+
+
     }
 
     // / call par ajaxSendData

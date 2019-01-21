@@ -96,10 +96,12 @@ class RestFul extends Controller {
         if (!empty($POST)) {
             $data = $POST;
         } else {
-            parse_str($this->getRequest()->getBody()->getContents(), $PUT);
+
+            $PUT = json_decode(file_get_contents('php://input'), true);
+
             $data = $PUT;
         }
-
+       
         /**
          * ecypte password
          */

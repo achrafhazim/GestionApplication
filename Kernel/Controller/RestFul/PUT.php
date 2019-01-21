@@ -27,13 +27,13 @@ class PUT {
         $this->model = $model;
     }
 
-    public function run(int $id,array $POST, array $IconShowFiles) {
+    public function run(int $id, array $POST, array $IconShowFiles) {
 
         /**
          * merge data post and id files generate save
          */
-        $ID=["id"=>$id];
-        $insert = array_merge($POST,$ID, $IconShowFiles);
+        $ID = ["id" => $id];
+        $insert = array_merge($POST, $ID, $IconShowFiles);
 
 
         /**
