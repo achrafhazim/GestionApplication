@@ -8,10 +8,14 @@
 
 namespace Kernel\Controller;
 
+use Kernel\Controller\RestFul\DELETE;
+use Kernel\Controller\RestFul\GET;
+use Kernel\Controller\RestFul\POST;
+use Kernel\Controller\RestFul\PUT;
+use Kernel\Tools\Tools;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Kernel\Tools\Tools;
 
 /**
  * Description of RestFul
@@ -26,9 +30,13 @@ class RestFul extends Controller {
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
-        $method_HTTP = $this->getRequest()->getMethod();
+
+
+        $route = $this->getRouter()->match($this->getRequest());
+        $this->setRoute($route);
+        $namecontrole = $this->getRoute()->getParam("controle");
+        $this->setNameController($namecontrole);
+
 
 
 
@@ -43,35 +51,34 @@ class RestFul extends Controller {
                             ->withHeader('Content-Type', 'application/json; charset=utf-8');
         }
 
+        $method_HTTP = $this->getRequest()->getMethod();
 
+        $data = [];
 
         if ($method_HTTP === "GET") {
 
-            $api = new RestFul\GET($this->getContainer(), $this->getModel());
+            $api = new GET($this->getContainer(), $this->getModel());
             $GET = $this->getRequest()->getQueryParams();
             $id = (int) $this->getRoute()->getParam("id");
             $data = $api->run($id, $GET);
-            $json = Tools::json_js($data);
-            $this->getResponse()->getBody()->write($json);
-            return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         }
         if ($method_HTTP === "DELETE") {
-            $api = new RestFul\DELETE($this->getContainer(), $this->getModel());
+            $api = new DELETE($this->getContainer(), $this->getModel());
             $id = (int) $this->getRoute()->getParam("id");
             $code = $api->run($id);
-            die($code);
         }
         if ($method_HTTP === "POST") {
-            $api = new RestFul\POST($this->getContainer(), $this->getModel());
+            $api = new POST($this->getContainer(), $this->getModel());
             $code = $api->run();
-            die($code);
         }
         if ($method_HTTP === "PUT") {
-            $api = new RestFul\PUT($this->getContainer(), $this->getModel());
+            $api = new PUT($this->getContainer(), $this->getModel());
             $id = (int) $this->getRoute()->getParam("id");
             $code = $api->run($id);
-            die($code);
         }
+        $json = Tools::json_js($data);
+        $this->getResponse()->getBody()->write($json);
+        return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
 }
