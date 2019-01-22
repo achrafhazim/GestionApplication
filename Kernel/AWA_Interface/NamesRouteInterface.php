@@ -18,7 +18,7 @@ interface NamesRouteInterface {
 
     public function set_NameRoute(string $nameRoute);
 
-    public function ajax(): string;
+    public function RestFull(): string;
 
     public function files(): string;
 
@@ -34,7 +34,7 @@ interface NamesRouteInterface {
 
     public function delete(): string;
 
-    public function is_ajax(): bool;
+    public function is_RestFull(): bool;
 
     public function is_files(): bool;
 

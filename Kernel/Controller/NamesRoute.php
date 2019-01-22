@@ -17,7 +17,7 @@ use Kernel\AWA_Interface\NamesRouteInterface;
  */
 class NamesRoute implements NamesRouteInterface {
 
-    private $ajax = "_Ajax";
+    private $RestFull = "_RestFull";
     private $files = "_Files";
     private $send = "_Send";
     private $show = "_Show";
@@ -28,13 +28,17 @@ class NamesRoute implements NamesRouteInterface {
     private $nameModule = "";
     private $nameRoute = "'";
 
+    function __construct(string $nameModule = "") {
+        $this->nameModule = $nameModule;
+    }
+
     public function set_NameModule(string $nameModule = "") {
         $this->nameModule = $nameModule;
     }
 
-    public function ajax(): string {
+    public function RestFull(): string {
 
-        return $this->nameModule . $this->ajax;
+        return $this->nameModule . $this->RestFull;
     }
 
     public function files(): string {
@@ -65,9 +69,9 @@ class NamesRoute implements NamesRouteInterface {
         return $this->nameModule . $this->delete;
     }
 
-    public function is_ajax(): bool {
+    public function is_RestFull(): bool {
 
-        if (preg_match("/[^.]+" . $this->ajax . "/i", $this->nameRoute)) {
+        if (preg_match("/[^.]+" . $this->RestFull . "/i", $this->nameRoute)) {
             return true;
         } else {
             return false;

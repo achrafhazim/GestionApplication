@@ -73,10 +73,10 @@ class ComptesModule extends AbstractModule
         );
 
 
-        $router->addRoute_get(
-            "/ajax/{controle:[a-zA-Z\$]+}",
+        $router->addRoute_RestFul(
+            "/api/{controle:[a-zA-Z\$]+}",
             new AjaxController($Options),
-            $nameRoute->ajax(),
+            $nameRoute->RestFull(),
             self::NameModule
         );
 
