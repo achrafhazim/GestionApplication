@@ -50,7 +50,7 @@ use function substr;
     public function run($id): ResponseInterface {
         switch (true) {
             case $this->Actions()->is_index():
-                return $this->showDataTable("show", $this->getNamesRoute()->get());
+                return $this->showDataTable("show", $this->getNamesRoute()->RestFull());
 
 
             case $this->Actions()->is_update():
@@ -184,7 +184,8 @@ use function substr;
         $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
 
         if ($Entitys->is_Null()) {
-            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+            var_dump("modifier");
+            die("<h1>bbbbbbbbbbbbbbdonnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
 
         $intent_Form = new Intent_Form();
@@ -318,7 +319,8 @@ use function substr;
         $Entitys = $model->find_by_id($id_save, $modeselect, $schema);
 
         if ($Entitys->is_Null()) {
-            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+            var_dump("modifier_child");
+            die("<h1>cccccccccccccccccccdonnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
 
         $intent_Form = new Intent_Form();

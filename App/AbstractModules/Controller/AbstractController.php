@@ -18,17 +18,6 @@ use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Controller\WebController;
 
 abstract class AbstractController extends WebController {
-    
-    
-    
-    
-    
-  
-
-    
-    
-    
-    
 
 //////////////////////////////////////////////////////////////////////
 

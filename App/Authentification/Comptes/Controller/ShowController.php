@@ -22,11 +22,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class ShowController extends show
 {
 
-    public function __construct(array $Options)
-    {
-        parent::__construct($Options);
-           $this->setModel(new Model($this->getContainer()->get("pathModel"), $this->getContainer()->get("tmp")));
-    }
+
 
     public function run($id): ResponseInterface
     {
@@ -35,7 +31,7 @@ class ShowController extends show
 
         switch (true) {
             case $this->Actions()->is_index():
-                return $this->showDataTable("show", $this->getNamesRoute()->ajax());
+                return $this->showDataTable("show", $this->getNamesRoute()->RestFull());
 
 
             case $this->Actions()->is_update():

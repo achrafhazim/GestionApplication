@@ -15,12 +15,24 @@ class ComptesModule extends AbstractModule
 {
 
     private $modules = [];
+     private $Options = [];
     protected $Controllers = [
         "comptes"];
 
     const NameModule = "Comptes";
     const IconModule = " fa fa-fw fa-stack-overflow ";
 
+    
+      function __construct($container) {
+        parent::__construct($container);
+
+        $this->Options = ["container" => $this->getContainer(),
+            "namesControllers" => $this->Controllers,
+            "nameModule" => self::NameModule,
+            "middlewares" => $this->middlewares,
+            "nameRoute" => $this->getNamesRoute()
+        ];
+    }
     function setController($Controller)
     {
         $this->Controllers[] = $Controller;
@@ -40,6 +52,7 @@ class ComptesModule extends AbstractModule
         $renderer->addPath($pathModule, self::NameModule);
     }
 
+    
     public function addRoute(RouterInterface $router)
     {
         $nameRoute = $this->getNamesRoute();
@@ -49,17 +62,12 @@ class ComptesModule extends AbstractModule
 
 
 
-        $Options = ["container" => $this->getContainer(),
-            "namesControllers" => $this->Controllers,
-            "nameModule" => self::NameModule,
-            "middlewares" => $this->middlewares,
-            "nameRoute" => $nameRoute,
-        ];
+     
 
 
         $router->addRoute_get(
             "/{controle:[a-zA-Z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]",
-            new ShowController($Options),
+            new ShowController($this->Options),
             $nameRoute->show(),
             self::NameModule
         );
@@ -67,23 +75,18 @@ class ComptesModule extends AbstractModule
 
         $router->addRoute_post(
             "/{controle:[a-zA-Z\$]+}/{action:[a-z]+}-{id:[0-9]+}",
-            new SendController($Options),
+            new SendController($this->Options),
             $nameRoute->send(),
             self::NameModule
         );
 
 
-        $router->addRoute_RestFul(
-            "/api/{controle:[a-zA-Z\$]+}",
-            new AjaxController($Options),
-            $nameRoute->RestFull(),
-            self::NameModule
-        );
+  
 
 
         $router->addRoute_get(
             "/files/{controle:[a-zA-Z0-9\_\$\-]+}",
-            new FileController($Options),
+            new FileController($this->Options),
             $nameRoute->files(),
             self::NameModule
         );
@@ -93,7 +96,7 @@ class ComptesModule extends AbstractModule
          */
         $router->addRoute_get(
             "/login",
-            new Controller\LoginFormController($Options),
+            new Controller\LoginFormController($this->Options),
             "login",
             "login"
         );
@@ -101,9 +104,15 @@ class ComptesModule extends AbstractModule
 
         $router->addRoute_post(
             "/login",
-            new Controller\LoginSendController($Options),
+            new Controller\LoginSendController($this->Options),
             "loginPost",
             "login"
+        );
+          ///api
+        $router->addRoute_RestFul(
+                "/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \Kernel\Controller\RestFul($this->Options),
+                /// name route
+                $nameRoute->RestFull(), self::NameModule
         );
     }
 }

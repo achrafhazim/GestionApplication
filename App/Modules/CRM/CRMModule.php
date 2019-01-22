@@ -33,41 +33,33 @@ class CRMModule extends AbstractModule {
     }
 
     public function addRoute(RouterInterface $router) {
-        $nameRoute = $this->getNamesRoute();
-
-
-
-
-
-
-
-
-
-
         $router->addRoute_get(
                 /* web view
                   /controle/voir                variable GET
+                  /controle/voir-:id            variable GET
                   /controle/ajouter-            variable GET
                   /controle/modifier-:id        variable GET
-                  /controle/message-:id,id        variable GET
+                  /controle/message-:id,id      variable GET
                   /controle/delete-:id          variable GET
-                  /controle/delete?startid=:id&stopid=:id variable GET
-                 * 
+                  /controle/files-:id           variable GET tamarahhhhhhhhhh
+
+                 
                  */
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}-{id:[0-9\,]+}]", new ShowController($this->Options), $nameRoute->show(), self::NameModule
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{id:[0-9\_\$\-\,]+}]", new ShowController($this->Options), $this->getNamesRoute()->show(), self::NameModule
         );
         $router->addRoute_post(
-                "/{controle:[a-z\$]+}/{action:[a-z]+}-{id:[0-9]+}", new SendController($this->Options), $nameRoute->send(), self::NameModule
+                "/{controle:[a-z\$]+}/{action:[a-z]+}/{id:[0-9]+}", new SendController($this->Options), $this->getNamesRoute()->send(), self::NameModule
         );
+
         $router->addRoute_get(
-                "/files/{controle:[a-z0-9\_\$\-]+}", new FileController($this->Options), $nameRoute->files(), self::NameModule
+                "/files/{controle:[a-z0-9\_\$\-\,]+}", new FileController($this->Options), $this->getNamesRoute()->files(), self::NameModule
         );
 
         ///api
         $router->addRoute_RestFul(
                 "/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \Kernel\Controller\RestFul($this->Options),
                 /// name route
-                $nameRoute->get(), self::NameModule
+                $this->getNamesRoute()->RestFull(), self::NameModule
         );
     }
 

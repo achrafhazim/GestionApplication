@@ -169,7 +169,8 @@ class Model extends m
 
         $Entitys = $this->find_by_id($id, $modeselect, $schema);
         if ($Entitys->is_Null()) {
-            die("<h1>donnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
+            var_dump("show_styleForm");
+            die("<h1>bbbbbbbbbbbbbbdonnees vide car je ne peux pas insérer données  doublons ou vide </h1> ");
         }
 
         $intent_Form = new Intent_Form();
