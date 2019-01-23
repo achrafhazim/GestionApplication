@@ -36,14 +36,14 @@ class CRMModule extends AbstractModule {
         $router->addRoute_get(
                 /* web view
                   /controle/voir                variable GET
-                  /controle/voir-:id            variable GET
-                  /controle/ajouter-            variable GET
-                  /controle/modifier-:id        variable GET
-                  /controle/message-:id,id      variable GET
-                  /controle/delete-:id          variable GET
-                  /controle/files-:id           variable GET tamarahhhhhhhhhh
+                  /controle/voir/:id            variable GET
+                  /controle/ajouter/0             variable GET
+                  /controle/modifier/:id        variable GET
+                  /controle/message/:id,id      variable GET
+                  /controle/delete/:id          variable GET
+                  /controle/files/:id           variable GET tamarahhhhhhhhhh
 
-                 
+
                  */
                 "/{controle:[a-z\$]+}[/{action:[a-z]+}/{id:[0-9\_\$\-\,]+}]", new ShowController($this->Options), $this->getNamesRoute()->show(), self::NameModule
         );
@@ -51,9 +51,7 @@ class CRMModule extends AbstractModule {
                 "/{controle:[a-z\$]+}/{action:[a-z]+}/{id:[0-9]+}", new SendController($this->Options), $this->getNamesRoute()->send(), self::NameModule
         );
 
-        $router->addRoute_get(
-                "/files/{controle:[a-z0-9\_\$\-\,]+}", new FileController($this->Options), $this->getNamesRoute()->files(), self::NameModule
-        );
+
 
         ///api
         $router->addRoute_RestFul(

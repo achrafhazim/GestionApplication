@@ -148,13 +148,13 @@ class File_Upload implements File_UploadInterface
         $this->setPreffix($preffix);
         $this->mkdir_is_not();
 
-        $id_file = $this->preffix . "_" . date("Y-m-d-H-i-s");
-
+        //$id_file = $this->preffix . "_" . date("Y-m-d-H-i-s");
+        $id_file = date("Y-m-d-H-i-s");
         $keyFilesave = [];
         foreach ($uploadedFiles as $nameInput => $files) {
             $file_upload = [];
             foreach ($files as $file) {
-                $file_upload[] = $this->insert_file_upload($file, $id_file);
+                $file_upload[] = $this->insert_file_upload($file, $this->preffix . "_" .$id_file);
             }
 
             $keyFilesave[$nameInput] = ["id_files" => $id_file, "count_files" => count($file_upload)];

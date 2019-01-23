@@ -23,6 +23,7 @@ class Action implements ActionInterface
     private $delete;
     private $show;
     private $message;
+     private $files;
     private $action;
 
     /**
@@ -38,13 +39,15 @@ class Action implements ActionInterface
         string $update = "update",
         string $delete = "delete",
         string $show = "show",
-        string $message = "message"
+        string $message = "message",
+        string $files = "show"
     ) {
         $this->add = $add;
         $this->update = $update;
         $this->delete = $delete;
         $this->show = $show;
         $this->message = $message;
+        $this->files = $files;
     }
 
     /**
@@ -91,7 +94,14 @@ class Action implements ActionInterface
     {
         return $this->message;
     }
-
+ /**
+     *
+     * @return string
+     */
+    public function name_files(): string
+    {
+        return $this->files;
+    }
     /**
      *
      * @param type $action
@@ -120,7 +130,7 @@ class Action implements ActionInterface
     }
 
     /**
-     *
+     *action
      * @return bool
      */
     public function is_delete(): bool
@@ -154,4 +164,11 @@ class Action implements ActionInterface
     {
         return "index" === strtolower($this->action) || "" === $this->action || null == $this->action;
     }
+
+    public function is_files(): bool {
+       return $this->files === $this->files; 
+    }
+
+  
+
 }

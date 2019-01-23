@@ -17,8 +17,9 @@ use App\AbstractModules\Controller\AbstractController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Kernel\Controller\WebController;
 
-class LoginFormController extends AbstractController
+class LoginFormController extends WebController
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

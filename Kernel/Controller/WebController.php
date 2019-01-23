@@ -23,6 +23,84 @@ use function ucfirst;
 
 class WebController extends Controller {
 
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        parent::process($request, $handler);
+
+        if ($this->getResponse()->getStatusCode() != 200) {
+            return $this->getResponse();
+        }
+        $this->setRoute($this->getRouter()->match($this->getRequest()));
+        $this->setNameController($this->getRoute()->getParam("controle"));
+
+
+
+
+        if ($this->is_Erreur()) {
+            return $this->getResponse()->withStatus(404);
+        }
+        $action = $this->getRoute()->getParam("action");
+        $this->Actions()->setAction($action);
+        $id = $this->getRoute()->getParam("id");
+        $method_HTTP = $this->getRequest()->getMethod();
+
+        if ($method_HTTP == "GET") {
+            return $this->webGET($id);
+        } elseif ($method_HTTP == "POST") {
+            return $this->webPOST($id);
+        } else {
+           return $this->getResponse()->withStatus(404);
+        }
+
+        
+    }
+
+    public function webGET($param) {
+      switch (true) {
+            case $this->Actions()->is_index():
+                return $this->showDataTable("show", $this->getNamesRoute()->RestFull());
+
+
+            case $this->Actions()->is_update():
+                if ($this->getChild() !== false) {
+                    return $this->modifier_child($id, "modifier_form_child");
+                } else {
+                    return $this->modifier($id, "modifier_form");
+                }
+
+
+            case $this->Actions()->is_delete():
+                return $this->supprimer($id, "les données a supprimer de ID");
+
+
+            case $this->Actions()->is_show():
+                return $this->show($id, "show_id");
+
+
+            case $this->Actions()->is_message():
+                return $this->message($id, "show_message_id");
+
+
+            case $this->Actions()->is_add():
+                if ($this->getChild() !== false) {
+                    return $this->ajouter_child("ajouter_form_child", "ajouter_select");
+                } else {
+                    return $this->ajouter("ajouter_form", "ajouter_select");
+                }
+
+            case $this->Actions()->is_files():
+                $id = $this->getRoute()->getParam("id");
+                return $this->files($id, "show_files");
+
+            default:
+                return $this->getResponse()->withStatus(404);
+        }  
+    }
+
+    public function webPOST($param) {
+        
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private $renderer;
     private $data_views = [];
 

@@ -36,7 +36,7 @@ return [
     ModelInterface::class => function (ContainerInterface $container): ModelInterface {
         return new \Kernel\Model\Model($container->get("pathModel"),$container->get("tmp"));
     }, ActionInterface::class => function (ContainerInterface $container): ActionInterface {
-        return new Kernel\Controller\Action("ajouter","modifier","effacer","voir","message");
+        return new Kernel\Controller\Action("ajouter","modifier","effacer","voir","message","files");
     }, NamesRouteInterface::class => function (ContainerInterface $container): NamesRouteInterface {
         return new Kernel\Controller\NamesRoute();
     },

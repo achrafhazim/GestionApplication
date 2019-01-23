@@ -12,8 +12,7 @@ namespace Kernel\AWA_Interface;
  *
  * @author wassime
  */
-interface ActionInterface
-{
+interface ActionInterface {
 
     public function name_add(): string;
 
@@ -25,7 +24,9 @@ interface ActionInterface
 
     public function name_message(): string;
 
-    function setAction($action);
+    public function name_files(): string;
+
+    public function setAction($action);
 
     public function is_add(): bool;
 
@@ -36,6 +37,8 @@ interface ActionInterface
     public function is_show(): bool;
 
     public function is_message(): bool;
+
+    public function is_files(): bool;
 
     public function is_index(): bool;
 }

@@ -19,13 +19,14 @@ use function preg_match;
 use function str_replace;
 use function substr;
 use function var_dump;
+use Kernel\Controller\WebController;
 
 /**
  * Description of PostController
  *
  * @author wassime
  */
- class SendController extends AbstractController
+ class SendController extends WebController
 {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -44,7 +45,7 @@ use function var_dump;
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
-         return $this->send_data("show_item", $this->getNamesRoute()->files());
+         return $this->send_data("show_item", $this->getNamesRoute()->show());
        
     }
 
@@ -226,7 +227,7 @@ use function var_dump;
              */
             $IconShowFile = [];
             foreach ($keyFilesSave as $nameInput => $filesuploade) {
-                $url = $this->getRouter()->generateUri($nameRoute, ["controle" => $filesuploade["id_files"]]);
+                $url = $this->getRouter()->generateUri($nameRoute, ["controle" => $this->getNameController(),"action" => $this->Actions()->name_files(),"id" => $filesuploade["id_files"]]);
                 /*
                  * icon <a hre base par twitre bootstrap
                  */

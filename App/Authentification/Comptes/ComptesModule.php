@@ -84,12 +84,7 @@ class ComptesModule extends AbstractModule
   
 
 
-        $router->addRoute_get(
-            "/files/{controle:[a-zA-Z0-9\_\$\-]+}",
-            new FileController($this->Options),
-            $nameRoute->files(),
-            self::NameModule
-        );
+        
 
         /*
          * login
