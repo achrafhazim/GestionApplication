@@ -7,6 +7,7 @@
  */
 
 namespace Kernel\Controller\web;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
@@ -22,12 +23,20 @@ use function substr;
  * @author wassim
  */
 class Files {
-    public function run( $controller,  $id,$view) {}
-      protected function files($id, string $view) {
-        //clients_2019-01-23-15-14-10
-        $find = $this->getNameController() . "_" . $id;
-        $files = $this->getFile_Upload()->get($find);
 
-        return $this->render($view, ["files" => $files]);
+    private $NameController;
+    private $file_Upload;
+
+    function __construct($NameController, $file_Upload) {
+        $this->NameController = $NameController;
+        $this->file_Upload = $file_Upload;
     }
+
+    public function run($id) {
+        //clients_2019-01-23-15-14-10
+        $find = $this->NameController . "_" . $id;
+        $files = $this->file_Upload->get($find);
+        return $files;
+    }
+
 }

@@ -45,10 +45,10 @@ class CRMModule extends AbstractModule {
 
 
                  */
-                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{id:[0-9\_\$\-\,]+}]", new ShowController($this->Options), $this->getNamesRoute()->show(), self::NameModule
+                "/{controle:[a-z\$]+}[/{action:[a-z]+}/{id:[0-9\_\$\-\,]+}]", new \Kernel\Controller\WebController($this->Options), $this->getNamesRoute()->show(), self::NameModule
         );
         $router->addRoute_post(
-                "/{controle:[a-z\$]+}/{action:[a-z]+}/{id:[0-9]+}", new SendController($this->Options), $this->getNamesRoute()->send(), self::NameModule
+                "/{controle:[a-z\$]+}/{action:[a-z]+}/{id:[0-9]+}", new \Kernel\Controller\WebController($this->Options), $this->getNamesRoute()->send(), self::NameModule
         );
 
 

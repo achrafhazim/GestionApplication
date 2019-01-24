@@ -22,13 +22,19 @@ use function substr;
  * @author wassim
  */
 class Message {
-    public function run( $controller,  $id,$view) {}
-       protected function message($rangeID, string $view): ResponseInterface {
+    private $model;
+    private $controller;
+    function __construct($model, $controller) {
+        $this->model = $model;
+        $this->controller = $controller;
+    }
 
-        $mode = $this->getModel()::MODE_SELECT_DEFAULT_NULL;
+    public function run( $rangeID) {
 
-        $intentshow = $this->getModel()->show_in($mode, $rangeID);
+        $mode = $this->model::MODE_SELECT_DEFAULT_NULL;
 
-        return $this->render($view, ["intent" => $intentshow]);
+        return $this->model->show_in($mode, $rangeID);
+
+        
     }
 }

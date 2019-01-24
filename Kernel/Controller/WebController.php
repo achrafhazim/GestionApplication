@@ -13,8 +13,15 @@ namespace Kernel\Controller;
  *
  * @author wassime
  */
+use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\RendererInterface;
+use Kernel\Event\Event;
+use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Kernel\Controller\WebController;
+use function substr;
 use const D_S;
 use const ROOT_WEB;
 use function array_merge;
@@ -48,14 +55,28 @@ class WebController extends Controller {
         } elseif ($method_HTTP == "POST") {
             return $this->webPOST($id);
         } else {
-           return $this->getResponse()->withStatus(404);
+            return $this->getResponse()->withStatus(404);
         }
-
-        
     }
 
     public function webGET($param) {
-      switch (true) {
+        switch (true) {
+
+            case $this->Actions()->is_message():
+                $message = new web\Message($this->getModel(), $this->getNameController());
+                $intentshow = $message->run($param);
+                return $this->render("show_message_id", ["intent" => $intentshow]);
+            case $this->Actions()->is_files():
+                $files=new web\Files($this->getNameController() , $this->getFile_Upload());
+                $data=$files->run($param);
+                return $this->render("show_files", ["files" => $data]);
+
+
+
+
+
+
+
             case $this->Actions()->is_index():
                 return $this->showDataTable("show", $this->getNamesRoute()->RestFull());
 
@@ -76,8 +97,7 @@ class WebController extends Controller {
                 return $this->show($id, "show_id");
 
 
-            case $this->Actions()->is_message():
-                return $this->message($id, "show_message_id");
+
 
 
             case $this->Actions()->is_add():
@@ -87,13 +107,11 @@ class WebController extends Controller {
                     return $this->ajouter("ajouter_form", "ajouter_select");
                 }
 
-            case $this->Actions()->is_files():
-                $id = $this->getRoute()->getParam("id");
-                return $this->files($id, "show_files");
+
 
             default:
                 return $this->getResponse()->withStatus(404);
-        }  
+        }
     }
 
     public function webPOST($param) {
@@ -106,7 +124,7 @@ class WebController extends Controller {
 
     function __construct(array $Options) {
         parent::__construct($Options);
-        $this->setRenderer($this->getContainer()->get(RendererInterface::class));
+        $this->setRenderer($this->getContainer()->get(\Kernel\AWA_Interface\RendererInterface::class));
     }
 
     /// view
