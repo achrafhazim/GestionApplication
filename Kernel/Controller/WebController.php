@@ -51,7 +51,8 @@ class WebController extends Controller {
         $method_HTTP = $this->getRequest()->getMethod();
 
         if ($method_HTTP == "GET") {
-            return $this->webGET($id);
+            $GET = $this->getRequest()->getQueryParams();
+            return $this->webGET($id, $GET);
         } elseif ($method_HTTP == "POST") {
             return $this->webPOST($id);
         } else {
@@ -59,26 +60,60 @@ class WebController extends Controller {
         }
     }
 
-    public function webGET($param) {
+    public function webGET($param, $GET) {
         switch (true) {
 
             case $this->Actions()->is_message():
                 $message = new web\Message($this->getModel(), $this->getNameController());
                 $intentshow = $message->run($param);
                 return $this->render("show_message_id", ["intent" => $intentshow]);
+
             case $this->Actions()->is_files():
-                $files=new web\Files($this->getNameController() , $this->getFile_Upload());
-                $data=$files->run($param);
+                $files = new web\Files($this->getNameController(), $this->getFile_Upload());
+                $data = $files->run($param);
                 return $this->render("show_files", ["files" => $data]);
 
-
-
-
-
-
-
             case $this->Actions()->is_index():
-                return $this->showDataTable("show", $this->getNamesRoute()->RestFull());
+
+                $url = $this->getRouter()
+                        ->generateUri($this->getNamesRoute()->RestFull(), ["controle" => $this->getNameController()]);
+
+                $get = "?" . $this->getRequest()->getUri()->getQuery();
+                $urljson = $url . $get;
+                $index = new web\Index($this->getModel());
+                $data = $index->run($GET, $urljson);
+                return $this->render("show", $data);
+
+            case $this->Actions()->is_show():
+                $show = new web\Show($this->getModel());
+                $data = $show->run($param);
+                return $this->render("show_id", ["intent" => $data]);
+
+            case $this->Actions()->is_delete():
+                $delete = new web\Delete($this->getModel());
+                $etat = $delete->run($param);
+
+                $id = $param;
+
+
+                if ($etat == -1) {
+                    $r = $this->getResponse()->withStatus(406);
+                    $r->getBody()->write("accès refusé  de supprimer ID  $id");
+                    return $r;
+                } else {
+                    $this->getResponse()->getBody()->write("les données a supprimer de ID  $id");
+                    $url_id_file = $this->getModel()->get_idfile($id);
+
+                    $eventManager = $this->getContainer()->get(EventManagerInterface::class);
+                    $event = new Event();
+                    $event->setName("delete_files");
+                    $event->setParams(["url_id_file" => $url_id_file]);
+                    $eventManager->trigger($event);
+                }
+
+                return $this->getResponse();
+
+
 
 
             case $this->Actions()->is_update():
@@ -89,12 +124,12 @@ class WebController extends Controller {
                 }
 
 
-            case $this->Actions()->is_delete():
-                return $this->supprimer($id, "les données a supprimer de ID");
 
 
-            case $this->Actions()->is_show():
-                return $this->show($id, "show_id");
+
+
+
+
 
 
 

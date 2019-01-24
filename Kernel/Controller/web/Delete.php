@@ -7,6 +7,7 @@
  */
 
 namespace Kernel\Controller\web;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
@@ -22,29 +23,20 @@ use function substr;
  * @author wassim
  */
 class Delete {
-  public function run( $controller,  $id,$view) {}
-    protected function supprimer($id, string $view): ResponseInterface {
+
+    private $model;
+
+    function __construct($model) {
+        $this->model = $model;
+    }
+
+    public function run($id) {
 
         $conditon = ['id' => $id];
 
-        $url_id_file = $this->getModel()->get_idfile($id);
 
-        $etat = $this->getModel()->delete($conditon);
 
-        if ($etat == -1) {
-            $r = $this->getResponse()->withStatus(406);
-            $r->getBody()->write("accès refusé  de supprimer ID  $id");
-            return $r;
-        } else {
-            $this->getResponse()->getBody()->write("$view  $id");
-
-            $eventManager = $this->getContainer()->get(EventManagerInterface::class);
-            $event = new Event();
-            $event->setName("delete_files");
-            $event->setParams(["url_id_file" => $url_id_file]);
-            $eventManager->trigger($event);
-        }
-
-        return $this->getResponse();
+        $etat = $this->model->delete($conditon);
     }
+
 }
