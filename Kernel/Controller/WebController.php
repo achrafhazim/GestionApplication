@@ -114,32 +114,25 @@ class WebController extends Controller {
                 return $this->getResponse();
 
 
+            case $this->Actions()->is_add():
+                $add = new web\Add($this->getModel(), $GET, $this->getnotSelect(), $this->getChild());
+                $data = $add->run();
 
-
-            case $this->Actions()->is_update():
-                if ($this->getChild() !== false) {
-                    return $this->modifier_child($id, "modifier_form_child");
-                } else {
-                    return $this->modifier($id, "modifier_form");
+                if ("select" == ($data["type"])) {
+                    return $this->render("ajouter_select", $data);
+                } elseif ("form_child" == ($data["type"])) {
+                    return $this->render("ajouter_form_child", $data);
+                } elseif ("ajouter" == ($data["type"])) {
+                    return $this->render('ajouter_form', $data);
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-            case $this->Actions()->is_add():
-                if ($this->getChild() !== false) {
-                    return $this->ajouter_child("ajouter_form_child", "ajouter_select");
-                } else {
-                    return $this->ajouter("ajouter_form", "ajouter_select");
+            case $this->Actions()->is_update():
+                $add = new web\Update($this->getModel(), $this->getChild());
+                $data = $add->run($param);
+                if ("form" == ($data["type"])) {
+                    return $this->render("modifier_form", $data);
+                } elseif ("form_child" == ($data["type"])) {
+                    return $this->render("modifier_form_child", $data);
                 }
 
 

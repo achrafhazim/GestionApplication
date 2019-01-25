@@ -7,6 +7,7 @@
  */
 
 namespace Kernel\Controller\web;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
@@ -22,13 +23,33 @@ use function substr;
  * @author wassim
  */
 class Add {
-    public function run( $controller,  $id,$view) {}
-        protected function ajouter(string $viewAjoutes, string $viewSelect): ResponseInterface {
-        $model = $this->getModel();
+
+    private $model;
+    private $GET;
+    private $notSelect;
+    private $Child;
+
+    function __construct($model, $GET, $notSelect, $Child) {
+        $this->model = $model;
+        $this->GET = $GET;
+        $this->notSelect = $notSelect;
+        $this->Child = $Child;
+    }
+
+    public function run() {
+        if ($this->Child !== false) {
+            return $this->ajouter_child();
+        } else {
+            return $this->ajouter();
+        }
+    }
+
+    public function ajouter() {
+        $model = $this->model;
         $schema = $model->getschema();
 
-        $data_get = $this->getRequest()->getQueryParams();
-        $NotSelect = $this->getnotSelect();
+        $data_get = $this->GET;
+        $NotSelect = $this->notSelect;
 
 
         $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
@@ -42,7 +63,8 @@ class Add {
             $intent_formselect = new Intent_Form();
             $intent_formselect->setCOLUMNS_META($META_data);
             $intent_formselect->setCharge_data_select($select);
-            return $this->render($viewSelect, ["intent" => $intent_formselect]);
+            return ["type" => "select", "intent" => $intent_formselect];
+         //   return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
             $META_data = $schema->getCOLUMNS_META();
             $select = $model->get_Data_FOREIGN_KEY($data_get);
@@ -53,25 +75,21 @@ class Add {
             $intent_form->setCharge_data_select($select);
             $intent_form->setCharge_data_multiSelect($multiSelect);
 
-
-            return $this->render($viewAjoutes, ["intent" => $intent_form]);
+            return ["type" => "ajouter", "intent" => $intent_form];
+           // return $this->render($viewAjoutes, ["intent" => $intent_form]);
         }
     }
-
-  
-
- 
 
     /*     * ***
      * child
      */
 
-    protected function ajouter_child(string $viewAjoutes, string $viewSelect): ResponseInterface {
-        $model = $this->getModel();
+    public function ajouter_child() {
+        $model = $this->model;
         $schema = $model->getschema();
 
-        $data_get = $this->getRequest()->getQueryParams();
-        $NotSelect = $this->getnotSelect();
+        $data_get = $this->GET;
+        $NotSelect = $this->notSelect;
 
         $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
 
@@ -81,9 +99,10 @@ class Add {
             $intent_formselect = new Intent_Form();
             $intent_formselect->setCOLUMNS_META($META_data);
             $intent_formselect->setCharge_data_select($select);
-            return $this->render($viewSelect, ["intent" => $intent_formselect]);
+            return ["type" => "select", "intent" => $intent_formselect];
+            //return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
-            $model = $this->getModel();
+            $model = $this->model;
             $schema = $model->getschema();
             $META_data = $schema->getCOLUMNS_META();
             $select = $model->get_Data_FOREIGN_KEY($data_get);
@@ -97,10 +116,10 @@ class Add {
 
 
 
-            $NameControllerchild = $this->getChild();
-            $this->getModel()->setTable($NameControllerchild);
+            $NameControllerchild = $this->Child;
+            $this->model->setTable($NameControllerchild);
 
-            $model = $this->getModel();
+            $model = $this->model;
             $schema = $model->getschema();
             $META_data = $schema->getCOLUMNS_META();
             $select = $model->get_Data_FOREIGN_KEY($data_get);
@@ -110,8 +129,9 @@ class Add {
             $intentformchile->setCOLUMNS_META($META_data);
             $intentformchile->setCharge_data_select($select);
             $intentformchile->setCharge_data_multiSelect($multiSelect);
-
-            return $this->render($viewAjoutes, ["intent" => $intent_form, "intentchild" => $intentformchile]);
+            return ["type" => "form_child", "intent" => $intent_form, "intentchild" => $intentformchile];
+            //return $this->render($viewAjoutes, ["intent" => $intent_form, "intentchild" => $intentformchile]);
         }
     }
+
 }

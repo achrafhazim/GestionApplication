@@ -21,13 +21,29 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Kernel\Controller\WebController;
 use function substr;
 class Update {
-    public function run( $controller,  $id,$view) {}
+   private $model;
+ 
+    private $Child;
+
+    function __construct($model, $Child) {
+        $this->model = $model;
+      
+        $this->Child = $Child;
+    }
+
+    public function run($id) {
+        if ($this->Child !== false) {
+            return $this->modifier_child($id);
+        } else {
+            return $this->modifier($id);
+        }
+    }
     
-    protected function modifier($id_save, string $view): ResponseInterface {
+    protected function modifier($id_save) {
 
 
-        $modeselect = $this->getModel()::MODE_SELECT_ALL_MASTER;
-        $model = $this->getModel();
+        $modeselect = $this->model::MODE_SELECT_ALL_MASTER;
+        $model = $this->model;
 
         $schema = $model->getschema();
 
@@ -47,21 +63,21 @@ class Update {
         $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
         $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
 
+        return ["type"=>"form","intent" => $intent_Form];
 
 
 
 
 
-
-        return $this->render($view, ["intent" => $intent_Form]);
+      //  return $this->render($view, ["intent" => $intent_Form]);
     }
 
 
 
-    protected function modifier_child($id_save, string $view): ResponseInterface {
+    protected function modifier_child($id_save) {
 
 
-        $model = $this->getModel();
+        $model = $this->model;
         $modeselect = $model::MODE_SELECT_ALL_MASTER;
 
         $schema = $model->getschema();
@@ -85,10 +101,10 @@ class Update {
 
 
         //****************************************//
-
+        var_dump("nadar");die();
         $Controllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
         $this->chargeModel($Controllerchild);
-        $model_Child = $this->getModel();
+        $model_Child = $this->model;
         $schema_Child = $model_Child->getschema();
 
         $intent_formChile = new Intent_Form();
@@ -96,7 +112,7 @@ class Update {
         $intent_formChile->setCharge_data_multiSelect($model_Child->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
         $intent_formChile->setCOLUMNS_META($schema_Child->getCOLUMNS_META());
 
-
-        return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
+return ["type"=>"form_child","intent" => $intent_Form, "intentchild" => $intent_formChile];
+       // return $this->render($view, ["intent" => $intent_Form, "intentchild" => $intent_formChile]);
     }
 }
