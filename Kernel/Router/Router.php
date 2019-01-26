@@ -44,10 +44,13 @@ class Router implements RouterInterface {
         $this->addRoute($url, $middleware, ['DELETE'], $name, $nameModule);
     }
 
+    public function addRoute_Web(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") {
+         $this->addRoute($url, $middleware, ['POST',"GET"], $name, $nameModule);
+    }
+
     public function addRoute_RestFul(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") {
         $route = new FastRouteRoute("/api/" . $nameModule . $url, $middleware, null, $name);
         $this->router->addRoute($route);
-  
     }
 
     public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") {

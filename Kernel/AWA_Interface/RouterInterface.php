@@ -32,7 +32,7 @@ interface RouterInterface extends MiddlewareInterface {
     public function addRoute_delete(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "");
 
     public function addRoute_RestFul(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "");
-
+    public function addRoute_Web(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "");
     public function addRoute_any(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
