@@ -62,17 +62,14 @@ class WebController extends Controller {
 
     public function webGET($param, $GET) {
         switch (true) {
-
             case $this->Actions()->is_message():
-                $message = new web\Message($this->getModel(), $this->getNameController());
+                $message = new web\GET\Message($this->getModel(), $this->getNameController());
                 $intentshow = $message->run($param);
                 return $this->render("show_message_id", ["intent" => $intentshow]);
-
             case $this->Actions()->is_files():
-                $files = new web\Files($this->getNameController(), $this->getFile_Upload());
+                $files = new web\GET\Files($this->getNameController(), $this->getFile_Upload());
                 $data = $files->run($param);
                 return $this->render("show_files", ["files" => $data]);
-
             case $this->Actions()->is_index():
 
                 $url = $this->getRouter()
@@ -80,17 +77,15 @@ class WebController extends Controller {
 
                 $get = "?" . $this->getRequest()->getUri()->getQuery();
                 $urljson = $url . $get;
-                $index = new web\Index($this->getModel());
+                $index = new web\GET\Index($this->getModel());
                 $data = $index->run($GET, $urljson);
                 return $this->render("show", $data);
-
             case $this->Actions()->is_show():
-                $show = new web\Show($this->getModel());
+                $show = new web\GET\Show($this->getModel());
                 $data = $show->run($param);
                 return $this->render("show_id", ["intent" => $data]);
-
             case $this->Actions()->is_delete():
-                $delete = new web\Delete($this->getModel());
+                $delete = new web\GET\Delete($this->getModel());
                 $etat = $delete->run($param);
 
                 $id = $param;
@@ -112,10 +107,8 @@ class WebController extends Controller {
                 }
 
                 return $this->getResponse();
-
-
             case $this->Actions()->is_add():
-                $add = new web\Add($this->getModel(), $GET, $this->getnotSelect(), $this->getChild());
+                $add = new web\GET\Add($this->getModel(), $GET, $this->getnotSelect(), $this->getChild());
                 $data = $add->run();
 
                 if ("select" == ($data["type"])) {
@@ -125,25 +118,51 @@ class WebController extends Controller {
                 } elseif ("ajouter" == ($data["type"])) {
                     return $this->render('ajouter_form', $data);
                 }
-
             case $this->Actions()->is_update():
-                $add = new web\Update($this->getModel(), $this->getChild());
+                $add = new web\GET\Update($this->getModel(), $this->getChild());
                 $data = $add->run($param);
                 if ("form" == ($data["type"])) {
                     return $this->render("modifier_form", $data);
                 } elseif ("form_child" == ($data["type"])) {
                     return $this->render("modifier_form_child", $data);
                 }
-
-
-
             default:
                 return $this->getResponse()->withStatus(404);
         }
     }
 
-    public function webPOST($param) {
-        
+    public function webPOST($id) {
+        if ($id == 0) {
+            $add = new web\POST\Add(
+                    $this->getContainer(),
+                    $this->getModel(),
+                    $this->getChild(),
+                    $this->getNameController(),
+                    $this->getFile_Upload(),
+                    $this->getRequest()->getUploadedFiles(),
+                    $this->getRequest()->getParsedBody(),
+                    $this->getRouter(),
+                    $this->Actions()
+            );
+
+            $re = $add->run($this->getNamesRoute()->show());
+            return $this->render("show_item", $re);
+        } else {
+            $add = new web\POST\Update(
+                    $this->getContainer(),
+                    $this->getModel(),
+                    $this->getChild(),
+                    $this->getNameController(),
+                    $this->getFile_Upload(),
+                    $this->getRequest()->getUploadedFiles(),
+                    $this->getRequest()->getParsedBody(),
+                    $this->getRouter(),
+                    $this->Actions()
+            );
+
+            $re = $add->run($this->getNamesRoute()->show());
+            return $this->render("show_item", $re);
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,34 +171,24 @@ class WebController extends Controller {
 
     function __construct(array $Options) {
         parent::__construct($Options);
-        $this->setRenderer($this->getContainer()->get(\Kernel\AWA_Interface\RendererInterface::class));
+        $this->renderer = $this->getContainer()->get(\Kernel\AWA_Interface\RendererInterface::class);
+        //$this->setRenderer($this->getContainer()->get(\Kernel\AWA_Interface\RendererInterface::class));
     }
 
     /// view
-    function add_data_views(array $data_views): array {
 
-        $this->data_views = array_merge($this->data_views, $data_views);
-        return $this->data_views;
-    }
 
-    function getRenderer(): RendererInterface {
-        return $this->renderer;
-    }
-
-    function setRenderer(RendererInterface $renderer) {
-        $this->renderer = $renderer;
-    }
-
-    public function render($name_view, array $data = []): ResponseInterface {
-        $renderer = $this->getRenderer();
+    public function render($name_view, array $data_view = []): ResponseInterface {
+        $renderer = $this->renderer;
 
         $renderer->addGlobal("_page", ucfirst(str_replace("$", "  ", $this->getNameController())));
         $renderer->addGlobal("_Controller", $this->getNameController());
         $renderer->addGlobal("_Action", $this->Actions());
         $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
-
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());
-        $data_view = $this->add_data_views($data);
+
+
+
 
 
         $pathview = $this->getContainer()->get("Modules") .

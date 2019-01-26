@@ -11,7 +11,7 @@
  *
  * @author wassim
  */
-namespace Kernel\Controller\web;
+namespace Kernel\Controller\web\GET;
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;

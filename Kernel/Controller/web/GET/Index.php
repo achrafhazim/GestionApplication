@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Controller\web;
+namespace Kernel\Controller\web\GET;
 
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 

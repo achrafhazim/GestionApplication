@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Controller\web;
+namespace Kernel\Controller\web\GET;
 
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;

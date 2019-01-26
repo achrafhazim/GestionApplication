@@ -6,7 +6,8 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Controller\web;
+namespace Kernel\Controller\web\GET;
+
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\Event\Event;
 use Kernel\INTENT\Intent_Form;
@@ -17,10 +18,25 @@ use Kernel\Controller\WebController;
 use function substr;
 
 /**
- * Description of Send
+ * Description of delete
  *
  * @author wassim
  */
-class Send {
-  public function run( $controller,  $id,$view) {}
+class Delete {
+
+    private $model;
+
+    function __construct($model) {
+        $this->model = $model;
+    }
+
+    public function run($id) {
+
+        $conditon = ['id' => $id];
+
+
+
+        $etat = $this->model->delete($conditon);
+    }
+
 }

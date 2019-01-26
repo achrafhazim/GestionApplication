@@ -5,8 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-namespace Kernel\Controller\web;
+namespace Kernel\Controller\web\GET;
 
 /**
  * Description of show
