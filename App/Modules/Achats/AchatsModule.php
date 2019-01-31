@@ -2,15 +2,10 @@
 
 namespace App\Modules\Achats;
 
-use Kernel\AWA_Interface\RouterInterface;
 use App\AbstractModules\AbstractModule;
-use Kernel\AWA_Interface\RendererInterface;
-use App\Modules\Achats\Controller\SendController;
-use App\Modules\Achats\Controller\ShowController;
-use App\Modules\Achats\Controller\AjaxController;
-use App\Modules\Achats\Controller\FileController;
-use Kernel\Controller\RestFul;
-use Kernel\Controller\WebController;
+use Kernel\AWA_Interface\RouterInterface;
+use Kernel\Controller\RestFul\RestFul;
+use Kernel\Controller\web\WebController;
 
 class AchatsModule extends AbstractModule
 {

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\Controller;
+namespace Kernel\Controller\RestFul;
 
 use Kernel\Controller\RestFul\DELETE;
 use Kernel\Controller\RestFul\GET;
@@ -22,7 +22,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @author wassime
  */
-class RestFul extends Controller {
+class RestFul extends \Kernel\Controller\Controller {
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         parent::process($request, $handler);

@@ -185,11 +185,15 @@ class Model extends m
     /**
      * self::mode
      * @param array $mode
-     * @param type $rangeID
+     * @param array $rangeID
      * @return Intent_Show
      */
     public function show_in(array $mode, $rangeID): Intent_Show
     {
+         //range
+        if (is_string($rangeID)) {
+            $rangeID = explode(",", $rangeID);
+        }
         $schema = $this->getSchema();
         $Entitys = $this->select_in($rangeID, $mode, $schema);
         return new Intent_Show($schema, $Entitys, $mode);

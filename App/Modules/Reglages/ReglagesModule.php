@@ -4,8 +4,8 @@ namespace App\Modules\Reglages;
 
 use App\AbstractModules\AbstractModule;
 use Kernel\AWA_Interface\RouterInterface;
-use Kernel\Controller\RestFul;
-use Kernel\Controller\WebController;
+use Kernel\Controller\RestFul\RestFul;
+use Kernel\Controller\web\WebController;
 class ReglagesModule extends AbstractModule
 {
 

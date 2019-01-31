@@ -11,15 +11,9 @@ namespace Kernel\Controller\web\POST;
 use Kernel\AWA_Interface\EventManagerInterface;
 use Kernel\AWA_Interface\PasswordInterface;
 use Kernel\Event\Event;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use function array_merge;
 use function preg_match;
 use function str_replace;
-use function substr;
-use function var_dump;
-use Kernel\Controller\WebController;
 
 /**
  * Description of POST
@@ -130,7 +124,7 @@ class POST {
 
         //  save data parent
         $table_parent = $this->NameController;
-        $this->chargeModel($table_parent);
+        $this->model->setTable($table_parent);
 
         // insert data
         // $id_parent pour gere relation et data lier(exemple raison social)
@@ -156,7 +150,7 @@ class POST {
         //$Controller_child = substr( $this->NameController, 0, -1);
         $Controller_child = $this->Child;
         /// save data child
-        $this->chargeModel($Controller_child);
+       $this->model->setTable($Controller_child);
 
         /**
          *  merge data post and id files generate save
@@ -170,7 +164,7 @@ class POST {
 
 
         /// show etem save
-        $this->chargeModel($this->NameController);
+        $this->model->setTable($this->NameController);
 
         $intent = $this->model->show_styleForm($id_parent);
          return ["intent" => $intent];

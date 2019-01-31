@@ -78,7 +78,7 @@ interface SelectInterface extends MODE_SELECT_Interface {
      * @param EntitysSchema $schema
      * @return array EntitysDataTable
      */
-    public function select_in($rangeID, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array;
+    public function select_in(array $rangeID, array $mode = self::MODE_SELECT_DEFAULT_DEFAULT, $schema = null): array;
 
     /**
      * select data BETWEEN 2 value in id
