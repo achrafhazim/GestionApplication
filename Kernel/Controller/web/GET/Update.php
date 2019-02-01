@@ -12,13 +12,8 @@
  * @author wassim
  */
 namespace Kernel\Controller\web\GET;
-use Kernel\AWA_Interface\EventManagerInterface;
-use Kernel\Event\Event;
-use Kernel\INTENT\Intent_Form;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Kernel\Controller\WebController;
+
+use Kernel\ToolsView\INTENT\Intent_Form;
 use function substr;
 class Update {
    private $model;

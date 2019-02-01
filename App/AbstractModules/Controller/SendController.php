@@ -19,7 +19,7 @@ use function preg_match;
 use function str_replace;
 use function substr;
 use function var_dump;
-use Kernel\Controller\WebController;
+use Kernel\Controller\Web\WebController;
 
 /**
  * Description of PostController

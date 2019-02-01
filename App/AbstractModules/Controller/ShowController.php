@@ -19,7 +19,7 @@ use Kernel\INTENT\Intent_Form;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Kernel\Controller\WebController;
+use Kernel\Controller\Web\WebController;
 use function substr;
 
 class ShowController extends WebController {

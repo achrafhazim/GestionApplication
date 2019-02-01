@@ -1,7 +1,7 @@
-charge model hhhhhhhhhhhhhhhhhhhhhh
 
-2 controler post + get
-restfall controler
+
+
+
 https://stackoverflow.com/questions/36975619/how-to-call-a-rest-web-service-api-from-javascript/51854096
 
 const test = async () => {

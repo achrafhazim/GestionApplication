@@ -105,7 +105,7 @@ class ComptesModule extends AbstractModule
         );
           ///api
         $router->addRoute_RestFul(
-                "/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \Kernel\Controller\RestFul($this->Options),
+                "/{controle:[a-z\$]+}[/{id:[0-9]+}]", new \Kernel\Controller\RestFul\RestFul($this->Options),
                 /// name route
                 $nameRoute->RestFull(), self::NameModule
         );
