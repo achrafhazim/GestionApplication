@@ -14,10 +14,9 @@
 
 namespace App\AbstractModules\Model ;
 
-use Kernel\INTENT\Intent_Form;
-use Kernel\INTENT\Intent_Show;
 use Kernel\Model\Model as m;
-use Kernel\Tools\Tools;
+use Kernel\ToolsView\INTENT\Intent_Form;
+use Kernel\ToolsView\INTENT\Intent_Show;
 
 class Model extends m
 {

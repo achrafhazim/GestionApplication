@@ -4,7 +4,7 @@ namespace Kernel\ToolsView\html\element\Form;
 
 use Kernel\ToolsView\html\Components\Box_shadow;
 use Kernel\ToolsView\html\element\Form\FormAbstract;
-use Kernel\ToolsView\html\element\Form\input\Readonly;
+use Kernel\ToolsView\html\Components\input\Readonly;
 use function implode;
 
 class Form_view extends FormAbstract

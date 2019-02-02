@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\ToolsView\html\element\Form\input;
+namespace Kernel\ToolsView\html\Components\input;
 
-use Kernel\ToolsView\html\element\Form\input\Schema_Input_HTML;
+use Kernel\ToolsView\html\Components\input\Schema_Input_HTML;
 use Kernel\ToolsView\INTENT\Schema_Form;
 use function str_replace;
 

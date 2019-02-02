@@ -2,11 +2,11 @@
 
 namespace Kernel\ToolsView\html\element\Form;
 
-use Kernel\ToolsView\html\element\Form\input\Input;
-use Kernel\ToolsView\html\element\Form\input\MultiSelect;
-use Kernel\ToolsView\html\element\Form\input\Schema_Input_HTML;
-use Kernel\ToolsView\html\element\Form\input\Select;
-use Kernel\ToolsView\html\element\Form\input\Textarea;
+use Kernel\ToolsView\html\Components\input\Input;
+use Kernel\ToolsView\html\Components\input\MultiSelect;
+use Kernel\ToolsView\html\Components\input\Schema_Input_HTML;
+use Kernel\ToolsView\html\Components\input\Select;
+use Kernel\ToolsView\html\Components\input\Textarea;
 use function implode;
 
 class FormHTML extends FormAbstract

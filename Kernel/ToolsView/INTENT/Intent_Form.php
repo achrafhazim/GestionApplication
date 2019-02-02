@@ -7,7 +7,7 @@
 namespace Kernel\ToolsView\INTENT;
 
 use Kernel\Conevert\SQL_HTML;
-use Kernel\ToolsView\html\element\Form\input\Schema_Input_HTML;
+use Kernel\ToolsView\html\Components\input\Schema_Input_HTML;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Tools\Tools;
 use function array_keys;

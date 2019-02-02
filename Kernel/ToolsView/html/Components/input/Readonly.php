@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\ToolsView\html\element\Form\input;
+namespace Kernel\ToolsView\html\Components\input;
 
 /**
  * Description of Readonly

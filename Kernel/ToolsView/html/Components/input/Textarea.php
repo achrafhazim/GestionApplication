@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace Kernel\ToolsView\html\element\Form\input;
+namespace Kernel\ToolsView\html\Components\input;
 
-use Kernel\ToolsView\html\element\Form\input\Abstract_Input;
+use Kernel\ToolsView\html\Components\input\Abstract_Input;
 use Kernel\ToolsView\html\HTML;
 
 /**
