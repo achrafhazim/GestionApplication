@@ -9,9 +9,9 @@
 namespace Kernel\Model\Base_Donnee;
 
 use Kernel\AWA_Interface\Base_Donnee\SetDataInterface;
-use Kernel\INTENT\Intent_Set;
 use Kernel\Model\Entitys\EntitysDataTable;
 use Kernel\Tools\Tools;
+use Kernel\ToolsView\INTENT\Intent_Set;
 use TypeError;
 use function array_keys;
 use function date;

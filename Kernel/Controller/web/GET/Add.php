@@ -30,6 +30,7 @@ class Add {
     }
 
     public function run() {
+        
         if ($this->Child !== false) {
             return $this->ajouter_child();
         } else {
@@ -50,10 +51,7 @@ class Add {
 
         if (empty($data_get) && !empty($META_data)) {
             $select = $model->get_Data_FOREIGN_KEY();
-
-
-
-            $intent_formselect = new Intent_Form();
+           $intent_formselect = new Intent_Form();
             $intent_formselect->setCOLUMNS_META($META_data);
             $intent_formselect->setCharge_data_select($select);
             return ["type" => "select", "intent" => $intent_formselect];
@@ -61,6 +59,7 @@ class Add {
         } else {
             $META_data = $schema->getCOLUMNS_META();
             $select = $model->get_Data_FOREIGN_KEY($data_get);
+            
             $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
 
             $intent_form = new Intent_Form();
@@ -73,6 +72,29 @@ class Add {
         }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /*     * ***
      * child
      */

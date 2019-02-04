@@ -37,7 +37,7 @@ class FormHTML extends FormAbstract
                 $inputHTML = $this->style_form_horizonta(new Select($input));
                 break;
             case "mult_select":
-                $inputHTML = $this->style_Modals(new MultiSelect($input));
+                $inputHTML = $this->style_form_inline(new MultiSelect($input));
                 break;
 
             default:

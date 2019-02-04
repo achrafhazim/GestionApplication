@@ -13,10 +13,10 @@ class AchatsModule extends AbstractModule
 
 
     protected $Controllers = [
-          ['commandes'=>['child'=>'list$articles','notSelect'=>['raison$sociale']]],
-          ['bons$achats'=>['child'=>'list$articles']],
-          ['factures$achats'=>['child'=>'list$articles']],
-          ['avoirs$achats'=>['child'=>'list$articles']],
+          ['commandes'=>['notSelect'=>['raison$sociale']]],
+          ['bons$achats'=>['notSelect'=>['raison$sociale']]],
+          ['factures$achats'=>[]],
+          ['avoirs$achats'=>[]],
 
 
     ];

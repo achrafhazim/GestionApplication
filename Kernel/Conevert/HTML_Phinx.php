@@ -18,16 +18,14 @@ use Phinx\Db\Table\Column;
  *
  * @author wassime
  */
-class HTML_Phinx implements SQL_HTMLInterface
-{
+class HTML_Phinx implements SQL_HTMLInterface {
 
     /**
      *
      * @param string $name
      * @return Column
      */
-    public static function tel(string $name = "TEL"): Column
-    {
+    public static function tel(string $name = "TEL"): Column {
         return self::parseColumn($name, "tel");
     }
 
@@ -36,8 +34,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function email(string $name = "email"): Column
-    {
+    public static function email(string $name = "email"): Column {
         return self::parseColumn($name, "email");
     }
 
@@ -46,8 +43,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function email_master(string $name = "email"): Column
-    {
+    public static function email_master(string $name = "email"): Column {
         return self::parseColumn($name, "email_master");
     }
 
@@ -56,8 +52,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function text_master(string $name): Column
-    {
+    public static function text_master(string $name): Column {
         return self::parseColumn($name, "text_master");
     }
 
@@ -66,8 +61,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function password(string $name = "password"): Column
-    {
+    public static function password(string $name = "password"): Column {
         return self::parseColumn($name, "password");
     }
 
@@ -76,8 +70,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function text(string $name): Column
-    {
+    public static function text(string $name): Column {
         return self::parseColumn($name, "text");
     }
 
@@ -86,8 +79,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function file(string $name = "fichiers"): Column
-    {
+    public static function file(string $name = "fichiers"): Column {
         return self::parseColumn($name, "file");
     }
 
@@ -96,8 +88,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function textarea(string $name): Column
-    {
+    public static function textarea(string $name): Column {
         return self::parseColumn($name, "textarea");
     }
 
@@ -106,8 +97,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function date(string $name = "date"): Column
-    {
+    public static function date(string $name = "date"): Column {
         return self::parseColumn($name, "date");
     }
 
@@ -116,8 +106,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function checkBox(string $name): Column
-    {
+    public static function checkBox(string $name): Column {
         return self::parseColumn($name, "checkBox");
     }
 
@@ -126,8 +115,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function number(string $name): Column
-    {
+    public static function number(string $name): Column {
         return self::parseColumn($name, "number");
     }
 
@@ -136,8 +124,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function select(string $name): Column
-    {
+    public static function select(string $name): Column {
         return self::parseColumn($name, "select");
     }
 
@@ -146,8 +133,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function id(string $name = "id"): Column
-    {
+    public static function id(string $name = "id"): Column {
         return self::parseColumn($name, "id");
     }
 
@@ -156,8 +142,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $name
      * @return Column
      */
-    public static function datetime(string $name): Column
-    {
+    public static function datetime(string $name): Column {
         return self::parseColumn($name, "add_update");
     }
 
@@ -165,8 +150,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      *
      * @return array
      */
-    public static function id_default(): array
-    {
+    public static function id_default(): array {
 
         return ['id' => false, 'primary_key' => ['id']];
     }
@@ -177,8 +161,7 @@ class HTML_Phinx implements SQL_HTMLInterface
      * @param string $index
      * @return Column
      */
-    private static function parseColumn(string $name, string $index): Column
-    {
+    private static function parseColumn(string $name, string $index): Column {
         $column = new Column();
         return $column->setName($name)
                         ->setType(self::HTML_SQL[$index]["typePhinix"])
@@ -207,8 +190,7 @@ class HTML_Phinx implements SQL_HTMLInterface
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
      */
 
-    public static function relation(string $pere, string $enfant, AdapterInterface $adapter)
-    {
+    public static function relation(string $pere, string $enfant, AdapterInterface $adapter) {
         $table = new Table('r_' . $pere . '_' . $enfant, ['id' => false, 'primary_key' => ['id_' . $pere, 'id_' . $enfant]], $adapter);
         $table->addColumn('id_' . $pere, 'integer', ['limit' => 10])
                 ->addColumn('id_' . $enfant, 'integer', ['limit' => 10])
@@ -216,4 +198,18 @@ class HTML_Phinx implements SQL_HTMLInterface
                 ->addForeignKey('id_' . $enfant, $enfant, 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
+
+    public static function relationList(string $pere, string $enfant, AdapterInterface $adapter) {
+        $table = new Table('r_' . $pere . '_' . $enfant, ['id' => false, 'primary_key' => ['id_' . $pere, 'id_' . $enfant]], $adapter);
+        $table->addColumn('id_' . $pere, 'integer', ['limit' => 10])
+                ->addColumn('id_' . $enfant, 'integer', ['limit' => 10])
+                
+                ->addColumn(self::number('Qte'))
+                ->addColumn(self::number('prix'))
+                ->addColumn(self::textarea('remarque'))
+                ->addForeignKey('id_' . $pere, $pere, 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('id_' . $enfant, $enfant, 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->create();
+    }
+
 }

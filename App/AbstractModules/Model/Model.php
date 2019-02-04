@@ -145,7 +145,7 @@ class Model extends m
      * @param array $mode
      * @return type
      */
-    public function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_DEFAULT)
+    private function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_DEFAULT)
     {
         //select id de FOREIGN_KEY lier to table
         $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);

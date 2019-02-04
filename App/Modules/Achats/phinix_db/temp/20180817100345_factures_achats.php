@@ -76,6 +76,7 @@ class FacturesAchats extends AbstractMigration
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
         HTML_Phinx::relation('factures$achats', 'bons$achats', $this->getAdapter());
-        HTML_Phinx::relation('factures$achats', 'list$articles', $this->getAdapter());
+        HTML_Phinx::relationList('factures$achats', 'articles', $this->getAdapter());
+       
     }
 }

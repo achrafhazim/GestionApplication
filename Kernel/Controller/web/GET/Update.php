@@ -96,9 +96,10 @@ class Update {
 
 
         //****************************************//
-        var_dump("nadar");die();
-        $Controllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
-        $this->chargeModel($Controllerchild);
+      //  var_dump("nadar");die();
+       // $Controllerchild = substr($this->getNameController(), 0, -1); // childe achats => achat
+        $Controllerchild = $this->Child; // childe achats => achat
+        $this->model->setTable($Controllerchild);
         $model_Child = $this->model;
         $schema_Child = $model_Child->getschema();
 

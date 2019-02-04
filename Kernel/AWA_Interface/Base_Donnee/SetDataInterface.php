@@ -8,7 +8,9 @@
 
 namespace Kernel\AWA_Interface\Base_Donnee;
 
-use Kernel\INTENT\Intent_Set;
+
+
+use Kernel\ToolsView\INTENT\Intent_Set;
 use TypeError;
 
 /**
