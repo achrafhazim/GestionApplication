@@ -30,9 +30,9 @@ if (empty($app->getModules())) {
 
 
     // $app->addModule(RapportsModule::class);
-  //  $app->addModule(ReglagesModule::class);
+    $app->addModule(ReglagesModule::class);
 
-  //  $app->addModule(ProduitModule::class);
+    $app->addModule(ProduitModule::class);
 
     $app->addModule(CRMModule::class);
     $app->addModule(AchatsModule::class);
