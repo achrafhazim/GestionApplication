@@ -57,16 +57,25 @@ class Add {
             return ["type" => "select", "intent" => $intent_formselect];
          //   return $this->render($viewSelect, ["intent" => $intent_formselect]);
         } else {
+            $intent_form = new Intent_Form();
             $META_data = $schema->getCOLUMNS_META();
+            
+            $intent_form->setCOLUMNS_META($META_data);
+            
             $select = $model->get_Data_FOREIGN_KEY($data_get);
+            $intent_form->setCharge_data_select($select);
+            $table_CHILDREN=$model->getschema()->get_table_CHILDREN();
+             var_dump($table_CHILDREN,$model->getschema("r_commandes_articles")->getCOLUMNS_all());
+              die();
+            
+            
             
             $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
-
-            $intent_form = new Intent_Form();
-            $intent_form->setCOLUMNS_META($META_data);
-            $intent_form->setCharge_data_select($select);
             $intent_form->setCharge_data_multiSelect($multiSelect);
 
+            
+            
+            
             return ["type" => "ajouter", "intent" => $intent_form];
            // return $this->render($viewAjoutes, ["intent" => $intent_form]);
         }

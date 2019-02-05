@@ -539,7 +539,9 @@ class MetaDatabase extends ActionDataBase implements MetaDatabaseInterface, MODE
         if (empty(self::$allSchema)) {
             $config = self::getSCHEMA_SELECT_AUTO();
             $DB_name = self::getNameDataBase();
-            $sql = ' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ';
+              $sql = ' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '"  ';
+           
+            //$sql = ' SELECT table_name as NameTable FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ';
             $allSchema = $this->querySchema($sql);
             foreach ($allSchema as $table) {
                 $table->setCOLUMNS_default($this->columns_default($table, $config));

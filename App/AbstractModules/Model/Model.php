@@ -12,14 +12,13 @@
  * @author wassime
  */
 
-namespace App\AbstractModules\Model ;
+namespace App\AbstractModules\Model;
 
 use Kernel\Model\Model as m;
 use Kernel\ToolsView\INTENT\Intent_Form;
 use Kernel\ToolsView\INTENT\Intent_Show;
 
-class Model extends m
-{
+class Model extends m {
     ////select input simple
 
     /**
@@ -27,8 +26,7 @@ class Model extends m
      * @param type $id_save
      * @return array assoc  exemple ['raison$sociale' =>  '24',...]
      */
-    public function get_id_FOREIGN_KEYs($id_save): array
-    {
+    public function get_id_FOREIGN_KEYs($id_save): array {
 
         $FOREIGN_KEYs = $this->getschema()
                 ->getFOREIGN_KEY();
@@ -53,8 +51,7 @@ class Model extends m
      * @param array $mode
      * @return array
      */
-    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_MASTER_NULL): array
-    {
+    public function get_Data_FOREIGN_KEY(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_MASTER_NULL): array {
         /// charge select input
         $Entitys_FOREIGNs = [];
 
@@ -75,17 +72,16 @@ class Model extends m
             // get data
             $shema_FOREIGN = $this->getschema($nameTable_FOREIGN);
             $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->find(
-                $conditions,
-                $mode,
-                $shema_FOREIGN
+                    $conditions,
+                    $mode,
+                    $shema_FOREIGN
             );
         }
 
         return $Entitys_FOREIGNs;
     }
 
-    public function get_Data_FOREIGN_KEY__ID($id_save): array
-    {
+    public function get_Data_FOREIGN_KEY__ID($id_save): array {
         //select id de FOREIGN_KEY lier to table
         $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de FOREIGN_KEY
@@ -93,14 +89,14 @@ class Model extends m
     }
 
 ////multiselect input
+
     /**
      *
      * @param array $id_FOREIGN_KEYs   exemple ['raison$sociale' =>  '24']
      * @param array $mode
      * @return array
      */
-    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_ALL_MASTER): array
-    {
+    public function dataChargeMultiSelectIndependent(array $id_FOREIGN_KEYs = [], array $mode = self::MODE_SELECT_ALL_MASTER): array {
 
         $Entitys_CHILDRENs = [];
 
@@ -126,13 +122,13 @@ class Model extends m
 
 
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery(
-                self::Get_QuerySQL()
+                    self::Get_QuerySQL()
                             ->select($this->getschema()->select_CHILDREN($table_CHILDREN, $mode[1]))
                             ->from($table_CHILDREN)
                             ->join($this->getschema($table_CHILDREN)->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
                             ->independent($this->getTable()) // independent table not lier
                             ->where($conditions) // lier FOREIGN_KEY
-                ->prepareQuery()
+                            ->prepareQuery()
             );
         }
 
@@ -145,8 +141,7 @@ class Model extends m
      * @param array $mode
      * @return type
      */
-    private function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_DEFAULT)
-    {
+    private function get_Charge_multiSelect($id_save, array $mode = self::MODE_SELECT_ALL_DEFAULT) {
         //select id de FOREIGN_KEY lier to table
         $id_FOREIGN_KEYs = $this->get_id_FOREIGN_KEYs($id_save);
         // select data de MultiSelect || tablechilde
@@ -159,8 +154,7 @@ class Model extends m
      * @param type $modeselect
      * @return Intent_Form
      */
-    public function show_styleForm($id, $modeselect = self::MODE_SELECT_ALL_DEFAULT): Intent_Form
-    {
+    public function show_styleForm($id, $modeselect = self::MODE_SELECT_ALL_DEFAULT): Intent_Form {
 
 
         $schema = $this->getschema();
@@ -187,9 +181,8 @@ class Model extends m
      * @param array $rangeID
      * @return Intent_Show
      */
-    public function show_in(array $mode, $rangeID): Intent_Show
-    {
-         //range
+    public function show_in(array $mode, $rangeID): Intent_Show {
+        //range
         if (is_string($rangeID)) {
             $rangeID = explode(",", $rangeID);
         }
@@ -204,8 +197,7 @@ class Model extends m
      * @param type $id
      * @return Intent_Show
      */
-    public function show(array $mode, $id = true): Intent_Show
-    {
+    public function show(array $mode, $id = true): Intent_Show {
 
         $schema = $this->getSchema();
         $Entitys = $this->find($id, $mode);
@@ -213,12 +205,9 @@ class Model extends m
         return new Intent_Show($schema, $Entitys, $mode);
     }
 
- 
-
 // save data
 
-    public function setData(array $data, $table_parent = "", $id_perent = 0)
-    {
+    public function setData(array $data, $table_parent = "", $id_perent = 0) {
 
 
 
@@ -237,4 +226,5 @@ class Model extends m
             die(" data to server php is empty show code html or ajax =>erreur send data");
         }
     }
+
 }

@@ -90,6 +90,6 @@ class BonsAchats extends AbstractMigration
          */
 
        HTML_Phinx::relation('bons$achats', 'commandes', $this->getAdapter());
-       // HTML_Phinx::relationList('bons$achats', 'articles', $this->getAdapter());
+        HTML_Phinx::relationList('bons$achats', 'articles', $this->getAdapter());
     }
 }

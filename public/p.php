@@ -28,104 +28,35 @@
         <script type="text/javascript">
             $('form').jsonForm(
                     {
-
                         "schema": {
-                            "color": {
-                                "title": "Color",
+                            "name": {
+                                "title": "Name",
+                                "description": "Nickname allowed",
+                                "type": "string"
+                            },
+                            "gender": {
+                                "title": "Gender",
+                                "description": "Your gender",
                                 "type": "string",
                                 "enum": [
-                                    "blue",
-                                    "spicy",
-                                    "gray",
-                                    "earth",
-                                    "vegetal"
-                                ],
-                                "default": "gray",
-                                "required": true
-                            },
-                            "backgroundimage": {
-                                "title": "Background image for TV version",
-                                "type": "object"
-                            },
-                            "tabs": {
-                                "title": "Tabs titles",
-                                "type": "array",
-                                "items": {
-                                    "title": "Short tab title (max. 15 characters)",
-                                    "type": "string",
-                                    "maxLength": 15
-                                }
-                            },
-                            "tabicons": {
-                                "title": "Tabs icons",
-                                "maxLength": 8,
-                                "type": "array",
-                                "items": {
-                                    "title": "Tab icon",
-                                    "type": "string",
-                                    "enum": [
-                                        "contact",
-                                        "event",
-                                        "map",
-                                        "news",
-                                        "photo",
-                                        "product",
-                                        "sound",
-                                        "status",
-                                        "video"
-                                    ]
-                                }
+                                    "male",
+                                    "female",
+                                    "alien"
+                                ]
                             }
                         },
                         "form": [
                             {
-                                "type": "fieldset",
-                                "legend": "Styles",
-                                "items": [
-                                    "color",
-                                    {
-                                        "key": "backgroundimage",
-                                        "type": "file-hosted-public"
-                                    }
-
-                                ]
+                                "key": "name"
                             },
                             {
-                                "type": "fieldset",
-                                "legend": "Tabs",
-                                "items": [
-                                    {
-                                        "type": "tabarray",
-                                        "items": [
-                                            {
-                                                "type": "section",
-                                                "legend": "{{value}}",
-                                                "items": [
-                                                    {
-                                                        "key": "tabicons[]",
-                                                        "type": "imageselect",
-                                                        "imageWidth": 32,
-                                                        "imageHeight": 42,
-                                                        "imageButtonClass": "btn-inverse",
-                                                        "imagePrefix": "app/images/tv-",
-                                                        "imageSuffix": ".png",
-                                                        "imageSelectorTitle": "Based on tab data source"
-                                                    },
-                                                    {
-                                                        "key": "tabs[]",
-                                                        "valueInLegend": true,
-                                                        "value": "{{values.datasources.main[]}}"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
+                                "type": "submit",
+                                "title": "Submit"
                             }
                         ]
                     }
 
-            
+
             );
         </script>
     </body>
