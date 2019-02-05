@@ -65,8 +65,7 @@ class Add {
             $select = $model->get_Data_FOREIGN_KEY($data_get);
             $intent_form->setCharge_data_select($select);
             $table_CHILDREN=$model->getschema()->get_table_CHILDREN();
-             var_dump($table_CHILDREN,$model->getschema("r_commandes_articles")->getCOLUMNS_all());
-              die();
+            
             
             
             

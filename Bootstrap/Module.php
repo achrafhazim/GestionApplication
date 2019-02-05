@@ -38,12 +38,12 @@ if (empty($app->getModules())) {
     $app->addModule(AchatsModule::class);
 
 
-//
-//    $app->addModule(VentesModule::class);
-//    $app->addModule(TransactionsModule::class, [
-//            //  new Authentification($container)
-//            ]
-//    );
+
+    $app->addModule(VentesModule::class);
+    $app->addModule(TransactionsModule::class, [
+            //  new Authentification($container)
+            ]
+    );
 
     $app->run_modules(); // ===> not run method charge and run
 }
