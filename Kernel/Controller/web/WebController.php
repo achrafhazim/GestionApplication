@@ -155,6 +155,7 @@ class WebController extends \Kernel\Controller\Controller {
             case $this->Actions()->is_add():
                 $add = new Add2($this->getModel(), $GET, $this->getnotSelect(), $this->getChild());
                 $data = $add->run();
+                return $this->render('ajouter_new', $data);
 
                 if ("select" == ($data["type"])) {
                     return $this->render("ajouter_select", $data);

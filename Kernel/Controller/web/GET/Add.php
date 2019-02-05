@@ -31,7 +31,7 @@ class Add {
 
     public function run() {
         //hhhhhhhhhhhhhhhhhhh tamara
-         return $this->ajouter_child();
+         return $this->ajouter();
         if ($this->Child !== false) {
             return $this->ajouter_child();
         } else {
