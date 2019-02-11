@@ -2,10 +2,8 @@
 
 namespace Kernel\Controller;
 
-use Kernel\AWA_Interface\ActionInterface;
 use Kernel\AWA_Interface\File_UploadInterface;
 use Kernel\AWA_Interface\ModelInterface;
-use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\AWA_Interface\RouteInterface;
 use Kernel\AWA_Interface\RouterInterface;
 use Kernel\AWA_Interface\SessionInterface;
@@ -23,11 +21,9 @@ use function ucfirst;
 abstract class Controller implements MiddlewareInterface {
 
     private $erreur = [];
-    private $action = [];
     private $container;
     private $model = null;
-    private $File_Upload;
-    private $router;
+   
     private $route;
     private $request;
     private $response;
@@ -37,29 +33,21 @@ abstract class Controller implements MiddlewareInterface {
     private $child = [];
     private $notSelect = [];
     private $nameModule;
-    private $namesRoute;
 
     function __construct(array $Options) {
         $Controllers = $Options["namesControllers"];
         $this->chargeControllers($Controllers);
-
-        $this->container = $Options["container"];
-
-
-        $this->nameModule = $Options["nameModule"];
         $this->setMiddlewares($Options["middlewares"]);
-        $this->namesRoute = $Options["nameRoute"];
+        $this->container = $Options["container"];
+        $this->nameModule = $Options["nameModule"];
 
 
-        $this->action = $this->getContainer()->get(ActionInterface::class);
 
-        $this->namesRoute->set_NameModule($this->nameModule);
+
+
+
         $this->erreur["Controller"] = false;
         $this->erreur["Model"] = false;
-
-        $this->setRouter($this->getContainer()->get(RouterInterface::class));
-
-        $this->setFile_Upload($this->getContainer()->get(File_UploadInterface::class));
     }
 
     function getContainer(): ContainerInterface {
@@ -89,7 +77,23 @@ abstract class Controller implements MiddlewareInterface {
         return $this->getContainer()->get(SessionInterface::class);
     }
 
-// psr 15
+// router
+
+
+
+    function getRouter(): RouterInterface {
+        return ($this->getContainer()->get(RouterInterface::class));
+    }
+
+    function getRoute(): RouteInterface {
+        return $this->route;
+    }
+
+    function setRoute(RouteInterface $route) {
+        $this->route = $route;
+    }
+
+    // psr 15
 
     function setMiddlewares(array $middlewares) {
         $this->middlewares = $middlewares;
@@ -116,31 +120,17 @@ abstract class Controller implements MiddlewareInterface {
         $route = $this->getRouter()->match($this->getRequest());
         $this->setRoute($route);
         $namecontrole = $this->getRoute()->getParam("controle");
+
         $this->setNameController($namecontrole);
 
         return $this->getResponse();
     }
 
-// router
+    // MC
 
-    function setRouter(RouterInterface $router) {
-        $this->router = $router;
+    function getNameModule(): string {
+        return $this->nameModule;
     }
-
-    function getRoute(): RouteInterface {
-        return $this->route;
-    }
-
-    function setRoute(RouteInterface $route) {
-        $this->route = $route;
-    }
-
-    function getRouter(): RouterInterface {
-        return $this->router;
-    }
-
-    // mvc
-
 
     function is_Erreur(string $MC = ""): bool {
 
@@ -150,18 +140,6 @@ abstract class Controller implements MiddlewareInterface {
         } else {
             return $this->erreur[$MC];
         }
-    }
-
-    function Actions(): ActionInterface {
-        return $this->action;
-    }
-
-    function getNameModule(): string {
-        return $this->nameModule;
-    }
-
-    function getNamesRoute(): NamesRouteInterface {
-        return $this->namesRoute;
     }
 
     /// model
@@ -231,6 +209,16 @@ abstract class Controller implements MiddlewareInterface {
 
     /// controller
     private function chargeControllers($Controllers) {
+
+        // api all controller
+        if (is_string($Controllers)) {
+            $this->namesControllers = "";
+            return;
+        }
+
+
+
+
         foreach ($Controllers as $Controller) {
             if (is_string($Controller)) {
                 $this->namesControllers [] = $Controller;
@@ -281,6 +269,14 @@ abstract class Controller implements MiddlewareInterface {
 
     function setNameController(string $nameController): bool {
         $flag = false;
+        // si api any
+        if ($this->getNamesControllers() == []) {
+            $this->nameController = $nameController;
+            $flag = true;
+        }
+
+
+
         // si on namse du module
         $flag = in_array($nameController, $this->getNamesControllers());
         if ($flag) {
@@ -304,11 +300,7 @@ abstract class Controller implements MiddlewareInterface {
 
 
     function getFile_Upload(): File_UploadInterface {
-        return $this->File_Upload;
-    }
-
-    function setFile_Upload(File_UploadInterface $File_Upload) {
-        $this->File_Upload = $File_Upload;
+        return $this->getContainer()->get(File_UploadInterface::class);
     }
 
 }

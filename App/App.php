@@ -50,6 +50,15 @@ class App extends Kernel {
             $menus[] = $module->getMenu();
         }
 
+        
+        /// pour rest form api
+         $this->router->addRoute_RestFul(
+                "{controle:[a-z\$\_]+}[/{id:[0-9]+}]", 
+                 new \Kernel\Controller\RestFul\api($this->getContainer())
+        );
+        
+        
+        
         $this->renderer->addGlobal("_Router", $this->router);
         $this->renderer->addGlobal("_menu", $menus);
     }

@@ -31,12 +31,16 @@ class Add {
 
     public function run() {
         //hhhhhhhhhhhhhhhhhhh tamara
-         return $this->ajouter();
-        if ($this->Child !== false) {
-            return $this->ajouter_child();
-        } else {
-            return $this->ajouter();
-        }
+        return $this->ajouter();
+        
+        
+        
+        
+//        if ($this->Child !== false) {
+//            return $this->ajouter_child();
+//        } else {
+//            return $this->ajouter();
+//        }
     }
 
     public function ajouter() {
@@ -44,66 +48,43 @@ class Add {
         $schema = $model->getschema();
 
         $data_get = $this->GET;
-        $NotSelect = $this->notSelect;
+//        $NotSelect = $this->notSelect;
 
 
-        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
+//        $META_data = $schema->getCOLUMNS_META(["Key" => "MUL"], ["Field" => $NotSelect]);
 
 
-        if (empty($data_get) && !empty($META_data)) {
-            $select = $model->get_Data_FOREIGN_KEY();
-           $intent_formselect = new Intent_Form();
-            $intent_formselect->setCOLUMNS_META($META_data);
-            $intent_formselect->setCharge_data_select($select);
-            return ["type" => "select", "intent" => $intent_formselect];
-         //   return $this->render($viewSelect, ["intent" => $intent_formselect]);
-        } else {
+//        if (empty($data_get) && !empty($META_data)) {
+//            $select = $model->get_Data_FOREIGN_KEY();
+//            $intent_formselect = new Intent_Form();
+//            $intent_formselect->setCOLUMNS_META($META_data);
+//            $intent_formselect->setCharge_data_select($select);
+//            return ["type" => "select", "intent" => $intent_formselect];
+//            //   return $this->render($viewSelect, ["intent" => $intent_formselect]);
+//        } else {
             $intent_form = new Intent_Form();
             $META_data = $schema->getCOLUMNS_META();
-            
+
             $intent_form->setCOLUMNS_META($META_data);
-            
+
             $select = $model->get_Data_FOREIGN_KEY($data_get);
             $intent_form->setCharge_data_select($select);
-            $table_CHILDREN=$model->getschema()->get_table_CHILDREN();
-            
-            
-            
-            
+//            $table_CHILDREN = $model->getschema()->get_table_CHILDREN();
+
+
+
+
             $multiSelect = $model->dataChargeMultiSelectIndependent($data_get);
             $intent_form->setCharge_data_multiSelect($multiSelect);
 
-            
-            
-            
+
+
+
             return ["type" => "ajouter", "intent" => $intent_form];
-           // return $this->render($viewAjoutes, ["intent" => $intent_form]);
-        }
+            // return $this->render($viewAjoutes, ["intent" => $intent_form]);
+//        }
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /*     * ***
      * child
      */

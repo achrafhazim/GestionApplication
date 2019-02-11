@@ -48,7 +48,7 @@ class Router implements RouterInterface {
          $this->addRoute($url, $middleware, ['POST',"GET"], $name, $nameModule);
     }
 
-    public function addRoute_RestFul(string $url, MiddlewareInterface $middleware, string $name, string $nameModule = "") {
+    public function addRoute_RestFul(string $url, MiddlewareInterface $middleware, string $name="", string $nameModule = "") {
         $route = new FastRouteRoute("/api/" . $nameModule . $url, $middleware, null, $name);
         $this->router->addRoute($route);
     }

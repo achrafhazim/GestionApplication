@@ -25,10 +25,12 @@ use Kernel\Controller\web\GET\Show;
 use Kernel\Controller\web\GET\Update as Update2;
 use Kernel\Controller\web\POST\Add;
 use Kernel\Controller\web\POST\Update;
+use Kernel\AWA_Interface\NamesRouteInterface;
 use Kernel\Event\Event;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Kernel\AWA_Interface\ActionInterface;
 use const D_S;
 use const ROOT_WEB;
 use function str_replace;
@@ -39,13 +41,36 @@ class WebController extends \Kernel\Controller\Controller {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// view
     private $renderer;
+    
+    private $namesRoute;
 
     function __construct(array $Options) {
+        
+        
         parent::__construct($Options);
+         
+        
+        $this->namesRoute = $Options["nameRoute"];
+        
         $this->renderer = $this->getContainer()->get(RendererInterface::class);
         //$this->setRenderer($this->getContainer()->get(\Kernel\AWA_Interface\RendererInterface::class));
     }
+   function Actions(): ActionInterface {
+       return $this->getContainer()->get(ActionInterface::class);
+        
+    }
 
+    function getNamesRoute(): NamesRouteInterface {
+        
+        return $this->namesRoute;
+    }
+    
+    
+    
+    
+    
+    
+    
     public function render($name_view, array $data_view = []): ResponseInterface {
         $renderer = $this->renderer;
 
@@ -85,8 +110,9 @@ class WebController extends \Kernel\Controller\Controller {
         if ($this->getResponse()->getStatusCode() != 200) {
             return $this->getResponse();
         }
-        $this->setRoute($this->getRouter()->match($this->getRequest()));
-        $this->setNameController($this->getRoute()->getParam("controle"));
+        
+
+        
         if ($this->is_Erreur()) {
             return $this->getResponse()->withStatus(404);
         }
@@ -157,13 +183,17 @@ class WebController extends \Kernel\Controller\Controller {
                 $data = $add->run();
                 return $this->render('ajouter_new', $data);
 
-                if ("select" == ($data["type"])) {
-                    return $this->render("ajouter_select", $data);
-                } elseif ("form_child" == ($data["type"])) {
-                    return $this->render("ajouter_form_child", $data);
-                } elseif ("ajouter" == ($data["type"])) {
-                    return $this->render('ajouter_form', $data);
-                }
+                
+                
+//                if ("select" == ($data["type"])) {
+//                    return $this->render("ajouter_select", $data);
+//                } elseif ("form_child" == ($data["type"])) {
+//                    return $this->render("ajouter_form_child", $data);
+//                } elseif ("ajouter" == ($data["type"])) {
+//                    return $this->render('ajouter_form', $data);
+//                }
+                
+                
             case $this->Actions()->is_update():
                 $add = new Update2($this->getModel(), $this->getChild());
                 $data = $add->run($param);
