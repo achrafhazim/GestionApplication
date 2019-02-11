@@ -52,6 +52,7 @@ namespace Kernel\Controller\RestFul;
 
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
+use Kernel\ToolsView\INTENT\Intent_Form;
 
 /**
  * Description of GETcontroller
@@ -69,7 +70,9 @@ class GET {
     }
 
     public function run(int $id = 0, array $GET = []) {
-
+        if (isset($GET["schema"])) {
+            $this->schema(); 
+        }
 
         $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
@@ -78,7 +81,26 @@ class GET {
         $data = Tools::entitys_TO_array($entity);
         return $data;
     }
-
+    function schema() {
+        $schema = $this->model->getschema();
+        
+        
+        
+        $intent_form = new Intent_Form();
+            $META_data = $schema->getCOLUMNS_META();
+            
+            $intent_form->setCOLUMNS_META($META_data);
+            
+            
+          
+            var_dump($intent_form->getInputsSchema());
+            die();
+    }
+    
+    
+    
+    
+    
     protected function query($id = null, $GET = []) {
 
 

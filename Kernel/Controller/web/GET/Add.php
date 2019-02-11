@@ -8,6 +8,7 @@
 
 namespace Kernel\Controller\web\GET;
 
+use Kernel\Tools\Tools;
 use Kernel\ToolsView\INTENT\Intent_Form;
 
 /**
@@ -64,7 +65,7 @@ class Add {
 //        } else {
             $intent_form = new Intent_Form();
             $META_data = $schema->getCOLUMNS_META();
-
+            var_dump(Tools::entitys_TO_array($META_data));die();
             $intent_form->setCOLUMNS_META($META_data);
 
             $select = $model->get_Data_FOREIGN_KEY($data_get);
