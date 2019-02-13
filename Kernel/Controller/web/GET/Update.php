@@ -50,6 +50,7 @@ class Update {
         }
 
         $intent_Form = new Intent_Form();
+        var_dump($Entitys);die();
         $intent_Form->setDefault_Data($Entitys);
         $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
 

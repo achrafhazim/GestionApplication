@@ -108,7 +108,7 @@ class Select extends MetaDatabase implements SelectInterface {
         $Entitys = $this->prepareQuery($sql);
 
 
-
+        /// charge data multi select lier
 
         return $this->get_Data_CHILDREN($Entitys, $mode, $schema);
     }
