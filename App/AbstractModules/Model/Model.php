@@ -119,7 +119,7 @@ class Model extends m {
             }
 
 
-
+            
 
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->prepareQuery(
                     self::Get_QuerySQL()
@@ -129,12 +129,56 @@ class Model extends m {
                             ->independent($this->getTable()) // independent table not lier
                             ->where($conditions) // lier FOREIGN_KEY
                             ->prepareQuery()
+                    
             );
+            
         }
+     
 
         return $Entitys_CHILDRENs;
     }
+    
+    /**
+     * test select libr champ
+     * /chld/...?pr=
+     * http://localhost/api/commandes?schema=p&pr=bons$achats&con=raison$sociale.id=1
+     * @param type $perant
+     * @param type $conditions
+     * @return type
+     */
+    public function libre($perant,$conditions=true) {
+        return $this->prepareQuery(
+                    self::Get_QuerySQL()
+                            ->select()
+                            ->from($this->getTable())
+                            ->join($this->schema->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
+                            ->independent($perant) // independent table not lier
+                            ->where($conditions) // lier FOREIGN_KEY
+                            ->prepareQuery()
+                    
+            ); 
+    }
 
+    /**
+     * http://localhost/api/commandes?schema=s&pr=bons$achats&id=1
+     * @param type $perant
+     * @param type $id
+     * @return type
+     */
+    
+        public function save($perant,$id) {
+            $tablechild=$this->getTable();
+        return $this->prepareQuery(
+                        self::Get_QuerySQL()
+                                ->select()
+                                ->column($this->getschema($tablechild)->select_default())
+                                ->from($perant)
+                                ->join($tablechild, " INNER ", true)
+                                ->join($this->getschema($tablechild)->getFOREIGN_KEY(), " INNER ", false, "", $tablechild)
+                                ->where($perant . ".id = " . $id)
+                                ->prepareQuery()
+                );
+    }
     /**
      *
      * @param type $id_save

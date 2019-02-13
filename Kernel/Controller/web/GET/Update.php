@@ -50,13 +50,15 @@ class Update {
         }
 
         $intent_Form = new Intent_Form();
-        var_dump($Entitys);die();
+        
         $intent_Form->setDefault_Data($Entitys);
         $id_FOREIGN_KEYs = $model->get_id_FOREIGN_KEYs($id_save);
 
 
         $intent_Form->setCharge_data_select($model->get_Data_FOREIGN_KEY($id_FOREIGN_KEYs));
+        
         $intent_Form->setCharge_data_multiSelect($model->dataChargeMultiSelectIndependent($id_FOREIGN_KEYs, $modeselect));
+      
         $intent_Form->setCOLUMNS_META($schema->getCOLUMNS_META());
 
         return ["type"=>"form","intent" => $intent_Form];

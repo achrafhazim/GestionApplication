@@ -71,8 +71,9 @@ class GET {
 
     public function run(int $id = 0, array $GET = []) {
         if (isset($GET["schema"])) {
-         return   $this->schema();
+            return $this->schema($GET);
         }
+
 
         $query = $this->query($id, $GET);
         $ModeSelect = $this->ModeSelect($GET);
@@ -83,20 +84,46 @@ class GET {
         return $data;
     }
 
-    function schema() {
-        $schema = $this->model->getschema();
+    function schema($GET) {
+        if ($GET["schema"] == "html") {
+            $schema = $this->model->getschema();
+
+            $intent_js = new Intent_JS();
+            $META_data = $schema->getCOLUMNS_META();
+
+            $intent_js->setCOLUMNS_META($META_data);
 
 
+            return $intent_js->getJson_Schema_Input();
+        }
+        if ($GET["schema"] == "f") {
+            $schema = $this->model->getschema();
+            $foreignkey = $schema->getFOREIGN_KEY();
+            return json_encode($foreignkey);
+        }
+        if ($GET["schema"] == "c") {
+            $schema = $this->model->getschema();
+            $foreignkey = $schema->get_table_CHILDREN();
+            return json_encode($foreignkey);
+        }
+        if ($GET["schema"] == "p") {
+            /*
+             * http://localhost/api/commandes?schema=p&pr=bons$achats&con=raison$sociale.id=1
+             */
+            $entity = $this->model->libre($GET["pr"],$GET["con"]);
+            $data = Tools::entitys_TO_array($entity);
 
-        $intent_js= new Intent_JS();
-        $META_data = $schema->getCOLUMNS_META();
+            return $data;
+        }
+         if ($GET["schema"] == "s") {
+            /*
+             * http://localhost/api/commandes?schema=s&pr=bons$achats&id=1
+             */
+            $entity = $this->model->save($GET["pr"],$GET["id"]);
+            $data = Tools::entitys_TO_array($entity);
 
-        $intent_js->setCOLUMNS_META($META_data);
-       
-
-        return $intent_js->getJson_Schema_Input();
-      
-        
+            return $data;
+        }
     }
 
     protected function query($id = null, $GET = []) {
