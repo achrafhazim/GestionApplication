@@ -80,8 +80,11 @@ class RestFul extends \Kernel\Controller\Controller {
     }
 
     public function json($data) {
-        $json = Tools::json_js($data);
-        $this->getResponse()->getBody()->write($json);
+       if( !is_string($data)){
+         $data = Tools::json_js($data);  
+        }
+        
+        $this->getResponse()->getBody()->write($data);
         return $this->getResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 

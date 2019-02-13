@@ -256,7 +256,7 @@ class Intent_Form
 
         /**
          * charge data select
-         * charge date save pour etat update
+         * charge dateDefault save pour etat update
          */
         foreach ($schema_Input as $name => $schema_Input_HTML) {
             // set data on select input <option> ......
