@@ -1,0 +1,76 @@
+{% extends "themes.twig" %}
+{% use "@AbstractModules/plugins/progress.twig" %}
+
+
+{% block headcss %}
+
+    <!-- Bootstrap-select Custom CSS -->
+    <link href="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <!-- multi-select Custom CSS -->
+    <link href="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
+    <link href="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
+
+
+{% block container %}
+    <div id="status">
+
+        <div class="row" style="margin: 5px">
+
+            <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
+                {{form(intent)}}
+                <div class="col-sm-12">
+                    <!-- par methode ajax -->
+                    <label for="ajoutdata"> AJOUTER </label>
+                    <input type="submit"   name="ajoutdata" class="btn btn-success btn-lg">
+                    <label for="reset"> VIDE </label>
+                    <input type="reset" name="reset"  class="btn btn-success btn-lg">
+                </div>
+            </form>
+
+
+        </div>
+
+    </div>
+    {{ block('progress') }}
+{% endblock %}
+
+
+{% block footer %}
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+
+    <script src="/{{_ROOTWEB}}AWA/set_data_par_ajax.js" type="text/javascript"></script>
+
+    <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
+    <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
+
+
+    <script>
+
+
+        new AWA_CalculeAutoInput({
+            preffix: "id_html"
+        });
+
+
+
+        var configMultiSelect = new AWA_ConfigMultiSelect({
+            Calcule: new pluginsMultiSelectCalcule({
+                preffixDOM: "id_html",
+                preffixDATA: "content_",
+            })
+
+        });
+        /// set config multi select
+        $.each($('select[multiple]'), function() {
+            $(this).multiSelect(configMultiSelect);
+        });
+    </script>
+
+{% endblock %}

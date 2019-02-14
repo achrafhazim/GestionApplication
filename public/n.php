@@ -25,7 +25,8 @@ and open the template in the editor.
                                 name: 'keyword[]',
                                 style: 'width:65%'}
                     ).append($("<option>", {text: 'ok', value: "jj"}))
-                    .append($("<option>", {text: 'ok'})).append($("<option>", {text: 'ok'}))
+                    .append($("<option>", {text: 'ok'}))
+                    .append($("<option>", {text: 'ok'}))
                     );
 
             form.append(

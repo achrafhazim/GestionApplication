@@ -14,26 +14,7 @@
 
 
 {% block container %}
-    <div id="status">
-
-        <div class="row" style="margin: 5px">
-
-            <form  action="#"  method='POST'  enctype="multipart/form-data" class="form-horizontal">
-                {{form(intent)}}
-                <div class="col-sm-12">
-                    <!-- par methode ajax -->
-                    <label for="ajoutdata"> AJOUTER </label>
-                    <input type="submit"   name="ajoutdata" class="btn btn-success btn-lg">
-                    <label for="reset"> VIDE </label>
-                    <input type="reset" name="reset"  class="btn btn-success btn-lg">
-                </div>
-            </form>
-
-
-        </div>
-
-    </div>
-    {{ block('progress') }}
+ <div id="test"></div> 
 {% endblock %}
 
 
@@ -49,7 +30,183 @@
     <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
     <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
-
+    
+ <script>
+            
+            function creetinput(schema) {
+                let _name = schema.name;
+                let _type = schema.type;
+                let _isnull = schema.isnull;
+                let _default = schema.default;
+                var div = $("<div/>",{class:"form-group"});
+                div.append(
+                        $("<label>",
+                                {
+                                    for : _name,
+                                    class:"col-sm-3 control-label"
+                                    
+                                    }
+                        )
+                        ).append(_name);
+                
+                
+                if (_type === "select") {
+                    
+                    var select =
+                            $("<select>",
+                                    {
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            ;
+                    
+                    $.get("/api/clients", function(data) {
+                        let titles = data.titles;
+                        let dataSet = data.dataSet;
+                        for (let i = 0, max = dataSet.length; i < max; i++) {
+                            let textoption=dataSet[i][1];
+                            select.append($("<option>", {text: textoption, value: textoption}));
+                        }
+                        
+                    });
+                    div.append(select);
+                    
+                    
+                             var select3 =
+                            $("<select>",
+                                    {
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            ;
+                    
+                    $.get("/api/commandes", function(data) {
+                        let titles = data.titles;
+                        let dataSet = data.dataSet;
+                        for (let i = 0, max = dataSet.length; i < max; i++) {
+                            let textoption=dataSet[i][1];
+                            select3.append($("<option>", {text: textoption, value: textoption}));
+                        }
+                        
+                    });
+                    div.append(select3);
+                    
+                    
+                    
+                    
+                             var select1 =
+                            $("<select>",
+                                    {
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            ;
+                    
+                    $.get("/api/raison$sociale", function(data) {
+                        let titles = data.titles;
+                        let dataSet = data.dataSet;
+                        for (let i = 0, max = dataSet.length; i < max; i++) {
+                            let textoption=dataSet[i][1];
+                            select1.append($("<option>", {text: textoption, value: textoption}));
+                        }
+                        
+                    });
+                    div.append(select1);
+                    
+                    
+                    
+                             var select2 =
+                            $("<select>",
+                                    {
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            ;
+                    
+                    $.get("/api/clients", function(data) {
+                        let titles = data.titles;
+                        let dataSet = data.dataSet;
+                        for (let i = 0, max = dataSet.length; i < max; i++) {
+                            let textoption=dataSet[i][1];
+                            select2.append($("<option>", {text: textoption, value: textoption}));
+                        }
+                        
+                    });
+                    div.append(select2);
+                    
+                    
+                } else if (_type === "textarea") {
+                    div.append(
+                            $("<textarea>",
+                                    {
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            );
+                } else {
+                    div.append(
+                            $("<input>",
+                                    {type: _type,
+                                        name: _name,
+                                        placeholder: _default,
+                                        value: _name,
+                                        class:"col-sm-9"}
+                            )
+                            );
+                }
+                
+                
+                
+                return div;
+                
+            }
+            
+            var jqxhr = $.get("/api/bons$achats?schema=html", function(schemas) {
+                
+                var form = $("<form/>",
+                        {action: '#', method: 'POST'}
+                );
+                
+                for (let i = 0, max = schemas.length; i < max; i++) {
+                    form.append(creetinput(schemas[i]));
+                }
+                
+                
+//                form.append(
+//                        $("<select>",
+//                                {type: 'select',
+//                                    placeholder: 'Keywords',
+//                                    name: 'keyword[]',
+//                                    style: 'width:65%'}
+//                        )
+//                        .append($("<option>", {text: 'ok', value: "jj"}))
+//                        .append($("<option>", {text: 'ok'}))
+//                        .append($("<option>", {text: 'ok'}))
+//                        );
+                
+                
+                
+                $("#test").append(form);
+            })
+                    ;
+            
+            
+            
+            
+            
+            
+            
+        </script>
 
     <script>
 

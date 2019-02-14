@@ -96,12 +96,12 @@ class GET {
 
             return $intent_js->getJson_Schema_Input();
         }
-        if ($GET["schema"] == "f") {
+        if ($GET["schema"] == "f_key") {
             $schema = $this->model->getschema();
             $foreignkey = $schema->getFOREIGN_KEY();
             return json_encode($foreignkey);
         }
-        if ($GET["schema"] == "c") {
+        if ($GET["schema"] == "c_table") {
             $schema = $this->model->getschema();
             $foreignkey = $schema->get_table_CHILDREN();
             return json_encode($foreignkey);
