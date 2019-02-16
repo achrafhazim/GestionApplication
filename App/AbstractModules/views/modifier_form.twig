@@ -14,33 +14,35 @@
 
 
 {% block container %}
- <div id="test"></div> 
+    <div id="status"></div> 
+    <div id="formJs" data-page="{{_page}}"></div> 
+     {{ block('progress') }}
 {% endblock %}
 
 
 {% block footer %}
-       <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
-    
-    
-    
     <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
-    
-    
- <script src="/{{_ROOTWEB}}AWA/formJs.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}AWA/set_data_par_ajax.js" type="text/javascript"></script>
+
+
+
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+
+
+    <script src="/{{_ROOTWEB}}AWA/formJs.js" type="text/javascript"></script>
+
 
     <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
     <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
-     
+
 
 
 
