@@ -75,7 +75,11 @@ class WebController extends \Kernel\Controller\Controller {
         $renderer = $this->renderer;
 
         $renderer->addGlobal("_page", ucfirst(str_replace("$", "  ", $this->getNameController())));
+       
+        
         $renderer->addGlobal("_Controller", $this->getNameController());
+        $renderer->addGlobal("_Module", $this->getNameModule());
+        
         $renderer->addGlobal("_Action", $this->Actions());
         $renderer->addGlobal("_ROOTWEB", ROOT_WEB);
         $renderer->addGlobal("_NamesRoute", $this->getNamesRoute());

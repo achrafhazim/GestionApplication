@@ -13,11 +13,11 @@ use Kernel\Tools\Tools;
 use Kernel\ToolsView\html\Components\input\Schema_Input_HTML;
 
 /**
- * Description of Intent_JS
+ * Description of Intent_Array
  *
- * @author wassim
+ * @author wassime
  */
-class Intent_JS {
+class Intent_Array {
 
     /**
      *
@@ -37,7 +37,7 @@ class Intent_JS {
      * schema input type , default ,isnull .....
      * @return array Schema_Input_HTML
      */
-     function getJson_Schema_Input() {
+    function getArray_Schema_Input() {
 
 
         $Array_Schema_Input = [];
@@ -50,19 +50,17 @@ class Intent_JS {
                     ->setSefix("id_html_");
             $Array_Schema_Input[] = $this->Array_($schema_Input_HTML);
         }
-        return json_encode($Array_Schema_Input);
+        return ($Array_Schema_Input);
     }
 
     private function Array_(Schema_Input_HTML $Schema_Input_HTML) {
-        $input=[
-            "name"=>$Schema_Input_HTML->getName(),
-            "type"=>$Schema_Input_HTML->getType(),
-            "isnull"=>$Schema_Input_HTML->getIsNull(),
-            "default"=>$Schema_Input_HTML->getDefault(),
-            
+        $input = [
+            "name" => $Schema_Input_HTML->getName(),
+            "type" => $Schema_Input_HTML->getType(),
+            "isnull" => $Schema_Input_HTML->getIsNull(),
+            "default" => $Schema_Input_HTML->getDefault(),
         ];
         return $input;
-        
     }
 
 }

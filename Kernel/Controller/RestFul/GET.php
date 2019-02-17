@@ -52,6 +52,7 @@ namespace Kernel\Controller\RestFul;
 
 use Kernel\AWA_Interface\Base_Donnee\MODE_SELECT_Interface;
 use Kernel\Tools\Tools;
+use Kernel\ToolsView\INTENT\Intent_Array;
 use Kernel\ToolsView\INTENT\Intent_JS;
 
 /**
@@ -85,6 +86,48 @@ class GET {
     }
 
     function schema($GET) {
+        if ($GET["schema"] == "all") {
+
+            $schema = $this->model->getschema();
+
+            $intent_Array = new Intent_Array();
+            $META_data = $schema->getCOLUMNS_META();
+
+            $intent_Array->setCOLUMNS_META($META_data);
+            $array_Schema_Input = $intent_Array->getArray_Schema_Input();
+
+
+            $schemaInfo = [];
+            $schemaInfo["html"] = $array_Schema_Input;
+            $schemaInfo["FOREIGN_KEY"] = $schema->getFOREIGN_KEY();
+            $schemaInfo["table_CHILDREN"] = $schema->get_table_CHILDREN();
+            $schemaInfo["table_CHILDREN"]=[];
+            $schemaInfo["table_CHILDREN_complex"]=[];
+           
+            $schemaInfo["html_relation_CHILDREN"] = [];
+            foreach ($schema->get_table_CHILDREN() as $table_CHILDREN) {
+                $relation_CHILDREN = "r_" . $this->model->getTable() . "_" . $table_CHILDREN;
+               
+                $META_dataChild = $this->model->getschema($relation_CHILDREN)->getCOLUMNS_META();
+                
+                $intent_Array->setCOLUMNS_META($META_dataChild);
+                $array_Schema_Input = $intent_Array->getArray_Schema_Input();
+                if (count($array_Schema_Input)>2) {
+                     $schemaInfo["table_CHILDREN_complex"][]=$table_CHILDREN;
+                } else {
+                     $schemaInfo["table_CHILDREN"][]=$table_CHILDREN;
+                }
+
+
+                $schemaInfo["html_relation_CHILDREN"][$relation_CHILDREN] = $array_Schema_Input;
+            }
+
+
+            return json_encode($schemaInfo);
+        }
+
+
+
         if ($GET["schema"] == "html") {
             $schema = $this->model->getschema();
 
@@ -103,23 +146,23 @@ class GET {
         }
         if ($GET["schema"] == "c_table") {
             $schema = $this->model->getschema();
-            $foreignkey = $schema->get_table_CHILDREN();
-            return json_encode($foreignkey);
+            $table_CHILDREN = $schema->get_table_CHILDREN();
+            return json_encode($table_CHILDREN);
         }
         if ($GET["schema"] == "p") {
             /*
              * http://localhost/api/commandes?schema=p&pr=bons$achats&con=raison$sociale.id=1
              */
-            $entity = $this->model->libre($GET["pr"],$GET["con"]);
+            $entity = $this->model->libre($GET["pr"], $GET["con"]);
             $data = Tools::entitys_TO_array($entity);
 
             return $data;
         }
-         if ($GET["schema"] == "s") {
+        if ($GET["schema"] == "s") {
             /*
              * http://localhost/api/commandes?schema=s&pr=bons$achats&id=1
              */
-            $entity = $this->model->save($GET["pr"],$GET["id"]);
+            $entity = $this->model->save($GET["pr"], $GET["id"]);
             $data = Tools::entitys_TO_array($entity);
 
             return $data;
