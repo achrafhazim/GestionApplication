@@ -1,74 +1,15 @@
-
-$("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
-<div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
-    <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
-        
-        
-        <div class="panel-heading">
-            <i class=" glyphicon glyphicon-usd"></i>blalblablalblablalbla<div class="pull-right">
-                <div class="btn-group">
-                    <button class="btn btn-default  " id="btnpanelperentstatistiqe" type="button">
-                        <span class="glyphicon glyphicon-floppy-saved" style="    color: #337ab7;"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="row clearfix" style="margin:5px">
-            <div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
-
-                <table class="table  table-hover table-sortable table-sm ">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                factures achats
-                                <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-                            </th>
-
-
-                            <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="content-child">
-                        <tr class="inputs-child">
-
-
-                            <td>
-                                <input class="form-control input-sm" data-set_null="NO" id="id_html_date_negociation_child1" name="date_negociation_child[]" placeholder="date negociation child" step="any" type="date">
-                            </td>
-
-                            <td>
-                                <button class="delete btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;"></button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-
-            </div>
-        </div>
-        <a class="btn btn-default pull-right" id="add_row">Add Row</a>
-    </div>
-</div>
-</div>   `));
-
-
-
-
 (function () {
     var formJs = $("#formJs");
     var namecontroller = formJs.data("namecontroller");
     var namemodule = formJs.data("namemodule");
 
     $.get("/api/" + namecontroller + "?schema=all", function (schemas) {
-        
+
 
 
         var form = create_form(schemas.html);
         create_listSelect(schemas.table_CHILDREN);
+        create_formtable(schemas.html_relation_CHILDREN);
 
         formJs.append(form);
 
@@ -89,6 +30,8 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
     });
     /// create form html
     function create_form(schemas) {
+
+
         function label_form(schema) {
 
             if (schema.type !== "hidden") {
@@ -211,6 +154,9 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
 
 
         }
+
+
+
         function btnForm() {
             var div = $("<div>", { class: "col-sm-12" });
 
@@ -257,21 +203,24 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
 
         var table = $("#DataTableJs");
         var divtable = $("#divTableJs");
-       
+
+
 
         for (let index = 0; index < table_CHILDREN.length; index++) {
-            let divRowTable=$("<div/>",{class:"row" 
-            ,style:"width:50% ;    margin-top: 10px; margin-left: 5px; "});
+            let divRowTable = $("<div/>", {
+                class: "row"
+                , style: "width:80% ;    margin: 0 auto; "
+            });
             let tb = table.clone();
-            let T_child=table_CHILDREN[index];
-            
+            let T_child = table_CHILDREN[index];
+
             tb.attr("id", T_child);
             divRowTable.append(tb);
             divtable.append(divRowTable);
 
             // set data par ajax
-            let data=get_data_ajax('/api/'+T_child, init_param());
-            $("#"+T_child).DataTable(data);
+            let data = get_data_ajax('/api/' + T_child, init_param());
+            $("#" + T_child).DataTable(data);
         }
 
 
@@ -298,22 +247,22 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
 
                         var data = datajson["dataSet"];
 
-                                 
-                                     columns
-                                             .unshift({
-                                                 title: '<span class="glyphicon glyphicon-check" aria-hidden="true" style="    display: block;margin: auto;width: 15px;"></span>'
-                                             });
-         
-                                     for (var i = 0; i < data.length; i++) {
-                                         var id_row = data[i][0];
-                                     
-                                         // sup modi voir
-                                         data[i].unshift(" "); // add checkbox
-                                     } 
+
+                        columns
+                            .unshift({
+                                title: '<span class="glyphicon glyphicon-check" aria-hidden="true" style="    display: block;margin: auto;width: 15px;"></span>'
+                            });
+
+                        for (var i = 0; i < data.length; i++) {
+                            var id_row = data[i][0];
+
+                            // sup modi voir
+                            data[i].unshift(" "); // add checkbox
+                        }
 
                         param.columns = columns;
                         param.data = data;
-                        param.scrollX=true;
+                        param.scrollX = true;
 
                     });
             return param;
@@ -323,10 +272,10 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
             var param = {
                 buttons: ["pageLength", "colvis"],
                 columnDefs: [{
-                        orderable: false,
-                        className: 'select-checkbox',
-                        targets: 0
-                    }],
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets: 0
+                }],
                 select: {
                     style: 'multi',
                     // style: 'os',
@@ -340,7 +289,7 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
                 dom: 'Bfrtip',
                 lengthChange: false,
                 language: {
-    
+
                     processing: "Traitement en cours...",
                     search: "Rechercher&nbsp;:",
                     lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
@@ -377,7 +326,351 @@ $("#blabla").append($(`  <div class="row clearfix" style="margin:5px">
         }
 
     }
+    /// create list form table
+    function create_formtable(html_relation_CHILDREN) {
 
+
+
+
+
+        // tableform for chile  autoadd , style file icon  
+        var AWA_FormChild = function (config) {
+            var select_elem = config.select_elem || 'content-child';
+            this.graph = config.graph || [];
+
+            var self = this;
+            // index row inputs
+            this.id_index = 0;
+            //id html table qui containrer input
+            this.content_child = $(select_elem + "  tbody");
+            
+            //row html row qui containrer input
+            this.inputs_child = this.content_child.find("tr");
+            // inpule files
+            this.$file = this.inputs_child.find("input[type='file']");
+            this.id_file = this.$file.attr("id");
+            this.name_file = this.$file.attr("name");
+            // change name input file for php 
+            this.$file.attr("name", this.name_file + this.id_index);
+            this.add_button = $(select_elem + "  .add_row");
+            
+            ///*************************///
+            //events
+            // delete row inputs 
+            this.content_child.on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('td').parent('tr').remove();
+                self.updateGraph();
+            });
+            // set data graph
+            this.content_child.on("change", "input", function (e) {
+                e.preventDefault();
+                self.updateGraph();
+            });
+            // add row inputs 
+            this.add_button.click(function (e) {
+                e.preventDefault();
+                self.id_index++;
+                var new_row = self.inputs_child.clone();
+                // vide data default(clone)
+                new_row.find("label span").text("");
+                new_row.find("input,textarea").val("");
+                // agument id
+                new_row.find("input,textarea,select").each(function () {
+                    var $input = $(this);
+                    var id = $input.attr("id");
+                    $input.attr("id", id + self.id_index);
+                })
+                // set event style file
+                new_row.find("input[type='file']")
+                    .each(function () {
+                        var $fileRow = $(this);
+                        var label = $fileRow.prev();
+                        //id and name file id pour lable 
+                        var id_local = self.id_file + self.id_index;
+                        $fileRow.attr("id", id_local);
+                        label.attr("for", id_local);
+                        //and name pour php
+                        $fileRow.attr("name", self.name_file + self.id_index);
+                        // set theme pour lable
+                        $fileRow.change(function (e) {
+                            label.find('span').html("");
+                            var len = this.files.length;
+                            if (len != 0) {
+                                label.find('span').html(len);
+                            }
+                        }
+                        );
+
+                    })
+                /// add row to table_form
+                $(self.content_child).append(new_row); //add input box
+            });
+
+        }
+        AWA_FormChild.prototype = {
+            updateGraph: function () {
+                // return json
+                var row = [];
+                this.content_child.find(".inputs-child").each(function (index) {
+                    var ob = {};
+                    ob.label = $(this).find("[type=date]").val();
+                    ob.dataset = $(this).find("[type=number]").val();
+                    row.push(ob)
+
+                })
+
+                for (var i = 0; i < this.graph.length; i++) {
+                    this.graph[i].set_Data("row", row);
+                }
+
+
+
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var divformtable = $("#divformtablemodule");
+
+
+        for (var relation_CHILDREN in html_relation_CHILDREN) {
+
+            let schemas = html_relation_CHILDREN[relation_CHILDREN];
+
+            if (schemas.length > 2) {
+                let divformtableitem = divformtable.clone();
+                let idrelation_CHILDREN = relation_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
+                divformtableitem.attr("id", idrelation_CHILDREN);
+                divformtableitem.removeClass("hidden");
+                
+                
+
+                for (let index = 0; index < schemas.length; index++) {
+
+                    const schema = schemas[index];
+                    let title = label_form(schema);
+                    
+                    divformtableitem
+                        .find("table>thead>tr")
+                        .append($("<th/>", { class: "text-center" })
+                            .append(title));
+
+
+                    let input = creetinput(schema);
+                    divformtableitem
+                        .find("table>tbody>tr")
+                        .append($("<td/>", { class: "text-center" })
+                            .append(input));
+
+                }
+                $("#divformtable").append(divformtableitem);
+                new AWA_FormChild({
+                    select_elem: "#" + idrelation_CHILDREN,
+                    graph: []
+                });
+            }
+
+
+
+        }
+
+
+        /*  for (let index = 0; index < table_CHILDREN.length; index++) {
+              let divRowTable = $("<div/>", {
+                  class: "row"
+                  , style: "width:80% ;    margin: 0 auto; "
+              });
+              let tb = table.clone();
+              let T_child = table_CHILDREN[index];
+ 
+              tb.attr("id", T_child);
+              divRowTable.append(tb);
+              divtable.append(divRowTable);
+ 
+              // set data par ajax
+              let data = get_data_ajax('/api/' + T_child, init_param());
+              $("#" + T_child).DataTable(data);
+          }
+          */
+
+
+
+
+        function label_form(schema) {
+
+            if (schema.type !== "hidden") {
+                let label = $("<label>",
+                    {
+                        for: schema.name,
+                        class: "col-sm-3 control-label",
+                        style: "text-align: left",
+
+                    }
+                ).append(schema.name.replace(new RegExp('[$]', 'g'), " ") + " ");
+                if (schema.isnull === "NO") {
+                    var spam = $("<span/>", { class: "glyphicon glyphicon-pencil", 'aria-hidden': "true" });
+                    label.append(spam);
+                }
+                return label;
+
+            } else {
+                return " ";
+            }
+
+
+
+        }
+        function hidden_form(schema) {
+            var select =
+                $("<select>",
+                    {
+
+                        "data-live-search": "true",
+                        name: schema.name,
+                        class: " "
+                    }
+                )
+                ;
+            
+            let url = schema.name.replace(new RegExp('id_', 'g'), '') ;
+          
+            
+            $.get("/api/" + url, function (data) {
+
+                let titles = data.titles;
+                let dataSet = data.dataSet;
+                for (let i = 0, max = dataSet.length; i < max; i++) {
+                    let textoption = dataSet[i][1];
+                    let valueoption = dataSet[i][0];
+                    select.append($("<option>", { text: textoption, value: valueoption }));
+                }
+
+                select.selectpicker();
+
+            });
+            return select;
+        }
+        function select_form(schema) {
+            var select =
+                $("<select>",
+                    {
+
+                        "data-live-search": "true",
+                        name: schema.name,
+                        class: " "
+                    }
+                )
+                ;
+
+            $.get("/api/" + schema.name, function (data) {
+
+                let titles = data.titles;
+                let dataSet = data.dataSet;
+                for (let i = 0, max = dataSet.length; i < max; i++) {
+                    let textoption = dataSet[i][1];
+                    let valueoption = dataSet[i][0];
+                    select.append($("<option>", { text: textoption, value: valueoption }));
+                }
+
+                select.selectpicker();
+
+            });
+            return select;
+        }
+        function textarea_form(schema) {
+            return $("<textarea>",
+                {
+                    name: schema.name,
+
+                    "autocomplete": "text"
+                }
+            );
+        }
+        function file_form(schema) {
+
+            return $("<input>",
+                {
+                    type: schema.type,
+                    name: schema.name + "[]",
+
+                    class: ""
+                }
+            ).attr("multiple", true);
+        }
+        function input_form(schema) {
+
+            return $("<input>",
+                {
+                    type: schema.type,
+                    name: schema.name,
+
+                    class: "",
+                }
+            );
+        }
+
+        function creetinput(schema) {
+
+
+            // input
+
+            let input;
+            if (schema.type === "hidden") {
+                input = hidden_form(schema);
+
+            }
+            else if (schema.type === "select") {
+                input = select_form(schema);
+
+            } else if (schema.type === "textarea") {
+                input = textarea_form(schema);
+
+            } else if (schema.type === "file") {
+                input = file_form(schema);
+
+            } else {
+                input = input_form(schema);
+
+            }
+
+            input.attr("data-set_null", schema.isnull);
+            input.addClass("form-control input-sm");
+
+            input.attr("placeholder", schema.name);
+            input.attr("value", schema.default);
+            input.attr("id", "id_html_" + schema.name);
+
+
+            var divFormGroup = $("<div/>", { class: "form-group" });
+          
+
+           
+
+            return divFormGroup.append(input);
+
+
+        }
+
+    }
     /**
      * charge form ajax
      */
