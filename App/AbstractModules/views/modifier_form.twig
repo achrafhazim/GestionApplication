@@ -13,11 +13,8 @@
     <link href="/{{_ROOTWEB}}Framework/Select/css/select.bootstrap.min.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block container %}
-    <div id="status"></div>
-    <!-- table select -->
-
-
-    <div class="row clearfix" style="margin:5px">
+    <!-- style box view -->
+    <div id="divmodule" class="row clearfix hidden" style="margin:5px">
         <div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
             <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
 
@@ -31,101 +28,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="divTableJs">
-                    <table class="DataTableJs table table-striped table-bordered dt-responsive nowrap " id="DataTableJs"></table>
-                </div>
+                <div class="row clearfix" style="margin:5px">
+                    <div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
+                        <div class="row showdata" style="width:80% ;    margin: 0 auto; " >
+
+
+                        </div>
+                    </div>
+                </div> 
             </div>
         </div> 
     </div>
 
-    <!-- end table select  -->
 
+    <!-- show data  -->
+    <div id="status"></div>
 
+    
+    <!-- create form par js  -->
+    <div id="showform" data-namecontroller="{{_Controller}}" data-namemodule="{{_Module}}"></div>
 
-
-
-    <!-- table form -->
-
-
-
-    <div id="divformtablemodule" class="row clearfix hidden" style="margin:5px">
-
-        <div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
-            <div class="panel panel-default box shadow-4dp" style="    padding: 0px;">
-
-
-                <div class="panel-heading">
-                    <i class=" glyphicon glyphicon-usd"></i>blalblablalblablalbla<div class="pull-right">
-                        <div class="btn-group">
-                            <button class="btn btn-default  " id="btnpanelperentstatistiqe" type="button">
-                                <span class="glyphicon glyphicon-floppy-saved" style="    color: #337ab7;"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
-                <div class="row clearfix" style="margin:5px">
-                    <div class="col-md-12 table-responsive" style="font-size: 11px;     overflow-x: visible;">
-
-                        <div >
-
-                            <table  class="table  table-hover table-sortable table-sm ">
-
-                                <thead>
-                                    <tr>
-
-
-
-
-                                        <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"></th>
-
-                                    </tr>
-                                </thead>
-
-
-                                <tbody >
-                                    <tr class="inputs-child">
-
-                                        <td>
-                                            <button class="delete btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;"></button>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-                </div>
-
-
-
-
-                <a class="btn btn-default pull-right add_row" >Add Row</a>
-            </div>
-        </div>
-
-    </div>  
-
-    <div id="divformtable" ></div>
-
-    <!-- end table form -->
-
-
-
-
-
-
-    <!-- form -->
-
-    <div id="formJs" data-namecontroller="{{_Controller}}" data-namemodule="{{_Module}}"></div>
     {{ block('progress') }}
 {% endblock %}
 {% block footer %}
@@ -147,13 +69,13 @@
     <script src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.html5.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Responsive/js/responsive.bootstrap.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Select/js/dataTables.select.min.js"></script>
-    
+
     <script src="/{{_ROOTWEB}}AWA/AWA_FormChild.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}AWA/formJs.js" type="text/javascript"></script>
-    
+
     <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
     <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
-    
-   
+
+
 {% endblock %}

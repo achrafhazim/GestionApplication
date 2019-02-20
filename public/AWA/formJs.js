@@ -1,25 +1,44 @@
 (function () {
-    var formJs = $("#formJs");
-    var namecontroller = formJs.data("namecontroller");
-    var namemodule = formJs.data("namemodule");
+
+    var showform = $("#showform");
+    var namecontroller = showform.data("namecontroller");
+    var namemodule = showform.data("namemodule");
+    function styleviewbox(data, id) {
+        let viewbox = $("#divmodule").clone();
+        viewbox.attr("id", "div" + id);
+        viewbox.removeClass("hidden");
+
+        viewbox.find(".showdata").append(data);
+        return viewbox;
+    }
 
     $.get("/api/" + namecontroller + "?schema=all", function (schemas) {
 
 
 
         var form = create_form(schemas.html);
-        create_listSelect(schemas.table_CHILDREN);
+         create_listSelect(schemas.table_CHILDREN);
+       
         create_formtable(schemas.html_relation_CHILDREN);
 
-        formJs.append(form);
+
+
+
+        let formbox = styleviewbox(form, "formhtmlview");
+
+
+
+
+
+        showform.append(formbox);
 
         form.submit(function (e) {
             e.preventDefault();
             // send formdata par ajax
             var formdata = chargeFormData();
             //cache form html
-            formJs.addClass("hidden");
-            // afiche stayle loade data
+            showform.addClass("hidden");
+            // affiche style loade data
             $("#refresh").removeClass("hidden");
             $('#ModalProgress').modal('show');
             ajaxSendData(formdata);
@@ -28,6 +47,8 @@
 
 
     });
+
+    
     /// create form html
     function create_form(schemas) {
 
@@ -144,6 +165,8 @@
 
 
             var divFormGroup = $("<div/>", { class: "form-group" });
+
+
             // label
             divFormGroup.append(label_form(schema));
 
@@ -196,31 +219,30 @@
             form.append(creetinput(schemas[i]));
         }
         form.append(btnForm());
+
+
+
+
+
         return form;
     }
     /// create list select
     function create_listSelect(table_CHILDREN) {
 
-        var table = $("#DataTableJs");
-        var divtable = $("#divTableJs");
-
-
 
         for (let index = 0; index < table_CHILDREN.length; index++) {
-            let divRowTable = $("<div/>", {
-                class: "row"
-                , style: "width:80% ;    margin: 0 auto; "
-            });
-            let tb = table.clone();
-            let T_child = table_CHILDREN[index];
-
-            tb.attr("id", T_child);
-            divRowTable.append(tb);
-            divtable.append(divRowTable);
-
+            let item = table_CHILDREN[index];
+            let id = "div" + item.replace(new RegExp('[\$_]', 'g'), '');
+            let table = $("<table/>", { class: "DataTableJs table table-striped table-bordered dt-responsive nowrap " });
+            let viewbox = styleviewbox(table, id);
+            showform.append(viewbox);
             // set data par ajax
-            let data = get_data_ajax('/api/' + T_child, init_param());
-            $("#" + T_child).DataTable(data);
+            let data = get_data_ajax('/api/' + item, init_param());
+            $("#div" + id).find("table")
+                .attr("id", "table" + id)
+                .DataTable(data);
+
+
         }
 
 
@@ -343,7 +365,7 @@
             this.id_index = 0;
             //id html table qui containrer input
             this.content_child = $(select_elem + "  tbody");
-            
+
             //row html row qui containrer input
             this.inputs_child = this.content_child.find("tr");
             // inpule files
@@ -353,7 +375,7 @@
             // change name input file for php 
             this.$file.attr("name", this.name_file + this.id_index);
             this.add_button = $(select_elem + "  .add_row");
-            
+
             ///*************************///
             //events
             // delete row inputs 
@@ -449,7 +471,8 @@
 
 
 
-        var divformtable = $("#divformtablemodule");
+
+
 
 
         for (var relation_CHILDREN in html_relation_CHILDREN) {
@@ -457,34 +480,64 @@
             let schemas = html_relation_CHILDREN[relation_CHILDREN];
 
             if (schemas.length > 2) {
-                let divformtableitem = divformtable.clone();
-                let idrelation_CHILDREN = relation_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
-                divformtableitem.attr("id", idrelation_CHILDREN);
-                divformtableitem.removeClass("hidden");
-                
-                
+
+
+
+
+
+                let id = "div" + relation_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
+
+
+
+
+                let table = $(`<table  class="table  table-hover table-sortable table-sm ">
+                     <thead>
+                    <tr>
+                        <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;"></th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr class="inputs-child">
+                     <td>
+                            <button class="delete btn btn-xs glyphicon glyphicon-trash row-remove" style="font-size: 16px ;    background-color: #f1a1c2;"></button>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                    </table>
+                    <a class="btn btn-default pull-right add_row" >Add Row</a>
+                    `);
+
+
+                let viewbox = styleviewbox(table, id);
+                showform.append(viewbox);
+
+                $("#div" + id).find(".showdata").append(table)
+
+
+
 
                 for (let index = 0; index < schemas.length; index++) {
 
                     const schema = schemas[index];
                     let title = label_form(schema);
-                    
-                    divformtableitem
+
+                    $("#div" + id).find(".showdata")
                         .find("table>thead>tr")
                         .append($("<th/>", { class: "text-center" })
                             .append(title));
 
 
                     let input = creetinput(schema);
-                    divformtableitem
+                    $("#div" + id).find(".showdata")
                         .find("table>tbody>tr")
                         .append($("<td/>", { class: "text-center" })
                             .append(input));
 
                 }
-                $("#divformtable").append(divformtableitem);
+                // $("#divformtable").append(divformtableitem);
                 new AWA_FormChild({
-                    select_elem: "#" + idrelation_CHILDREN,
+                    select_elem: "#div" + id,
                     graph: []
                 });
             }
@@ -494,23 +547,7 @@
         }
 
 
-        /*  for (let index = 0; index < table_CHILDREN.length; index++) {
-              let divRowTable = $("<div/>", {
-                  class: "row"
-                  , style: "width:80% ;    margin: 0 auto; "
-              });
-              let tb = table.clone();
-              let T_child = table_CHILDREN[index];
- 
-              tb.attr("id", T_child);
-              divRowTable.append(tb);
-              divtable.append(divRowTable);
- 
-              // set data par ajax
-              let data = get_data_ajax('/api/' + T_child, init_param());
-              $("#" + T_child).DataTable(data);
-          }
-          */
+
 
 
 
@@ -550,10 +587,10 @@
                     }
                 )
                 ;
-            
-            let url = schema.name.replace(new RegExp('id_', 'g'), '') ;
-          
-            
+
+            let url = schema.name.replace(new RegExp('id_', 'g'), '');
+
+
             $.get("/api/" + url, function (data) {
 
                 let titles = data.titles;
@@ -661,9 +698,9 @@
 
 
             var divFormGroup = $("<div/>", { class: "form-group" });
-          
 
-           
+
+
 
             return divFormGroup.append(input);
 
@@ -671,6 +708,7 @@
         }
 
     }
+    /***************************************************************************** */
     /**
      * charge form ajax
      */
