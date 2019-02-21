@@ -17,8 +17,7 @@
 
     function create_form(schemas) {
         create_form_simple(schemas.html);
-        create_multiSelect_table(schemas.table_CHILDREN);
-        create_form_dynamique_table(schemas.html_relation_CHILDREN);
+       
         ///style box show
         function styleviewbox(data, id, Class) {
             let viewbox = $("#divmodule").clone();
@@ -82,6 +81,10 @@
                     select.selectpicker();
 
                 });
+                select.on("change",function (e) {
+                    create_multiSelect_table(schemas.table_CHILDREN);
+                    create_form_dynamique_table(schemas.html_relation_CHILDREN);
+                })
                 return select;
             }
             function textarea_form(schema) {
