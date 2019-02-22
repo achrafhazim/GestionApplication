@@ -25,7 +25,8 @@
             let viewbox = $("#divmodule").clone();
             viewbox.attr("id", "div" + id);
             viewbox.removeClass("hidden");
-            viewbox.addClass(Class);
+            viewbox.addClass("col-md-4");
+            //  viewbox.addClass(Class);
 
             viewbox.find(".showdata").append(data);
             return viewbox;
@@ -174,30 +175,34 @@
                 }
             }
             function create_list(schemas) {
+                let html_tables_CHILDRENs = schemas.html_tables_CHILDRENs;
                 let html_relations_CHILDRENs = schemas.html_relations_CHILDRENs;
+                let r_namecontroller = "r_" + namecontroller + "_";
 
-                for (var relation_CHILDREN in html_relations_CHILDRENs) {
-
+                for (var tables_CHILDREN in html_tables_CHILDRENs) {
+                    let relation_CHILDREN = r_namecontroller + tables_CHILDREN;
                     let schemas_relation_CHILDREN = html_relations_CHILDRENs[relation_CHILDREN];
+                    let schemas_CHILDREN = html_tables_CHILDRENs[tables_CHILDREN];
 
 
                     if (schemas_relation_CHILDREN.length === 2) {
 
-                        create_multiSelect_table(relation_CHILDREN);
+                        create_multiSelect_table(tables_CHILDREN,schemas_CHILDREN);
 
                     } else {
 
-                        create_form_dynamique_table(relation_CHILDREN, schemas_relation_CHILDREN);
+                        create_form_dynamique_table(tables_CHILDREN,schemas_CHILDREN, schemas_relation_CHILDREN);
                     }
                 }
 
                 /// create list select
-                function create_multiSelect_table(relation_CHILDREN) {
+                function create_multiSelect_table(tables_CHILDREN,schemas_CHILDREN) {
 
 
-                    let r_namecontroller = "r_" + namecontroller + "_";
+                    let FOREIGN_KEY=get_FOREIGN_KEY(schemas_CHILDREN);
+                    
 
-                    let item = relation_CHILDREN.replace(r_namecontroller, '');
+                    let item = tables_CHILDREN;
                     let id = item.replace(new RegExp('[\$_]', 'g'), '');
 
                     let table = $("<table/>", { class: "DataTableJs table table-striped table-bordered dt-responsive nowrap " });
@@ -205,6 +210,7 @@
                     showform.append(viewbox);
                     // set data par ajax
                     let data = get_data_ajax('/api/' + item, init_param());
+
                     $("#div" + id).find("table")
                         .attr("id", "table" + id)
                         .DataTable(data);
@@ -320,13 +326,13 @@
 
                 }
                 /// create list form table
-                function create_form_dynamique_table(relation_CHILDREN, schemas) {
+                function create_form_dynamique_table(tables_CHILDREN,schemas_CHILDREN, schemas_relation_CHILDREN) {
 
-                    let id = relation_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
+                    let id = tables_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
                     let table = $(tableModulInput());
                     let viewbox = styleviewbox(table, id, "col-md-12");
                     showform.append(viewbox);
-                    row(schemas, id)
+                    row(schemas_relation_CHILDREN, id)
                     activeDynamiqueTable(id);
 
 
@@ -630,8 +636,22 @@
 
                 }
 
+                function get_FOREIGN_KEY(schemas) {
+                    let FOREIGN_KEY=[];
+                   for (let index = 0; index < schemas.length; index++) {
+                       const element = schemas[index];
+                       if (element.type==="select") {
+                        FOREIGN_KEY.push(element.name);
+                       }
+                       
+                   } 
+                   console.log(FOREIGN_KEY);
+                  return  FOREIGN_KEY;
+                }
+
+             
             }
-            
+
             function btnForm() {
                 var div = $("<div>", { class: "col-sm-12" });
 

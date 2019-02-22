@@ -1,15 +1,16 @@
 {% extends "themes.twig" %}
-{% use "@AbstractModules/plugins/progress.twig" %}
+
 {% block headcss %}
     <!-- Bootstrap-select Custom CSS -->
     <link
         href="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
-    <!-- multi-select Custom CSS -->
-    <link href="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
+    <!-- 
+     <link href="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/css/multi-select.dev.css" rel="stylesheet" type="text/css"/>
+     <link href="/{{_ROOTWEB}}Framework/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    -->
     <link href="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
     <link href="/{{_ROOTWEB}}Framework/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="/{{_ROOTWEB}}Framework/Buttons/css/buttons.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/{{_ROOTWEB}}Framework/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="/{{_ROOTWEB}}Framework/Select/css/select.bootstrap.min.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block container %}
@@ -40,43 +41,85 @@
             </div>
         </div> 
     </div>
+    <!-- style upload data -->
+    
+    <i id="refresh" class="fa fa-refresh fa-spin center hidden" style="font-size:100px"></i>
+
+    <!-- Modal -->
+    
+    <div class="modal fade" id="ModalProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-refresh fa-spin center" style="font-size:24px"></i></h4>
+                </div>
+                <div class="modal-body">
+                    <div  id="progresshidden" >
+                        <spam id="messageprogressBar"></spam>
+                        <spam id="etat"></spam>
+                        <div class="progress " >
+                            <div class="progress-bar" id="progressBar"role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div<!-- /.modal -->
+
+
+
+
+
+
 
 
     <!-- show data  -->
     <div id="status"></div>
+    <!-- create form par js  -->
+    <div id="showform" data-namecontroller="{{_Controller}}" data-namemodule="{{_Module}}" class="row">
+    
+        
+    </div>
 
     
-    <!-- create form par js  -->
-    <div id="showform" data-namecontroller="{{_Controller}}" data-namemodule="{{_Module}}" class="row"></div>
-
-    {{ block('progress') }}
 {% endblock %}
 {% block footer %}
-    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
+
     <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/{{_ROOTWEB}}Framework/BootstrapSelect/i18n/defaults-fr_FR.min.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}Framework/JqueryConfirm/jquery-confirm.min.js"></script>
+
     <script src="/{{_ROOTWEB}}Framework/DataTables/js/jquery.dataTables.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/DataTables/js/dataTables.bootstrap.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Buttons/js/dataTables.buttons.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.bootstrap.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.colVis.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Buttons/js/buttons.html5.min.js"></script>
-    <script src="/{{_ROOTWEB}}Framework/Responsive/js/responsive.bootstrap.min.js"></script>
     <script src="/{{_ROOTWEB}}Framework/Select/js/dataTables.select.min.js"></script>
 
-    <script src="/{{_ROOTWEB}}AWA/AWA_FormChild.js" type="text/javascript"></script>
+
     <script src="/{{_ROOTWEB}}AWA/formJs.js" type="text/javascript"></script>
 
-    <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
-    <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
-    <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
 
+    <!-- 
+    <script src="/{{_ROOTWEB}}Framework/Responsive/js/responsive.bootstrap.min.js"></script>
+       <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
+       <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+          <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.quicksearch.js" type="text/javascript"></script>
+       <script src="/{{_ROOTWEB}}Framework/BootstrapMultiSelect/js/jquery.multi-select.js" type="text/javascript"></script>
+      
+    <script src="/{{_ROOTWEB}}AWA/AWA_FormChild.js" type="text/javascript"></script>
+     <script src="/{{_ROOTWEB}}AWA/AWA_CalculeAutoInput.js" type="text/javascript"></script>
+       <script src="/{{_ROOTWEB}}AWA/AWA_ConfigMultiSelect.js"></script>
+       <script src="/{{_ROOTWEB}}AWA/pluginsMultiSelectCalcule.js" type="text/javascript"></script>
+    
+    -->
 
 {% endblock %}
