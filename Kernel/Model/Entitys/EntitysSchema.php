@@ -311,25 +311,7 @@ class EntitysSchema implements MODE_SELECT_Interface
         return $select;
     }
 
-//    ////
-//       public function select_statistique_SUM(): array {
-//
-//        $select = [];
-//        $FOREIGN_KEY = [];
-//
-//        foreach ($this->STATISTIQUE as $colom) {
-//
-//            $select[] = "SUM(" . $this->NameTable . "." . $colom . ") as  ` $colom des " . str_replace("$", " suite aux ", $this->NameTable) . " ` ";
-//        }
-//
-//        foreach ($this->FOREIGN_KEY as $FOREIGN) {
-//            $FOREIGN_KEY[] = $FOREIGN;
-//        }
-//
-//        return ["table" => $this->NameTable,
-//            "select" => $select,
-//            "FOREIGN_KEY" => $FOREIGN_KEY];
-//    }
+
 
     public function select_statistique($fonction, $alias): array
     {

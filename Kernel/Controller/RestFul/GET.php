@@ -99,27 +99,25 @@ class GET {
 
             $schemaInfo = [];
             $schemaInfo["html"] = $array_Schema_Input;
-            $schemaInfo["FOREIGN_KEY"] = $schema->getFOREIGN_KEY();
-            $schemaInfo["table_CHILDREN"] = $schema->get_table_CHILDREN();
-            $schemaInfo["table_CHILDREN"]=[];
-            $schemaInfo["table_CHILDREN_complex"]=[];
-           
-            $schemaInfo["html_relation_CHILDREN"] = [];
+            
+            // $schemaInfo["FOREIGN_KEY"] = $schema->getFOREIGN_KEY();
+            //$schemaInfo["table_CHILDREN"] = $schema->get_table_CHILDREN();
+            
+            $schemaInfo["html_tables_CHILDRENs"] = [];
+            $schemaInfo["html_relations_CHILDRENs"] = [];
             foreach ($schema->get_table_CHILDREN() as $table_CHILDREN) {
-                $relation_CHILDREN = "r_" . $this->model->getTable() . "_" . $table_CHILDREN;
-               
-                $META_dataChild = $this->model->getschema($relation_CHILDREN)->getCOLUMNS_META();
-                
+
+
+                $META_dataChild = $this->model->getschema($table_CHILDREN)->getCOLUMNS_META();
                 $intent_Array->setCOLUMNS_META($META_dataChild);
-                $array_Schema_Input = $intent_Array->getArray_Schema_Input();
-                if (count($array_Schema_Input)>2) {
-                     $schemaInfo["table_CHILDREN_complex"][]=$table_CHILDREN;
-                } else {
-                     $schemaInfo["table_CHILDREN"][]=$table_CHILDREN;
-                }
+                $array_Schema_Input_Child = $intent_Array->getArray_Schema_Input();
+                $schemaInfo["html_tables_CHILDRENs"][$table_CHILDREN] = $array_Schema_Input_Child;
 
-
-                $schemaInfo["html_relation_CHILDREN"][$relation_CHILDREN] = $array_Schema_Input;
+                $relation_CHILDREN = "r_" . $this->model->getTable() . "_" . $table_CHILDREN;
+                $META_relation_CHILDREN = $this->model->getschema($relation_CHILDREN)->getCOLUMNS_META();
+                $intent_Array->setCOLUMNS_META($META_relation_CHILDREN);
+                $array_Schema_Input_relation_CHILDREN = $intent_Array->getArray_Schema_Input();
+                $schemaInfo["html_relations_CHILDRENs"][$relation_CHILDREN] = $array_Schema_Input_relation_CHILDREN;
             }
 
 
