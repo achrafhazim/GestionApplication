@@ -16,8 +16,11 @@
     });
 
     function create_form(schemas) {
+
         create_form(schemas);
 
+
+        /***********************/
         ///style box show
         function styleviewbox(data, id, Class) {
             // remaoe si is box
@@ -31,10 +34,51 @@
             viewbox.find(".showdata").append(data);
             return viewbox;
         }
+        ///tools
+
+        function get_FOREIGN_KEY_Root(schemas) {
+            let FOREIGN_KEY_Root = {};
+            for (let index = 0; index < schemas.length; index++) {
+                const element = schemas[index];
+                if (element.type === "select") {
+                    FOREIGN_KEY_Root[element.name] = 1;
+                }
+
+            }
+
+            return FOREIGN_KEY_Root;
+        }
+
+        function get_where(FOREIGN_KEY_Root, schemas_CHILDREN) {
+
+            let FOREIGN_KEY = [];
+
+            for (let index = 0; index < schemas_CHILDREN.length; index++) {
+                const element = schemas_CHILDREN[index];
+                if (element.type === "select") {
+                    FOREIGN_KEY.push(element.name);
+                }
+
+            }
+
+            let where = "";
+            for (let index = 0; index < FOREIGN_KEY.length; index++) {
+                const F_K = FOREIGN_KEY[index];
+                if (FOREIGN_KEY_Root.hasOwnProperty(F_K)) {
+                    where[F_K] = FOREIGN_KEY_Root[F_K];
+                    where = where + F_K + ".id=" + FOREIGN_KEY_Root[F_K];
+                }
+            }
+
+            return where;
+
+        }
         /// create form html
         function create_form(schemas) {
             schemashtml = schemas.html
+            let FOREIGN_KEY_Root = get_FOREIGN_KEY_Root(schemashtml);
             var form = $("<form/>", { class: 'form-horizontal' });
+
 
             for (let i = 0, max = schemashtml.length; i < max; i++) {
                 form.append(creetinput(schemashtml[i]));
@@ -43,6 +87,7 @@
             form.append(btnForm());
             let id = "formhtmlview";
             let formbox = styleviewbox(form, id, "col-md-6");
+
             showform.append(formbox);
 
 
@@ -52,6 +97,7 @@
                 // input
 
                 let input;
+
                 if (schema.type === "select") {
                     input = select_form(schema);
 
@@ -109,6 +155,7 @@
 
 
                 }
+
                 function select_form(schema) {
                     var select =
                         $("<select>",
@@ -135,6 +182,8 @@
 
                     });
                     select.on("change", function (e) {
+                        FOREIGN_KEY_Root[schema.name] = select.val();
+
 
                         create_list(schemas);
 
@@ -174,7 +223,10 @@
                     );
                 }
             }
+
             function create_list(schemas) {
+
+
                 let html_tables_CHILDRENs = schemas.html_tables_CHILDRENs;
                 let html_relations_CHILDRENs = schemas.html_relations_CHILDRENs;
                 let r_namecontroller = "r_" + namecontroller + "_";
@@ -187,20 +239,22 @@
 
                     if (schemas_relation_CHILDREN.length === 2) {
 
-                        create_multiSelect_table(tables_CHILDREN,schemas_CHILDREN);
+                        create_multiSelect_table(tables_CHILDREN, schemas_CHILDREN);
 
                     } else {
 
-                        create_form_dynamique_table(tables_CHILDREN,schemas_CHILDREN, schemas_relation_CHILDREN);
+                        create_form_dynamique_table(tables_CHILDREN, schemas_CHILDREN, schemas_relation_CHILDREN);
                     }
                 }
 
+
+
+
                 /// create list select
-                function create_multiSelect_table(tables_CHILDREN,schemas_CHILDREN) {
+                function create_multiSelect_table(tables_CHILDREN, schemas_CHILDREN) {
 
 
-                    let FOREIGN_KEY=get_FOREIGN_KEY(schemas_CHILDREN);
-                    
+
 
                     let item = tables_CHILDREN;
                     let id = item.replace(new RegExp('[\$_]', 'g'), '');
@@ -209,11 +263,21 @@
                     let viewbox = styleviewbox(table, id, "col-md-6");
                     showform.append(viewbox);
                     // set data par ajax
-                    let data = get_data_ajax('/api/' + item, init_param());
+                    let where = get_where(FOREIGN_KEY_Root, schemas_CHILDREN);
 
-                    $("#div" + id).find("table")
-                        .attr("id", "table" + id)
-                        .DataTable(data);
+                    let url = '/api/' + item;
+                    url = url + "?schema=p&pr=bons$achats&con=" + where;
+                    console.log(url);
+                    let data = get_data_ajax(url, init_param());
+                    if (data === null) {
+
+                    } else {
+                        $("#div" + id).find("table")
+                            .attr("id", "table" + id)
+                            .DataTable(data);
+                    }
+
+
 
 
 
@@ -235,35 +299,43 @@
                                 function (datajson) {
 
                                     var titles = datajson["titles"];
-                                    var columns = [];
-                                    for (var i = 0; i < titles.length; i++) {
-                                        columns.push({
-                                            title: (titles[i].title).replace(/\$/g, " ").replace(/\_/g, " ")
-                                        });
+                                    // if vide data
+                                    if (titles.length == 0) {
+                                        param = null
+
+                                    } else {
+
+                                        var columns = [];
+                                        for (var i = 0; i < titles.length; i++) {
+                                            columns.push({
+                                                title: (titles[i].title).replace(/\$/g, " ").replace(/\_/g, " ")
+                                            });
+                                        }
+
+
+
+                                        var data = datajson["dataSet"];
+
+
+                                        columns
+                                            .unshift({
+                                                title: '<span class="glyphicon glyphicon-check" aria-hidden="true" style="    display: block;margin: auto;width: 15px;"></span>'
+                                            });
+
+                                        for (var i = 0; i < data.length; i++) {
+                                            var id_row = data[i][0];
+
+                                            // sup modi voir
+                                            data[i].unshift(" "); // add checkbox
+                                        }
+
+                                        param.columns = columns;
+                                        param.data = data;
+                                        param.scrollX = true;
                                     }
-
-
-
-                                    var data = datajson["dataSet"];
-
-
-                                    columns
-                                        .unshift({
-                                            title: '<span class="glyphicon glyphicon-check" aria-hidden="true" style="    display: block;margin: auto;width: 15px;"></span>'
-                                        });
-
-                                    for (var i = 0; i < data.length; i++) {
-                                        var id_row = data[i][0];
-
-                                        // sup modi voir
-                                        data[i].unshift(" "); // add checkbox
-                                    }
-
-                                    param.columns = columns;
-                                    param.data = data;
-                                    param.scrollX = true;
 
                                 });
+
                         return param;
                     }
 
@@ -326,7 +398,9 @@
 
                 }
                 /// create list form table
-                function create_form_dynamique_table(tables_CHILDREN,schemas_CHILDREN, schemas_relation_CHILDREN) {
+                function create_form_dynamique_table(tables_CHILDREN, schemas_CHILDREN, schemas_relation_CHILDREN) {
+
+                    get_where(FOREIGN_KEY_Root, schemas_CHILDREN);
 
                     let id = tables_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
                     let table = $(tableModulInput());
@@ -636,20 +710,9 @@
 
                 }
 
-                function get_FOREIGN_KEY(schemas) {
-                    let FOREIGN_KEY=[];
-                   for (let index = 0; index < schemas.length; index++) {
-                       const element = schemas[index];
-                       if (element.type==="select") {
-                        FOREIGN_KEY.push(element.name);
-                       }
-                       
-                   } 
-                   console.log(FOREIGN_KEY);
-                  return  FOREIGN_KEY;
-                }
 
-             
+
+
             }
 
             function btnForm() {
@@ -687,9 +750,12 @@
                 return div;
             }
 
+
         }
 
     }
+
+
 
     function send() {
         // send formdata par ajax

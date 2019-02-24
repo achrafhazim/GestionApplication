@@ -149,7 +149,8 @@ class Model extends m {
     public function libre($perant,$conditions=true) {
         return $this->prepareQuery(
                     self::Get_QuerySQL()
-                            ->select()
+                            ->select($this->schema->select_default())
+                             ->column($this->schema->select_FOREIGN_KEY())
                             ->from($this->getTable())
                             ->join($this->schema->getFOREIGN_KEY()) //array [ 0 =>  'raison$sociale']
                             ->independent($perant) // independent table not lier
