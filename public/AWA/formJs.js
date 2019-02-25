@@ -221,7 +221,11 @@
                     $("#div" + id).find("table")
                         .attr("id", "table" + id)
                         .DataTable(data);
+
+                  $("#div" + id).find('table tbody tr').addClass('selected');
                 }
+
+
 
                 function get_data_ajax(urlAjax) {
                    
