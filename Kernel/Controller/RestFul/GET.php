@@ -85,6 +85,42 @@ class GET {
         return $data;
     }
 
+    function getinfo($root_table) {
+          
+
+
+            $schema = $this->model->getschema($root_table);
+
+            $intent_Array = new Intent_Array();
+            $META_data = $schema->getCOLUMNS_META();
+
+            $intent_Array->setCOLUMNS_META($META_data);
+            $array_Schema_Input = $intent_Array->getArray_Schema_Input();
+
+
+            $schemaInfo = [];
+            $schemaInfo["schema_ROOT"] = $array_Schema_Input;
+
+           
+
+            $schemaInfo["schema_CHILDRENs"] = [];
+            $schemaInfo["schema_R_CHILDRENs"] = [];
+
+            foreach ($schema->get_table_CHILDREN() as $table_CHILDREN) {
+
+
+               
+                $schemaInfo["schema_CHILDRENs"][$table_CHILDREN] = $this->getinfo($table_CHILDREN);
+
+                $relation_CHILDREN = "r_" . $root_table . "_" . $table_CHILDREN;
+              
+                $schemaInfo["schema_R_CHILDRENs"][$relation_CHILDREN] = $this->getinfo($relation_CHILDREN);
+            }
+
+
+            return ($schemaInfo);
+        
+    }
     function schema($GET) {
         if ($GET["schema"] == "all") {
 
@@ -99,10 +135,10 @@ class GET {
 
             $schemaInfo = [];
             $schemaInfo["html"] = $array_Schema_Input;
-            
+
             // $schemaInfo["FOREIGN_KEY"] = $schema->getFOREIGN_KEY();
             //$schemaInfo["table_CHILDREN"] = $schema->get_table_CHILDREN();
-            
+
             $schemaInfo["html_tables_CHILDRENs"] = [];
             $schemaInfo["html_relations_CHILDRENs"] = [];
             foreach ($schema->get_table_CHILDREN() as $table_CHILDREN) {
@@ -121,6 +157,11 @@ class GET {
             }
 
 
+            return json_encode($schemaInfo);
+        }
+
+        if ($GET["schema"] == "r") {
+          $schemaInfo= $this->getinfo($this->model->getTable() );
             return json_encode($schemaInfo);
         }
 

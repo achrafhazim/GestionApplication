@@ -158,7 +158,7 @@ class Model extends m
                 ->prepareQuery()
 
         ;
-        var_dump($d->getPrepare());die();
+      //  var_dump($d->getPrepare());die();
         return $this->prepareQuery($d);
 
     }
@@ -184,7 +184,7 @@ class Model extends m
                 ->where($perant . ".id = " . $id)
                 ->prepareQuery()
         );
-        var_dump($d);
+      //  var_dump($d);
         return $d;
     }
     /**

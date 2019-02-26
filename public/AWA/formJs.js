@@ -228,11 +228,21 @@
                 if (data === null) {
 
                 } else {
-                    $("#div" + id).find("table")
+                      $("#div" + id).find("table")
                         .attr("id", "table" + id)
                         .DataTable(data);
 
-                    $("#div" + id).find('table tbody tr').addClass('selected');
+
+                    
+     
+                        $('#div' + id+' tbody').on('click', 'tr', function () {
+                            console.log(this);
+                            $.alert({
+                                title: 'Alert!',
+                                content: 'Simple alert!',
+                            });
+                        } );
+                   
                 }
 
 
