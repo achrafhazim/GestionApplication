@@ -147,9 +147,9 @@ class GET {
             $table_CHILDREN = $schema->get_table_CHILDREN();
             return json_encode($table_CHILDREN);
         }
-        if ($GET["schema"] == "p") {
+        if ($GET["schema"] == "l") {
             /*
-             * http://localhost/api/commandes?schema=p&pr=bons$achats&con=raison$sociale.id=1
+             * http://localhost/api/commandes?schema=l&pr=bons$achats&con=raison$sociale.id=1
              */
             $entity = $this->model->libre($GET["pr"], $GET["con"]);
             $data = Tools::entitys_TO_array($entity);

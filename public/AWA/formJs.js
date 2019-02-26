@@ -16,15 +16,15 @@
     });
 
     function create_form(schemas) {
-      
 
-       let schemashtml = schemas.html
-      let FOREIGN_KEY_Root = get_FOREIGN_KEY_Root(schemashtml);
+
+        let schemashtml = schemas.html
+        let FOREIGN_KEY_Root = get_FOREIGN_KEY_Root(schemashtml);
 
         var form = $("<form/>", { class: 'form-horizontal' });
-        
 
-        
+
+
         for (let i = 0, max = schemashtml.length; i < max; i++) {
             form.append(creetinput(schemashtml[i]));
         }
@@ -197,22 +197,32 @@
 
             /// create list select
             function create_multiSelect_table(tables_CHILDREN, schemas_CHILDREN) {
-
-
-
-
-                let item = tables_CHILDREN;
-                let id = item.replace(new RegExp('[\$_]', 'g'), '');
+                let id = tables_CHILDREN.replace(new RegExp('[\$_]', 'g'), '');
 
                 let table = $("<table/>", { class: "DataTableJs table table-striped table-bordered dt-responsive nowrap " });
                 let viewbox = styleviewbox(table, id, "col-md-6");
                 showform.append(viewbox);
-                
-                // set data par ajax
-                let where = get_where( schemas_CHILDREN);
 
-                let url = '/api/' + item;
-                url = url + "?schema=p&pr=bons$achats&con=" + where;
+                $
+                    .ajax({
+                        type: "GET",
+                        url: '/api/' + tables_CHILDREN +'?schema=all',
+                        async: false,
+                    })
+                    .done(function (data_tables_CHILDREN) {
+                        console.log(data_tables_CHILDREN);
+                    })
+
+///  li nafdarid matalan 
+                let tb ='articles';
+
+
+
+                // set data par ajax
+                let where = get_where(schemas_CHILDREN);
+
+                let url = '/api/' + tables_CHILDREN;
+                url = url + "?schema=l&pr=bons$achats&con=" + where;
                 console.log(url);
                 let data = get_data_ajax(url);
                 if (data === null) {
@@ -222,13 +232,13 @@
                         .attr("id", "table" + id)
                         .DataTable(data);
 
-                  $("#div" + id).find('table tbody tr').addClass('selected');
+                    $("#div" + id).find('table tbody tr').addClass('selected');
                 }
 
 
 
                 function get_data_ajax(urlAjax) {
-                   
+
                     let param = {
                         buttons: ["pageLength", "colvis"],
                         columnDefs: [{
@@ -291,7 +301,7 @@
                         })
                         .done(
                             function (datajson) {
-                               
+
                                 var titles = datajson["titles"];
                                 // if vide data
                                 if (titles.length == 0) {
@@ -331,10 +341,10 @@
                             });
 
                     return param;
-                   
+
                 }
 
-               
+
 
             }
             /// create list form table
@@ -739,7 +749,7 @@
             for (let index = 0; index < FOREIGN_KEY.length; index++) {
                 const F_K = FOREIGN_KEY[index];
                 if (FOREIGN_KEY_Root.hasOwnProperty(F_K)) {
-                    
+
                     where = where + F_K + ".id=" + FOREIGN_KEY_Root[F_K];
                 }
             }
