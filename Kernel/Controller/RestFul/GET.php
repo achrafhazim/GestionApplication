@@ -85,7 +85,7 @@ class GET {
         return $data;
     }
 
-    function getinfo($root_table) {
+    function getinfo($root_table,$R=false) {
           
 
 
@@ -99,17 +99,12 @@ class GET {
 
 
             $schemaInfo = [];
+            
             $schemaInfo["schema_ROOT"] = $array_Schema_Input;
-
-           
-
             $schemaInfo["schema_CHILDRENs"] = [];
             $schemaInfo["schema_R_CHILDRENs"] = [];
 
             foreach ($schema->get_table_CHILDREN() as $table_CHILDREN) {
-
-
-               
                 $schemaInfo["schema_CHILDRENs"][$table_CHILDREN] = $this->getinfo($table_CHILDREN);
 
                 $relation_CHILDREN = "r_" . $root_table . "_" . $table_CHILDREN;
