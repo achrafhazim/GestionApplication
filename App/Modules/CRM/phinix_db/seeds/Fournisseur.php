@@ -2,7 +2,7 @@
 
 use Phinx\Seed\AbstractSeed;
 
-class RaisonSociale extends AbstractSeed
+class Fournisseur extends AbstractSeed
 {
 
     /**
@@ -20,7 +20,7 @@ class RaisonSociale extends AbstractSeed
         for ($index = 0; $index < 30; $index++) {
             $date = date("Y-m-d H:i:s", $faker->unixTime('now'));
             $data[] = [
-                'raison$sociale' => $faker->name(),
+                'fournisseur' => $faker->name(),
                 'ICE' => $faker->uuid,
                 'I_F' => $faker->uuid,
                 'T_P' => $faker->uuid,
@@ -37,6 +37,6 @@ class RaisonSociale extends AbstractSeed
                 "date_modifier" => $date
             ];
         }
-        $this->table('raison$sociale')->insert($data)->save();
+        $this->table('fournisseur')->insert($data)->save();
     }
 }

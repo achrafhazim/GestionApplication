@@ -36,7 +36,7 @@ class Contacts extends AbstractMigration
         /*
           CREATE TABLE `contacts` (
           `id` int(10) NOT NULL,
-          `raison$sociale` int(11) NOT NULL,
+          `fournisseur` int(11) NOT NULL,
           `Prenom` varchar(201) NOT NULL,
           `Nom` varchar(201) NOT NULL,
           `TELE` varchar(20) NOT NULL,
@@ -50,7 +50,7 @@ class Contacts extends AbstractMigration
          */
         $this->table("contacts", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::select('fournisseur'))
                 ->addColumn(HTML_Phinx::text_master('Prenom'))
                 ->addColumn(HTML_Phinx::text_master('Nom'))
                 ->addColumn(HTML_Phinx::tel())
@@ -59,7 +59,7 @@ class Contacts extends AbstractMigration
                 ->addColumn(HTML_Phinx::email())
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('fournisseur', 'fournisseur', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
 }

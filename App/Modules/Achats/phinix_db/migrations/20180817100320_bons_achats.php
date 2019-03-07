@@ -37,7 +37,7 @@ class BonsAchats extends AbstractMigration
         /**
           CREATE TABLE `bons$achats` (
           `id` int(10) NOT NULL,
-          `raison$sociale` int(11) NOT NULL,
+          `fournisseur` int(11) NOT NULL,
           `N` varchar(200) NOT NULL,
           `date` date NOT NULL,
           `montant_HT` double NOT NULL,
@@ -52,7 +52,7 @@ class BonsAchats extends AbstractMigration
          */
         $this->table('bons$achats', HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::select('fournisseur'))
                 ->addColumn(HTML_Phinx::text_master('N'))
                 ->addColumn(HTML_Phinx::date('date'))
                 ->addColumn(HTML_Phinx::number('montant_HT'))
@@ -63,7 +63,7 @@ class BonsAchats extends AbstractMigration
                 ->addColumn(HTML_Phinx::file('fichiers'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('fournisseur', 'fournisseur', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
                
 

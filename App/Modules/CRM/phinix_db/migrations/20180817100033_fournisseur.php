@@ -3,7 +3,7 @@
 use Phinx\Migration\AbstractMigration;
 use Kernel\Conevert\HTML_Phinx;
 
-class RaisonSociale extends AbstractMigration
+class Fournisseur extends AbstractMigration
 {
 
     /**
@@ -35,9 +35,9 @@ class RaisonSociale extends AbstractMigration
     {
 
         /*
-          CREATE TABLE `raison$sociale` (
+          CREATE TABLE `fournisseur` (
           `id` int(10) NOT NULL,
-          `raison$sociale` varchar(200) NOT NULL,
+          `fournisseur` varchar(200) NOT NULL,
           `ICE` varchar(200) NOT NULL,
           `I_F` varchar(201) NOT NULL,
           `T_P` varchar(201) NOT NULL,
@@ -57,9 +57,9 @@ class RaisonSociale extends AbstractMigration
 
 
 
-          ALTER TABLE `raison$sociale`
+          ALTER TABLE `fournisseur`
           ADD PRIMARY KEY (`id`),
-          ADD UNIQUE KEY `RAISON_SOCIALE` (`raison$sociale`),
+          ADD UNIQUE KEY `RAISON_SOCIALE` (`fournisseur`),
           ADD UNIQUE KEY `ICE` (`ICE`),
           ADD UNIQUE KEY `I-F` (`I_F`),
           ADD UNIQUE KEY `CNSS` (`CNSS`),
@@ -67,14 +67,14 @@ class RaisonSociale extends AbstractMigration
           ADD UNIQUE KEY `R-C` (`R_C`);
 
 
-          ALTER TABLE `raison$sociale`
+          ALTER TABLE `fournisseur`
           MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
          */
 
 
-        $this->table('raison$sociale', HTML_Phinx::id_default())
+        $this->table('fournisseur', HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::text_master('raison$sociale'))
+                ->addColumn(HTML_Phinx::text_master('fournisseur'))
                 ->addColumn(HTML_Phinx::text_master('ICE'))
                 ->addColumn(HTML_Phinx::text_master('I_F'))
                 ->addColumn(HTML_Phinx::text_master('T_P'))

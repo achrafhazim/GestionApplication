@@ -44,7 +44,7 @@ class Achat extends AbstractMigration
           `remarque` text DEFAULT NULL,
           `date_ajoute` datetime NOT NULL,
           `date_modifier` datetime NOT NULL,
-          `raison$sociale` int(11) NOT NULL
+          `fournisseur` int(11) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
          */
 
@@ -59,9 +59,9 @@ class Achat extends AbstractMigration
                 ->addColumn(HTML_Phinx::textarea('remarque'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::select('fournisseur'))
                 ->addForeignKey('mode$paiement', 'mode$paiement', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('fournisseur', 'fournisseur', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
     }
 }

@@ -36,7 +36,7 @@ class Commandes extends AbstractMigration
         /*
           CREATE TABLE `commandes` (
           `id` int(10) NOT NULL,
-          `raison$sociale` int(11) NOT NULL,
+          `fournisseur` int(11) NOT NULL,
           `titre` varchar(200) NOT NULL,
           `date` date NOT NULL,
           `montant_estime_HT` double NOT NULL,
@@ -51,7 +51,7 @@ class Commandes extends AbstractMigration
 
         $this->table("commandes", HTML_Phinx::id_default())
                 ->addColumn(HTML_Phinx::id())
-                ->addColumn(HTML_Phinx::select('raison$sociale'))
+                ->addColumn(HTML_Phinx::select('fournisseur'))
                 ->addColumn(HTML_Phinx::text_master('titre'))
                 ->addColumn(HTML_Phinx::number('montant_estime_HT'))
                 ->addColumn(HTML_Phinx::textarea('adresse'))
@@ -59,7 +59,7 @@ class Commandes extends AbstractMigration
                 ->addColumn(HTML_Phinx::file('fichiers'))
                 ->addColumn(HTML_Phinx::datetime('date_ajoute'))
                 ->addColumn(HTML_Phinx::datetime('date_modifier'))
-                ->addForeignKey('raison$sociale', 'raison$sociale', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+                ->addForeignKey('fournisseur', 'fournisseur', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                 ->create();
              HTML_Phinx::relationList('commandes', 'articles', $this->getAdapter());
              
