@@ -8,6 +8,7 @@ class BonsAchats extends AbstractMigration
 
     /**
      * Change Method.
+     * ok
      *
      * Write your reversible migrations using this method.
      *
