@@ -131,8 +131,7 @@ class GET {
             $schemaInfo = [];
             $schemaInfo["html"] = $array_Schema_Input;
 
-            // $schemaInfo["FOREIGN_KEY"] = $schema->getFOREIGN_KEY();
-            //$schemaInfo["table_CHILDREN"] = $schema->get_table_CHILDREN();
+            
 
             $schemaInfo["html_tables_CHILDRENs"] = [];
             $schemaInfo["html_relations_CHILDRENs"] = [];
